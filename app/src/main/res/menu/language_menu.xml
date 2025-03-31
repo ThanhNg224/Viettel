@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/lang_vi"
+        android:icon="@drawable/ic_vietnam_flag"
+        android:title="Tiếng Việt" />
+    <item
+        android:id="@+id/lang_en"
+        android:icon="@drawable/uk_flag"
+        android:title="English" />
+    <item
+        android:id="@+id/lang_fr"
+        android:icon="@drawable/france_flag"
+        android:title="Français" />
+</menu>

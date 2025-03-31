@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Xác Thực CCCD</string>
+
+    <!-- Header title -->
+    <string name="main_title">MUA SIM</string>
+
+    <!-- Button labels -->
+    <string name="btn_back">Quay lại</string>
+    <string name="btn_next">Tiếp tục</string>
+
+    <!-- Language -->
+    <string name="language_vietnamese">Tiếng Việt</string>
+    <string name="language_english">English</string>
+
+    <!-- Hotline -->
+    <string name="hotline">Hotline: 18008098</string>
+
+    <!-- Step titles -->
+    <string name="step1">Chọn giấy tờ</string>
+    <string name="step2">Đặt giấy tờ</string>
+    <string name="step3">Chụp ảnh trước</string>
+    <string name="step4">Chụp ảnh sau</string>
+    <string name="step5">Quét chip</string>
+    <string name="step6">Chụp chân dung</string>
+    <string name="step7">Thanh toán</string>
+    <string name="step8">Khảo sát</string>
+
+    <!-- Document selection options -->
+    <string name="option_cccd">Căn cước công dân</string>
+    <string name="option_passport">Hộ chiếu</string>
+    <string name="your_html_instruction">Vui lòng chọn loại giấy tờ để xác thực</string>
+
+    <!-- For step 2 -->
+    <string name="place_document_title">Vui lòng đặt giấy tờ vào khay máy quét</string>
+    <string name="doc_placement_desc">Hướng dẫn đặt giấy tờ vào máy</string>
+
+</resources>

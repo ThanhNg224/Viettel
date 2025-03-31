@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SimViettel</string>
+    <string name="Text_MuaSim">Để thực hiện giao dịch <font color='red'>Mua SIM trả trước</font>, quý khách vui lòng chọn loại giấy tờ</string>
+</resources>
