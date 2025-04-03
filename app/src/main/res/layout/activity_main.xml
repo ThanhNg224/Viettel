@@ -9,6 +9,20 @@
     android:background="@drawable/bg_image"
     tools:context=".activities.MainActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
     <TextView
         android:id="@+id/NoiDung"
         android:layout_width="0dp"
@@ -39,12 +53,14 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_phone"
+            android:contentDescription="@null"
             app:tint="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
+            android:paddingEnd="0dp"
             android:text="Hotline: 18008098"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
@@ -67,6 +83,7 @@
             android:id="@+id/languageFlag"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:contentDescription="@null"
             android:src="@drawable/ic_vietnam_flag" />
 
         <TextView
@@ -74,6 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="15dp"
+            android:paddingEnd="0dp"
             android:text="Tiếng Việt"
             android:textStyle="bold"
             android:textColor="@android:color/black" />
@@ -82,17 +100,80 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:paddingStart="4dp"
-            android:src="@drawable/ic_dropdown" />
+            android:paddingEnd="0dp"
+            android:src="@drawable/ic_dropdown"
+            android:contentDescription="@null" />
     </LinearLayout>
 
+
+
+    <!-- Inside your ConstraintLayout -->
+    <!-- 1) Add a layout for the Back / Continue buttons at the bottom -->
+    <LinearLayout
+        android:id="@+id/buttonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end">
+
+        <!-- Back button pinned to the left -->
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/arrow_button"
+            android:drawableLeft="@drawable/ic_arrow_left_red"
+            android:drawablePadding="12dp"
+            android:foreground="@null"
+            android:minHeight="48dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="Quay lại"
+            android:textColor="#332929"
+            android:textStyle="bold"
+             />
+
+
+        <!-- A spacer that takes all the leftover space -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!-- Continue button pinned to the right -->
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/arrow_button"
+            android:drawableEnd="@drawable/ic_arrow_right_red"
+            android:drawablePadding="12dp"
+            android:foreground="@null"
+            android:minHeight="48dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="Tiếp tục"
+            android:textColor="#070707"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
+    <!-- 2) Constrain the FragmentContainerView ABOVE the new button bar -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
         android:name="androidx.fragment.app.Fragment"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/NoiDung"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/NoiDung"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBar"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,12 @@
 package com.example.viettel.activities
 
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
@@ -13,23 +15,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
+import com.example.viettel.fragments.CaptureBackPhotoFragment
 import com.example.viettel.fragments.DocumentSelectionFragment
+import com.example.viettel.fragments.PlaceDocumentFragment
 import com.google.android.material.snackbar.Snackbar
+import com.example.viettel.fragments.CaptureFrontPhotoFragment
 
 class MainActivity : AppCompatActivity() {
+    // Store front photo from step 3
+    private var frontBitmap: Bitmap? = null
+
+    fun setFrontBitmap(bitmap: Bitmap?) {
+        frontBitmap = bitmap
+    }
+
+    private var backBitmap: Bitmap? = null
+
+
+    fun setBackBitmap(bitmap: Bitmap?) {
+        backBitmap = bitmap
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // ⚠️ Phải gọi trước khi dùng insetsController
+        setContentView(R.layout.activity_main)
 
-        // ✅ FULLSCREEN MODE - đúng chuẩn Android 11+ trở lên
+        // ✅ FULLSCREEN MODE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             @Suppress("DEPRECATION")
             window.setDecorFitsSystemWindows(false)
             window.insetsController?.let { controller ->
-                controller.hide(
-                    WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars()
-                )
+                controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
                 controller.systemBarsBehavior =
                     WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
@@ -45,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                     )
         }
 
+        // ✅ Language selector logic
         val languageSelector = findViewById<LinearLayout>(R.id.ChonNgonNgu)
         languageSelector.setOnClickListener {
             val popup = PopupMenu(this, it)
@@ -60,30 +78,53 @@ class MainActivity : AppCompatActivity() {
                         showLanguageSnackbar("Đã chọn: Tiếng Việt")
                         true
                     }
-
                     R.id.lang_en -> {
                         languageText.text = "English"
                         flagImage.setImageResource(R.drawable.uk_flag)
                         showLanguageSnackbar("Selected: English")
                         true
                     }
-
                     R.id.lang_fr -> {
                         languageText.text = "Français"
                         flagImage.setImageResource(R.drawable.france_flag)
                         showLanguageSnackbar("Langue sélectionnée : Français")
                         true
                     }
-
                     else -> false
                 }
             }
             popup.show()
         }
 
-        // Load first fragment
+        // ✅ Load initial fragment
         if (savedInstanceState == null) {
             replaceFragment(DocumentSelectionFragment())
+        }
+
+        // ✅ Handle Back button (same as system back)
+        findViewById<Button>(R.id.btnBack).setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        // ✅ Handle Continue button (switch fragment manually)
+        findViewById<Button>(R.id.btnContinue).setOnClickListener {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+            when (currentFragment) {
+                is DocumentSelectionFragment -> {
+                    replaceFragment(PlaceDocumentFragment())
+                }
+                is PlaceDocumentFragment -> {
+                    replaceFragment(CaptureFrontPhotoFragment())
+                }
+                is CaptureFrontPhotoFragment -> {
+                    // Step 3 to Step 4
+                    replaceFragment(CaptureBackPhotoFragment())
+                }
+
+                else -> {
+                    // Optional: show toast or do nothing
+                }
+            }
         }
     }
 
@@ -98,7 +139,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Show Snackbar with custom text
+     * Shows a custom snackbar when language is changed
      */
     private fun showLanguageSnackbar(message: String) {
         val rootLayout = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main_layout)
@@ -108,4 +149,8 @@ class MainActivity : AppCompatActivity() {
             .setAction("OK") { }
             .show()
     }
+
+
+
 }
+
