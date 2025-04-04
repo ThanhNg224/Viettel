@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +30,8 @@ class CaptureFrontPhotoFragment : Fragment() {
     private lateinit var textViewTitle: TextView
     private lateinit var btnCapture: Button
     private lateinit var previewView: PreviewView
+    private lateinit var successTick: ImageView
+
 
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -49,10 +52,12 @@ class CaptureFrontPhotoFragment : Fragment() {
         }
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.fragment_capture_front_photo, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,6 +66,8 @@ class CaptureFrontPhotoFragment : Fragment() {
         textViewTitle = view.findViewById(R.id.tvInstruction)
         btnCapture = view.findViewById(R.id.btnCapture)
         previewView = view.findViewById(R.id.view_finder)
+        successTick = view.findViewById(R.id.imgSuccessTick)
+
 
         textViewTitle.text = "Vui lòng chụp ảnh mặt trước của giấy tờ"
         animateProgressBar(view)
@@ -84,6 +91,7 @@ class CaptureFrontPhotoFragment : Fragment() {
     private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         imageCapture = ImageCapture.Builder().build()
+
 
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
@@ -127,10 +135,21 @@ class CaptureFrontPhotoFragment : Fragment() {
                     val bmp = imageProxy.toBitmapSafe()
                     (activity as? MainActivity)?.setFrontBitmap(bmp)
                     // 1) Store in MainActivity
-
+                    requireActivity().runOnUiThread {
+                        successTick.apply {
+                            alpha = 0f
+                            visibility = View.VISIBLE
+                            animate().alpha(1f).setDuration(300).withEndAction {
+                                postDelayed({
+                                    animate().alpha(0f).setDuration(300).withEndAction {
+                                        visibility = View.GONE
+                                    }.start()
+                                }, 2000)
+                            }.start()
+                        }
 
                     // 2) Provide feedback
-                    requireActivity().runOnUiThread {
+
                         Toast.makeText(requireContext(), "Ảnh mặt trước đã chụp xong!", Toast.LENGTH_SHORT).show()
                     }
 

@@ -180,7 +180,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:contentDescription="@string/doc_placement_desc"
-                android:src="@drawable/ic_doc_placement" />
+                android:src="@drawable/ic_cccd_placement" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

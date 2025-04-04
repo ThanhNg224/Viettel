@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,11 +20,13 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat.animate
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
 import java.io.ByteArrayOutputStream
 import com.example.viettel.utils.toBitmapSafe
+import com.google.common.util.concurrent.ListenableFuture
 
 
 @SuppressLint("SetTextI18n")
@@ -33,6 +36,9 @@ class CaptureBackPhotoFragment : Fragment() {
     private lateinit var btnCapture: Button
     private lateinit var previewView: PreviewView
     private lateinit var imageCapture: ImageCapture
+    private lateinit var successTick: ImageView
+
+    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
     private val cameraPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -51,6 +57,7 @@ class CaptureBackPhotoFragment : Fragment() {
         textViewTitle = view.findViewById(R.id.tvInstruction)
         btnCapture = view.findViewById(R.id.btnCapture)
         previewView = view.findViewById(R.id.view_finder)
+        successTick = view.findViewById(R.id.imgSuccessTick)
 
         textViewTitle.text = "Vui lòng chụp ảnh mặt sau của giấy tờ"
         animateProgressBar(view)
@@ -67,8 +74,9 @@ class CaptureBackPhotoFragment : Fragment() {
     }
 
     private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         imageCapture = ImageCapture.Builder().build()
+
 
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
@@ -77,27 +85,67 @@ class CaptureBackPhotoFragment : Fragment() {
             }
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
             cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            try {
+                cameraProvider.bindToLifecycle(
+                    this,
+                    cameraSelector,
+                    preview,
+                    imageCapture
+                )
+                Log.d("CaptureFrontPhoto", "Camera bound successfully.")
+            } catch (exc: Exception) {
+                Log.e("CaptureFrontPhoto", "Camera binding failed: ${exc.message}", exc)
+                Toast.makeText(
+                    requireContext(),
+                    "Không thể mở camera: ${exc.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
+
 
     private fun takePhoto() {
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageCapturedCallback() {
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e("CaptureBackPhoto", "Failed: ${exc.message}", exc)
+                    Log.e("CaptureFrontPhoto", "Photo capture failed: ${exc.message}", exc)
+                    Toast.makeText(requireContext(), "Lỗi chụp ảnh: ${exc.message}", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onCaptureSuccess(imageProxy: ImageProxy) {
+                    Log.d("CaptureFrontPhoto", "Photo captured successfully!")
                     val bmp = imageProxy.toBitmapSafe()
                     (activity as? MainActivity)?.setBackBitmap(bmp)
-                    imageProxy.close()
-                    Toast.makeText(requireContext(), "Ảnh mặt sau đã chụp xong!", Toast.LENGTH_SHORT).show()
+                    // 1) Store in MainActivity
+                    requireActivity().runOnUiThread {
+                        successTick.apply {
+                            alpha = 0f
+                            visibility = View.VISIBLE
+                            animate().alpha(1f).setDuration(300).withEndAction {
+                                postDelayed({
+                                    animate().alpha(0f).setDuration(300).withEndAction {
+                                        visibility = View.GONE
+                                    }.start()
+                                }, 2000)
+                            }.start()
+                        }
 
-                    // TODO: Optional - move to next step
+                        // 2) Provide feedback
+
+                        Toast.makeText(requireContext(), "Ảnh mặt trước đã chụp xong!", Toast.LENGTH_SHORT).show()
+                    }
+
+                    // 3) Close the image proxy to free memory
+                    imageProxy.close()
+
+                    // 4) (Optional) Move to step 4
+                    // (activity as? MainActivity)?.replaceFragment(CaptureBackPhotoFragment())
                 }
+
             }
         )
     }

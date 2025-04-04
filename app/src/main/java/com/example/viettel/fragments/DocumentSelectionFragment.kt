@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
@@ -31,6 +32,8 @@ class DocumentSelectionFragment : Fragment() {
 
         val progressLine = view.findViewById<View>(R.id.progressLine)
         val progressBarContainer = view.findViewById<View>(R.id.progressBarContainer)
+        val imageOption1 = optionCCCD.findViewById<ImageView>(R.id.imageOption1)
+        val imageOption2 = optionPassport.findViewById<ImageView>(R.id.imageOption2)
 
         progressBarContainer.post {
             stepDistance = progressBarContainer.width.toFloat() / totalSteps
@@ -47,13 +50,34 @@ class DocumentSelectionFragment : Fragment() {
         }
 
         optionCCCD.setOnClickListener {
+            imageOption1.setBackgroundResource(R.drawable.red_circle)
+            imageOption2.setBackgroundResource(R.drawable.white_circle)
+
             Toast.makeText(requireContext(), "CCCD selected", Toast.LENGTH_SHORT).show()
-            (activity as? MainActivity)?.replaceFragment(PlaceDocumentFragment())
+
+            val fragment = PlaceDocumentFragment().apply {
+                arguments = Bundle().apply {
+                    putString("docType", "cccd")
+                }
+            }
+
+            (activity as? MainActivity)?.replaceFragment(fragment)
         }
 
         optionPassport.setOnClickListener {
+            imageOption1.setBackgroundResource(R.drawable.white_circle)
+            imageOption2.setBackgroundResource(R.drawable.red_circle)
+
             Toast.makeText(requireContext(), "Passport selected", Toast.LENGTH_SHORT).show()
-            (activity as? MainActivity)?.replaceFragment(PlaceDocumentFragment())
+
+            val fragment = PlaceDocumentFragment().apply {
+                arguments = Bundle().apply {
+                    putString("docType", "passport")
+                }
+            }
+
+            (activity as? MainActivity)?.replaceFragment(fragment)
         }
+
     }
 }
