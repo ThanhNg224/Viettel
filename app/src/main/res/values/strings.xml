@@ -30,8 +30,16 @@
     <string name="option_passport">Hộ chiếu</string>
     <string name="your_html_instruction">Vui lòng chọn loại giấy tờ để xác thực</string>
 
-    <!-- For step 2 -->
-    <string name="place_document_title">Vui lòng đặt giấy tờ vào khay máy quét</string>
-    <string name="doc_placement_desc">Hướng dẫn đặt giấy tờ vào máy</string>
+    <string name="nfc_scanning">Đang quét NFC...</string>
+    <string name="nfc_read_start">Bắt đầu đọc chip...</string>
+    <string name="nfc_read_finished">Đã đọc xong chip!</string>
+    <string name="nfc_success">Thành công!</string>
+    <string name="nfc_no_data">Không có dữ liệu Eid</string>
+    <string name="nfc_read_failed">Đọc lỗi: %1$s</string>
+    <string name="warning_cla_not_supported">CLA (Class) không được hỗ trợ!</string>
+
+    <string name="place_document_title">Place your document</string>
+    <string name="doc_placement_desc">Make sure it\'s fully visible</string>
+
 
 </resources>

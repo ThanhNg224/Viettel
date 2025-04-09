@@ -21,7 +21,7 @@ class PlaceDocumentFragment : Fragment(R.layout.fragment_place_document) {
             "passport" -> imgIllustration.setImageResource(R.drawable.ic_passport_placement)
         }
 
-        // Animate red progress bar (step 2)
+        //  (step 2)
         val progressLine = view.findViewById<View>(R.id.progressLine)
         val progressBarContainer = view.findViewById<View>(R.id.progressBarContainer)
 

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollViewEid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#FFEEEE">
+
+        <!-- ====== TOP IMAGES ROW ====== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:id="@+id/imgFront"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:contentDescription="Front Image"
+                android:scaleType="fitCenter"
+                android:background="@drawable/white_rectangle"
+                android:layout_marginEnd="50dp" />
+
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:contentDescription="Back Image"
+                android:scaleType="fitCenter"
+                android:background="@drawable/white_rectangle"
+                android:layout_marginEnd="50dp" />
+
+            <ImageView
+                android:id="@+id/imgChipFace"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:contentDescription="Chip Face Image"
+                android:scaleType="fitCenter"
+                android:background="@drawable/white_rectangle" />
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="12dp" />
+
+        <!-- ====== BASIC PERSON DETAILS ====== -->
+        <!-- Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Họ Tên:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- DOB -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày sinh:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtDob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Gender -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giới tính:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Nationality -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quốc tịch:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtNationality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- DocNumber -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số giấy tờ:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtDocNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Personal ID -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đặc điểm nhận dạng:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtPersonalIdentification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+
+
+        <!-- FatherName -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên Cha:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtFatherName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- MotherName -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên Mẹ:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtMotherName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- PlaceOfBirth -->
+
+
+        <!-- PlaceOfOrigin -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nguyên quán:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtPlaceOfOrigin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- PlaceOfResidence -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nơi thường trú:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtPlaceOfResidence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Religion -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tôn giáo:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtReligion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Ethnicity -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dân tộc:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtEthnicity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- DateOfIssue -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày cấp:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtDateOfIssue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Date Expiry -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày hết hạn:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtDateExpiry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginVertical="12dp" />
+
+
+
+        <!-- Certificate / signature info -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chứng chỉ ký (docSigningCertificate):"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/txtSignatureInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginVertical="12dp" />
+
+        <!-- Verification status -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kết quả xác thực chip:"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/txtVerificationStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="16dp"/>
+    </LinearLayout>
+</ScrollView>

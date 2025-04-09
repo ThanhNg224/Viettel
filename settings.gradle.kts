@@ -9,16 +9,26 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven { url = uri("https://jitpack.io") }
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+
+        // ✅ Include this to resolve local AAR files in /libs
+        flatDir {
+            dirs("app/libs", "eidsdk/libs")
+        }
     }
 }
 
 rootProject.name = "Viettel"
+
+// ✅ Include both modules
 include(":app")
- 
+include(":eidsdk")

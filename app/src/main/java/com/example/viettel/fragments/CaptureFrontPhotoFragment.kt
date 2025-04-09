@@ -3,9 +3,10 @@ package com.example.viettel.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.graphics.*
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
@@ -18,29 +19,22 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
-import com.google.common.util.concurrent.ListenableFuture
-import java.io.ByteArrayOutputStream
 import com.example.viettel.activities.MainActivity
-import com.example.viettel.utils.toBitmapSafe
+import com.google.common.util.concurrent.ListenableFuture
+import vn.leeon.eidsdk.utils.ImageUtils
 
-
-@SuppressLint("SetTextI18n")
 class CaptureFrontPhotoFragment : Fragment() {
 
     private lateinit var textViewTitle: TextView
     private lateinit var btnCapture: Button
     private lateinit var previewView: PreviewView
     private lateinit var successTick: ImageView
-
-
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
-    // 🔒 Permission launcher
     private val cameraPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                Log.d("CaptureFrontPhoto", "Permission granted, starting camera.")
                 previewView.post { startCamera() }
             } else {
                 Toast.makeText(
@@ -52,14 +46,13 @@ class CaptureFrontPhotoFragment : Fragment() {
         }
 
     override fun onCreateView(
-
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.fragment_capture_front_photo, container, false)
-
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,7 +61,6 @@ class CaptureFrontPhotoFragment : Fragment() {
         previewView = view.findViewById(R.id.view_finder)
         successTick = view.findViewById(R.id.imgSuccessTick)
 
-
         textViewTitle.text = "Vui lòng chụp ảnh mặt trước của giấy tờ"
         animateProgressBar(view)
 
@@ -76,7 +68,6 @@ class CaptureFrontPhotoFragment : Fragment() {
             takePhoto()
         }
 
-        // ✅ Request permission if needed
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
@@ -90,36 +81,36 @@ class CaptureFrontPhotoFragment : Fragment() {
 
     private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        imageCapture = ImageCapture.Builder().build()
-
 
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
+
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(previewView.surfaceProvider)
             }
 
+            // 🧠 imageCapture MUST be initialized here inside the listener
+            imageCapture = ImageCapture.Builder()
+                .setTargetRotation(previewView.display.rotation)
+                .build()
+
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-            cameraProvider.unbindAll()
             try {
+                cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     this,
                     cameraSelector,
                     preview,
                     imageCapture
                 )
-                Log.d("CaptureFrontPhoto", "Camera bound successfully.")
             } catch (exc: Exception) {
                 Log.e("CaptureFrontPhoto", "Camera binding failed: ${exc.message}", exc)
-                Toast.makeText(
-                    requireContext(),
-                    "Không thể mở camera: ${exc.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "Không thể mở camera", Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
+
 
     private fun takePhoto() {
         imageCapture.takePicture(
@@ -130,11 +121,18 @@ class CaptureFrontPhotoFragment : Fragment() {
                     Toast.makeText(requireContext(), "Lỗi chụp ảnh: ${exc.message}", Toast.LENGTH_SHORT).show()
                 }
 
+                @androidx.camera.core.ExperimentalGetImage
                 override fun onCaptureSuccess(imageProxy: ImageProxy) {
-                    Log.d("CaptureFrontPhoto", "Photo captured successfully!")
-                    val bmp = imageProxy.toBitmapSafe()
-                    (activity as? MainActivity)?.setFrontBitmap(bmp)
-                    // 1) Store in MainActivity
+                    val bmp = imageProxy.image?.let { img ->
+                        ImageUtils.imageToByteArray(img)?.let { byteArray ->
+                            BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                        }
+                    }
+
+                    bmp?.let {
+                        (activity as? MainActivity)?.setFrontBitmap(it)
+                    }
+
                     requireActivity().runOnUiThread {
                         successTick.apply {
                             alpha = 0f
@@ -148,24 +146,14 @@ class CaptureFrontPhotoFragment : Fragment() {
                             }.start()
                         }
 
-                    // 2) Provide feedback
-
                         Toast.makeText(requireContext(), "Ảnh mặt trước đã chụp xong!", Toast.LENGTH_SHORT).show()
                     }
 
-                    // 3) Close the image proxy to free memory
                     imageProxy.close()
-
-                    // 4) (Optional) Move to step 4
-                    // (activity as? MainActivity)?.replaceFragment(CaptureBackPhotoFragment())
                 }
-
             }
         )
     }
-
-
-
 
     private fun animateProgressBar(view: View) {
         val progressLine = view.findViewById<View>(R.id.progressLine)
@@ -189,6 +177,4 @@ class CaptureFrontPhotoFragment : Fragment() {
             animator.start()
         }
     }
-
-
 }
