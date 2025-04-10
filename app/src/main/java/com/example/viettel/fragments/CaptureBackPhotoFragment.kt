@@ -8,10 +8,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -34,7 +36,7 @@ import vn.leeon.eidsdk.utils.OcrUtils
 class CaptureBackPhotoFragment : Fragment() {
 
     private lateinit var previewView: PreviewView
-    private lateinit var btnCapture: Button
+    private lateinit var captureButton: ImageButton
     private lateinit var textViewTitle: TextView
     private lateinit var successTick: ImageView
 
@@ -65,7 +67,7 @@ class CaptureBackPhotoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         previewView = view.findViewById(R.id.view_finder)
-        btnCapture = view.findViewById(R.id.btnCapture)
+        captureButton = view.findViewById(R.id.btnCapture)
         textViewTitle = view.findViewById(R.id.tvInstruction)
         successTick = view.findViewById(R.id.imgSuccessTick)
 
@@ -79,7 +81,7 @@ class CaptureBackPhotoFragment : Fragment() {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
-        btnCapture.setOnClickListener { takePhoto() }
+        captureButton.setOnClickListener { takePhoto() }
 
         // Animate progress bar to step 4 (for example)
         animateProgressBar(view)
@@ -87,15 +89,19 @@ class CaptureBackPhotoFragment : Fragment() {
 
     private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        previewView.scaleType = PreviewView.ScaleType.FIT_CENTER
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
             val preview = Preview.Builder()
+                .setTargetResolution(Size(1280, 720))
                 .build()
-                .also { it.setSurfaceProvider(previewView.surfaceProvider) }
+                .also {
+                    it.setSurfaceProvider(previewView.surfaceProvider)
+                }
 
-            // Initialize imageCapture here—important to do it inside the listener
             imageCapture = ImageCapture.Builder()
+                .setTargetResolution(Size(1280, 720))
                 .setTargetRotation(previewView.display.rotation)
                 .build()
 
@@ -146,6 +152,7 @@ class CaptureBackPhotoFragment : Fragment() {
                                 postDelayed({
                                     animate().alpha(0f).setDuration(300).withEndAction {
                                         visibility = View.GONE
+
                                     }.start()
                                 }, 2000)
                             }.start()

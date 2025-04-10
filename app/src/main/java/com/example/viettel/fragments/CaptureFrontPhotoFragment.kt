@@ -1,5 +1,6 @@
 package com.example.viettel.fragments
 
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -7,13 +8,20 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.*
+import androidx.camera.core.AspectRatio
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -26,9 +34,10 @@ import vn.leeon.eidsdk.utils.ImageUtils
 class CaptureFrontPhotoFragment : Fragment() {
 
     private lateinit var textViewTitle: TextView
-    private lateinit var btnCapture: Button
     private lateinit var previewView: PreviewView
     private lateinit var successTick: ImageView
+    private lateinit var captureButton: ImageButton
+
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
@@ -57,14 +66,14 @@ class CaptureFrontPhotoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         textViewTitle = view.findViewById(R.id.tvInstruction)
-        btnCapture = view.findViewById(R.id.btnCapture)
         previewView = view.findViewById(R.id.view_finder)
         successTick = view.findViewById(R.id.imgSuccessTick)
+        captureButton = view.findViewById(R.id.btnCapture)
 
         textViewTitle.text = "Vui lòng chụp ảnh mặt trước của giấy tờ"
         animateProgressBar(view)
 
-        btnCapture.setOnClickListener {
+        captureButton.setOnClickListener {
             takePhoto()
         }
 
@@ -82,15 +91,20 @@ class CaptureFrontPhotoFragment : Fragment() {
     private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
+        previewView.scaleType = PreviewView.ScaleType.FIT_CENTER // Important fix for visual alignment
+
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(previewView.surfaceProvider)
-            }
+            val preview = Preview.Builder()
+                .setTargetResolution(Size(1280, 720)) // Fallback for stable aspect ratio
+                .build()
+                .also {
+                    it.setSurfaceProvider(previewView.surfaceProvider)
+                }
 
-            // 🧠 imageCapture MUST be initialized here inside the listener
             imageCapture = ImageCapture.Builder()
+                .setTargetResolution(Size(1280, 720)) // Match preview
                 .setTargetRotation(previewView.display.rotation)
                 .build()
 
@@ -108,6 +122,7 @@ class CaptureFrontPhotoFragment : Fragment() {
                 Log.e("CaptureFrontPhoto", "Camera binding failed: ${exc.message}", exc)
                 Toast.makeText(requireContext(), "Không thể mở camera", Toast.LENGTH_SHORT).show()
             }
+
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
@@ -122,7 +137,7 @@ class CaptureFrontPhotoFragment : Fragment() {
                 }
 
                 @androidx.camera.core.ExperimentalGetImage
-                override fun onCaptureSuccess(imageProxy: ImageProxy) {
+                override fun onCaptureSuccess(imageProxy: androidx.camera.core.ImageProxy) {
                     val bmp = imageProxy.image?.let { img ->
                         ImageUtils.imageToByteArray(img)?.let { byteArray ->
                             BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
@@ -141,14 +156,15 @@ class CaptureFrontPhotoFragment : Fragment() {
                                 postDelayed({
                                     animate().alpha(0f).setDuration(300).withEndAction {
                                         visibility = View.GONE
+                                        (activity as? MainActivity)?.replaceFragment(
+                                            com.example.viettel.fragments.CaptureBackPhotoFragment()
+                                        )
                                     }.start()
                                 }, 2000)
                             }.start()
                         }
-
                         Toast.makeText(requireContext(), "Ảnh mặt trước đã chụp xong!", Toast.LENGTH_SHORT).show()
                     }
-
                     imageProxy.close()
                 }
             }

@@ -84,7 +84,9 @@ dependencies {
     // Vision + MLKit
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.google.mlkit:text-recognition:16.0.1")
-
+    implementation("com.google.mlkit:object-detection:17.0.0")
+    implementation("com.google.mlkit:object-detection-common:17.0.0")
+    implementation("com.google.mlkit:vision-common:17.3.0")
     // MRZ / Crypto
     implementation("org.jmrtd:jmrtd:0.7.39") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")

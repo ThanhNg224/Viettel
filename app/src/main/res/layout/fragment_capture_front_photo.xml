@@ -256,11 +256,10 @@
 
         <!-- Card Content Area specific to Step 3 -->
         <!-- 📷 Content Area -->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardContent"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
             android:background="#FFEEEE"
             android:padding="10dp"
             app:layout_constraintTop_toBottomOf="@id/cardHeader"
@@ -271,63 +270,70 @@
             <!-- 📝 Instruction -->
             <TextView
                 android:id="@+id/tvInstruction"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Vui lòng chụp ảnh mặt trước của giấy tờ"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- 🎥 FrameLayout to hold preview + green tick -->
-            <FrameLayout
-                android:layout_width="match_parent"
+            <!-- 🎥 Camera + Button Group (16:9 bounded) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cameraFrame"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp">
+                app:layout_constraintTop_toBottomOf="@id/tvInstruction"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintDimensionRatio="16:9"
+                android:background="#000000">
 
-                <!-- 📦 Centered Camera Frame -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/view_finder"
+                    android:layout_width="0dp"
+                    android:layout_height="650dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:scaleType="fitCenter" />
 
-                    <androidx.camera.view.PreviewView
-                        android:id="@+id/view_finder"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintDimensionRatio="16:9"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageButton
+                    android:id="@+id/btnCapture"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_camera_shutter"
+                    android:contentDescription="Chụp ảnh"
+                    android:scaleType="centerInside"
+                    android:scaleX="2.5"
+                    android:scaleY="2.5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- ✅ Green Tick Overlay -->
                 <ImageView
                     android:id="@+id/imgSuccessTick"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
                     android:src="@drawable/ic_success_tick"
-                    android:contentDescription="Success Tick" />
-            </FrameLayout>
+                    android:visibility="gone"
+                    android:contentDescription="Success"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- 📸 Capture Button -->
-            <Button
-                android:id="@+id/btnCapture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chụp ảnh"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:layout_marginTop="0dp"
-                android:backgroundTint="@android:color/holo_red_light"
-                android:textColor="@android:color/white"/>
-        </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
