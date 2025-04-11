@@ -304,6 +304,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:scaleType="fitCenter" />
+                <ImageView
+                    android:id="@+id/imgResultOverlay"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="8dp"
+
+                    android:visibility="gone"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="Result Overlay"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
 
 
                 <ImageButton
@@ -333,101 +347,191 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/emojiTL"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="18dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
+
+                <!-- Emoji Icon -->
                 <ImageView
                     android:id="@+id/imgEmojiTL"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/emoji_smile"
-                    android:scaleType="centerInside" />
+                    android:scaleType="centerInside"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Label Text -->
+                <TextView
+                    android:id="@+id/textEmojiTL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cười"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/imgEmojiTL"
+                    app:layout_constraintStart_toStartOf="@id/imgEmojiTL"
+                    app:layout_constraintEnd_toEndOf="@id/imgEmojiTL"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <!-- ✅ Tick Overlay -->
                 <ImageView
                     android:id="@+id/imgTickTL"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_gravity="bottom|end"
                     android:layout_margin="2dp"
                     android:src="@drawable/ic_success_tick"
-                    android:visibility="gone" />
-            </FrameLayout>
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="@id/imgEmojiTL"
+                    app:layout_constraintEnd_toEndOf="@id/imgEmojiTL" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <!-- 😌 TR Emoji -->
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/emojiTR"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="18dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <ImageView
                     android:id="@+id/imgEmojiTR"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/emoji_blink"
                     android:scaleType="centerInside"
-                    android:src="@drawable/emoji_blink" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/textEmojiTR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chớp mắt"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/imgEmojiTR"
+                    app:layout_constraintStart_toStartOf="@id/imgEmojiTR"
+                    app:layout_constraintEnd_toEndOf="@id/imgEmojiTR"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <ImageView
                     android:id="@+id/imgTickTR"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_gravity="bottom|end"
                     android:layout_margin="2dp"
                     android:src="@drawable/ic_success_tick"
-                    android:visibility="gone" />
-            </FrameLayout>
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="@id/imgEmojiTR"
+                    app:layout_constraintEnd_toEndOf="@id/imgEmojiTR" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <!-- 😎 BL Emoji -->
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/emojiBL"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="18dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
+
                 <ImageView
                     android:id="@+id/imgEmojiBL"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/emoji_left"
-                    android:scaleType="centerInside" />
+                    android:scaleType="centerInside"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/textEmojiBL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quay trái"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/imgEmojiBL"
+                    app:layout_constraintStart_toStartOf="@id/imgEmojiBL"
+                    app:layout_constraintEnd_toEndOf="@id/imgEmojiBL"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <ImageView
                     android:id="@+id/imgTickBL"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_gravity="bottom|end"
                     android:layout_margin="2dp"
                     android:src="@drawable/ic_success_tick"
-                    android:visibility="gone" />
-            </FrameLayout>
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="@id/imgEmojiBL"
+                    app:layout_constraintEnd_toEndOf="@id/imgEmojiBL" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <!-- 😁 BR Emoji -->
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/emojiBR"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="18dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
+
                 <ImageView
                     android:id="@+id/imgEmojiBR"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/emoji_right"
-                    android:scaleType="centerInside" />
+                    android:scaleType="centerInside"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/textEmojiBR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quay phải"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/imgEmojiBR"
+                    app:layout_constraintStart_toStartOf="@id/imgEmojiBR"
+                    app:layout_constraintEnd_toEndOf="@id/imgEmojiBR"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <ImageView
                     android:id="@+id/imgTickBR"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_gravity="bottom|end"
                     android:layout_margin="2dp"
                     android:src="@drawable/ic_success_tick"
-                    android:visibility="gone" />
-            </FrameLayout>
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="@id/imgEmojiBR"
+                    app:layout_constraintEnd_toEndOf="@id/imgEmojiBR" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

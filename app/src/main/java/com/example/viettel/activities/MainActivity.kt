@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnContinue).setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
             when (currentFragment) {
-                is DocumentSelectionFragment -> replaceFragment(PlaceDocumentFragment())
+                is DocumentSelectionFragment -> replaceFragment(PortraitLivenessFragment())
                 is PlaceDocumentFragment -> replaceFragment(CaptureFrontPhotoFragment())
                 is CaptureFrontPhotoFragment -> replaceFragment(CaptureBackPhotoFragment())
                 is NfcFragment -> replaceFragment(EidDetailsFragment())

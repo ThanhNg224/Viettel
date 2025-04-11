@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
+
 android {
     namespace = "com.example.viettel"
     compileSdk = 35
@@ -66,6 +67,7 @@ configurations.all {
     }
 }
 
+
 dependencies {
     implementation(project(":eidsdk"))
     implementation(libs.androidx.core.ktx)
@@ -87,6 +89,10 @@ dependencies {
     implementation("com.google.mlkit:object-detection:17.0.0")
     implementation("com.google.mlkit:object-detection-common:17.0.0")
     implementation("com.google.mlkit:vision-common:17.3.0")
+    implementation ("com.google.mlkit:face-detection:16.1.7")
+    implementation ("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
+
+
     // MRZ / Crypto
     implementation("org.jmrtd:jmrtd:0.7.39") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
