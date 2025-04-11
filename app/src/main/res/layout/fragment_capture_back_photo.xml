@@ -272,7 +272,7 @@
                 android:layout_height="wrap_content"
                 android:text="Vui lòng chụp ảnh mặt sau của giấy tờ"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginBottom="10dp"

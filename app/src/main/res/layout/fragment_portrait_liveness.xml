@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mainCard"
+    android:id="@+id/cardViewStep6"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Header with progress -->
+        <!-- Header with progress bar -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardHeader"
             android:layout_width="0dp"
@@ -28,16 +28,17 @@
                 android:id="@+id/tvDocumentTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Chọn loại giấy tờ"
+                android:text="Chụp chân dung"
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/progressBarContainer"
-                app:layout_constraintHorizontal_weight="1.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/progressBarContainer"
+                app:layout_constraintHorizontal_weight="1.5" />
 
+            <!-- Gray track line -->
             <View
                 android:id="@+id/trackLine"
                 android:layout_width="0dp"
@@ -49,6 +50,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/progressBarContainer"
                 app:layout_constraintVertical_bias="0.3" />
 
+            <!-- Red progress line -->
             <View
                 android:id="@+id/progressLine"
                 android:layout_width="0dp"
@@ -57,7 +59,7 @@
                 app:layout_constraintStart_toStartOf="@+id/progressBarContainer"
                 app:layout_constraintTop_toTopOf="@+id/progressBarContainer"
                 app:layout_constraintBottom_toBottomOf="@+id/progressBarContainer"
-                app:layout_constraintVertical_bias="0.3"/>
+                app:layout_constraintVertical_bias="0.3" />
 
             <!-- Steps container -->
             <LinearLayout
@@ -73,45 +75,41 @@
                 app:layout_constraintStart_toEndOf="@id/tvDocumentTitle"
                 app:layout_constraintHorizontal_weight="2">
 
-                <!-- Step 1 -->
-                <LinearLayout
-                    android:id="@+id/step1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="2dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:id="@+id/step1Icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_redtick" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Chọn giấy tờ"
-                        android:textSize="10sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"
-                        android:maxLines="2" />
-                </LinearLayout>
-
-                <!-- Step 2 -->
+                <!-- Step 1: Chọn giấy tờ (red tick) -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
                     android:orientation="vertical"
                     android:gravity="center">
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chọn giấy tờ"
+                        android:textSize="10sp"
+                        android:textColor="@color/black"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <!-- Step 2: Đặt giấy tờ (red tick) -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -121,18 +119,19 @@
                         android:gravity="center"/>
                 </LinearLayout>
 
-                <!-- Step 3 -->
+                <!-- Step 3: Chụp ảnh trước (red tick) -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
                     android:orientation="vertical"
                     android:gravity="center">
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -142,18 +141,19 @@
                         android:gravity="center"/>
                 </LinearLayout>
 
-                <!-- Step 4 -->
+                <!-- Step 4: Chụp ảnh sau -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
                     android:orientation="vertical"
                     android:gravity="center">
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -163,18 +163,19 @@
                         android:gravity="center"/>
                 </LinearLayout>
 
-                <!-- Step 5 -->
+                <!-- Step 5: Quét chip -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
                     android:orientation="vertical"
                     android:gravity="center">
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -184,18 +185,19 @@
                         android:gravity="center"/>
                 </LinearLayout>
 
-                <!-- Step 6 -->
+                <!-- Step 6: Chân dung -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
                     android:orientation="vertical"
                     android:gravity="center">
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -205,11 +207,12 @@
                         android:gravity="center"/>
                 </LinearLayout>
 
-                <!-- Step 7 -->
+                <!-- Step 7: Thanh toán -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
                     android:orientation="vertical"
                     android:gravity="center">
                     <ImageView
@@ -226,11 +229,12 @@
                         android:gravity="center"/>
                 </LinearLayout>
 
-                <!-- Step 8 -->
+                <!-- Step 8: Khảo sát -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
                     android:orientation="vertical"
                     android:gravity="center">
                     <ImageView
@@ -249,116 +253,182 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Card Content Area: CCCD or Passport options -->
-        <LinearLayout
+        <!-- Content: emoji + preview + button -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardContent"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="#FFEEEE"
-            android:orientation="vertical"
-            android:padding="32dp"
+            android:padding="5dp"
             app:layout_constraintTop_toBottomOf="@id/cardHeader"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
+            <!-- 🔥 TL Emoji -->
 
+
+
+            <!-- 📝 Instruction -->
             <TextView
                 android:id="@+id/tvInstruction"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:gravity="center"
+                android:text="Vui lòng chụp ảnh chân dung đang cười"
                 android:textColor="@color/black"
                 android:textSize="26sp"
                 android:textStyle="bold"
-                android:text="@string/your_html_instruction"
-                android:lineSpacingExtra="4dp" />
+                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
+            <!-- 🎥 Camera + Button Group (16:9 bounded) -->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/contentOptions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:id="@+id/cameraFrame"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tvInstruction"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintDimensionRatio="16:9"
+                android:background="#000000">
 
-                <!-- CCCD option -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/option1"
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/view_finder"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="650dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/option2"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_percent="0.5">
-
-                    <TextView
-                        android:id="@+id/textOption1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Căn cước công dân"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/imageOption1"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintWidth_percent="0.6"
-                        app:layout_constraintTop_toBottomOf="@id/textOption1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:scaleType="fitCenter"
-                        android:background="@drawable/white_circle"
-                        android:padding="16dp"
-                        android:src="@drawable/cccd_image" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!-- Passport option -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/option2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/option1"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:scaleType="fitCenter" />
+
+
+                <ImageButton
+                    android:id="@+id/btnCapture"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="@drawable/bg_camera_shutter"
+                    android:contentDescription="Chụp ảnh"
+                    android:scaleType="centerInside"
+                    android:scaleX="2.5"
+                    android:scaleY="2.5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imgSuccessTick"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_success_tick"
+                    android:visibility="gone"
+                    android:contentDescription="Success"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_percent="0.5">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-                    <TextView
-                        android:id="@+id/textOption2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Hộ chiếu"
-                        android:textColor="@color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/imageOption2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@drawable/white_circle"
-                        android:padding="16dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/passport_image"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textOption2"
-                        app:layout_constraintWidth_percent="0.6" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
+            <FrameLayout
+                android:id="@+id/emojiTL"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+                <ImageView
+                    android:id="@+id/imgEmojiTL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/emoji_smile"
+                    android:scaleType="centerInside" />
+                <ImageView
+                    android:id="@+id/imgTickTL"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="2dp"
+                    android:src="@drawable/ic_success_tick"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- 😌 TR Emoji -->
+            <FrameLayout
+                android:id="@+id/emojiTR"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/imgEmojiTR"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/emoji_blink" />
+                <ImageView
+                    android:id="@+id/imgTickTR"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="2dp"
+                    android:src="@drawable/ic_success_tick"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- 😎 BL Emoji -->
+            <FrameLayout
+                android:id="@+id/emojiBL"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+                <ImageView
+                    android:id="@+id/imgEmojiBL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/emoji_left"
+                    android:scaleType="centerInside" />
+                <ImageView
+                    android:id="@+id/imgTickBL"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="2dp"
+                    android:src="@drawable/ic_success_tick"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- 😁 BR Emoji -->
+            <FrameLayout
+                android:id="@+id/emojiBR"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <ImageView
+                    android:id="@+id/imgEmojiBR"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/emoji_right"
+                    android:scaleType="centerInside" />
+                <ImageView
+                    android:id="@+id/imgTickBR"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="2dp"
+                    android:src="@drawable/ic_success_tick"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

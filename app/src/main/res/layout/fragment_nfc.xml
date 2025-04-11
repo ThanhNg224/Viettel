@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="Đang đọc NFC..."
-            android:textSize="16sp"
+            android:textSize="26sp"
             android:textColor="@android:color/black" />
     </LinearLayout>
 </FrameLayout>
