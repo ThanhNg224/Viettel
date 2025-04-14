@@ -30,6 +30,7 @@ import android.media.MediaPlayer
 import androidx.fragment.app.activityViewModels
 import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.viewmodel.DocumentViewModel
+import com.example.viettel.viewmodel.PortraitAction
 import kotlin.getValue
 
 
@@ -238,7 +239,10 @@ class PortraitLivenessFragment : Fragment() {
             playSound(R.raw.siuuu)
 
             // Save the currently captured image for this action into the ViewModel
-            docViewModel.portraitActions[currentIndex] = lastCapturedBitmap
+            getCurrentAction()?.let {
+                docViewModel.portraitActions[it] = lastCapturedBitmap
+            }
+
 
             // Move to the next challenge
             currentIndex++
@@ -304,5 +308,14 @@ class PortraitLivenessFragment : Fragment() {
         mediaPlayer.start()
     }
 
+    private fun getCurrentAction(): PortraitAction? {
+        return when (currentIndex) {
+            0 -> PortraitAction.SMILE
+            1 -> PortraitAction.BLINK
+            2 -> PortraitAction.TURN_LEFT
+            3 -> PortraitAction.TURN_RIGHT
+            else -> null
+        }
+    }
 
 }

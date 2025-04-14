@@ -23,6 +23,7 @@ import com.example.viettel.fragments.DocumentSelectionFragment
 import com.example.viettel.fragments.EidDetailsFragment
 import com.example.viettel.fragments.NfcFragment
 import com.example.viettel.fragments.PlaceDocumentFragment
+import com.example.viettel.fragments.PortraitComparisonFragment
 import com.example.viettel.fragments.PortraitLivenessFragment
 import com.google.android.material.snackbar.Snackbar
 import org.jmrtd.lds.icao.MRZInfo
@@ -107,7 +108,8 @@ class MainActivity : AppCompatActivity() {
                 is CaptureFrontPhotoFragment -> replaceFragment(CaptureBackPhotoFragment())
                 is NfcFragment -> replaceFragment(EidDetailsFragment())
                 is EidDetailsFragment -> replaceFragment(PortraitLivenessFragment())
-                is PortraitLivenessFragment -> Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
+                is PortraitLivenessFragment -> replaceFragment(PortraitComparisonFragment())
+                is PortraitComparisonFragment -> Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
                 else -> Toast.makeText(this, "Không xác định bước hiện tại", Toast.LENGTH_SHORT).show()
             }
         }
