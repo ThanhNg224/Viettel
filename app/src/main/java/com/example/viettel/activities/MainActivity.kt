@@ -1,6 +1,5 @@
 package com.example.viettel.activities
 
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.util.Log

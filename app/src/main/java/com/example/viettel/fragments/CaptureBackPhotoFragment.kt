@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.utils.ProgressUtils
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
@@ -87,8 +88,9 @@ class CaptureBackPhotoFragment : Fragment() {
 
         captureButton.setOnClickListener { takePhoto() }
 
-        // Animate progress bar to step 4 (for example)
-        animateProgressBar(view)
+        // Animate progress bar to step 4
+        ProgressUtils.animateProgressToStep(view, 4)
+
     }
 
     private fun startCamera() {
@@ -219,29 +221,5 @@ class CaptureBackPhotoFragment : Fragment() {
             }
     }
 
-    /**
-     * Animates the progress bar (red line) to the desired step.
-     * In this case, we animate to step 4.
-     */
-    private fun animateProgressBar(view: View) {
-        val progressLine = view.findViewById<View>(R.id.progressLine)
-        val progressBarContainer = view.findViewById<View>(R.id.progressBarContainer)
-        progressBarContainer?.post {
-            val totalSteps = 8
-            val stepDistance = progressBarContainer.width.toFloat() / totalSteps
-            val step4Width = (stepDistance * 4).toInt()
 
-            val lp = progressLine.layoutParams
-            lp.width = 0
-            progressLine.layoutParams = lp
-
-            val animator = android.animation.ValueAnimator.ofInt(0, step4Width)
-            animator.duration = 400
-            animator.addUpdateListener { anim ->
-                lp.width = anim.animatedValue as Int
-                progressLine.layoutParams = lp
-            }
-            animator.start()
-        }
-    }
 }

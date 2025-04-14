@@ -1,5 +1,6 @@
 package com.example.viettel.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.viettel.R
-import com.example.viettel.activities.MainActivity
+
 import com.example.viettel.viewmodel.DocumentViewModel
 import vn.leeon.eidsdk.data.Eid
 import vn.leeon.eidsdk.jmrtd.FeatureStatus
@@ -36,7 +37,7 @@ class EidDetailsFragment : Fragment() {
 
     private lateinit var txtFatherName: TextView
     private lateinit var txtMotherName: TextView
-    private lateinit var txtPlaceOfBirth: TextView
+
     private lateinit var txtPlaceOfOrigin: TextView
     private lateinit var txtPlaceOfResidence: TextView
     private lateinit var txtReligion: TextView
@@ -117,6 +118,7 @@ class EidDetailsFragment : Fragment() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun displayEidInfo() {
         val pod = eid?.personOptionalDetails
         if (pod != null) {

@@ -26,6 +26,7 @@ import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.media.MediaPlayer
+import com.example.viettel.utils.ProgressUtils
 
 
 class PortraitLivenessFragment : Fragment() {
@@ -105,7 +106,8 @@ class PortraitLivenessFragment : Fragment() {
         }
 
         // Animate progress bar to step 6
-        animateProgressBar(view)
+        ProgressUtils.animateProgressToStep(view, 5)
+
     }
 
     private fun startCamera() {
@@ -279,30 +281,7 @@ class PortraitLivenessFragment : Fragment() {
         cameraExecutor.shutdown()
     }
 
-    /**
-     * Animate the red progress bar to step 6
-     */
-    private fun animateProgressBar(view: View) {
-        val progressLine = view.findViewById<View>(R.id.progressLine)
-        val progressBarContainer = view.findViewById<View>(R.id.progressBarContainer)
-        progressBarContainer?.post {
-            val totalSteps = 8
-            val stepDistance = progressBarContainer.width.toFloat() / totalSteps
-            val step6Width = (stepDistance * 6).toInt()
 
-            val lp = progressLine.layoutParams
-            lp.width = 0
-            progressLine.layoutParams = lp
-
-            val animator = android.animation.ValueAnimator.ofInt(0, step6Width)
-            animator.duration = 500
-            animator.addUpdateListener { anim ->
-                lp.width = anim.animatedValue as Int
-                progressLine.layoutParams = lp
-            }
-            animator.start()
-        }
-    }
 
     companion object {
         private const val TAG = "PortraitLiveness"

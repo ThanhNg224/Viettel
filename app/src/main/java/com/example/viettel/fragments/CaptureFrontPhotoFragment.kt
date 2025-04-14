@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.viewmodel.DocumentViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import vn.leeon.eidsdk.utils.ImageUtils
@@ -74,7 +75,8 @@ class CaptureFrontPhotoFragment : Fragment() {
         captureButton = view.findViewById(R.id.btnCapture)
 
         textViewTitle.text = "Vui lòng chụp ảnh mặt trước của giấy tờ"
-        animateProgressBar(view)
+        ProgressUtils.animateProgressToStep(view, 3)
+
 
         captureButton.setOnClickListener {
             takePhoto()
@@ -174,26 +176,5 @@ class CaptureFrontPhotoFragment : Fragment() {
         )
     }
 
-    private fun animateProgressBar(view: View) {
-        val progressLine = view.findViewById<View>(R.id.progressLine)
-        val progressBarContainer = view.findViewById<View>(R.id.progressBarContainer)
-        progressBarContainer?.post {
-            val totalSteps = 8
-            val stepDistance = progressBarContainer.width.toFloat() / totalSteps
-            val step3Width = (stepDistance * 3).toInt()
 
-            val layoutParams = progressLine.layoutParams
-            layoutParams.width = 0
-            progressLine.layoutParams = layoutParams
-
-            val animator = android.animation.ValueAnimator.ofInt(0, step3Width).apply {
-                duration = 400
-                addUpdateListener { anim ->
-                    layoutParams.width = anim.animatedValue as Int
-                    progressLine.layoutParams = layoutParams
-                }
-            }
-            animator.start()
-        }
-    }
 }

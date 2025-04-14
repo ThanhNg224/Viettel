@@ -1,6 +1,6 @@
 package com.example.viettel.fragments
 
-import android.animation.ValueAnimator
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +11,12 @@ import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.utils.ProgressUtils
+
 
 class DocumentSelectionFragment : Fragment() {
 
-    private var stepDistance: Float = 0f
-    private val totalSteps = 8
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,24 +31,14 @@ class DocumentSelectionFragment : Fragment() {
         val optionCCCD = view.findViewById<ConstraintLayout>(R.id.option1)
         val optionPassport = view.findViewById<ConstraintLayout>(R.id.option2)
 
-        val progressLine = view.findViewById<View>(R.id.progressLine)
-        val progressBarContainer = view.findViewById<View>(R.id.progressBarContainer)
+
         val imageOption1 = optionCCCD.findViewById<ImageView>(R.id.imageOption1)
         val imageOption2 = optionPassport.findViewById<ImageView>(R.id.imageOption2)
 
-        progressBarContainer.post {
-            stepDistance = progressBarContainer.width.toFloat() / totalSteps
-            val width = (stepDistance * 1).toInt()
-            val layoutParams = progressLine.layoutParams
-            ValueAnimator.ofInt(0, width).apply {
-                duration = 400
-                addUpdateListener {
-                    layoutParams.width = it.animatedValue as Int
-                    progressLine.layoutParams = layoutParams
-                }
-                start()
-            }
-        }
+        ProgressUtils.animateProgressToStep(view, 1)
+
+
+
 
         optionCCCD.setOnClickListener {
             imageOption1.setBackgroundResource(R.drawable.red_circle)
