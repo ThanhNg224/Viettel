@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Original colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -9,4 +10,38 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF3B30</color>
 
+    <!-- Additional colors -->
+    <color name="green">#4CAF50</color> <!-- Material Green 500 -->
+    <color name="green_light">#81C784</color> <!-- Material Green 300 -->
+    <color name="green_dark">#388E3C</color> <!-- Material Green 700 -->
+
+    <color name="blue">#2196F3</color> <!-- Material Blue 500 -->
+    <color name="blue_light">#64B5F6</color> <!-- Material Blue 300 -->
+    <color name="blue_dark">#1976D2</color> <!-- Material Blue 700 -->
+
+    <color name="orange">#FF9800</color> <!-- Material Orange 500 -->
+    <color name="orange_light">#FFB74D</color> <!-- Material Orange 300 -->
+    <color name="orange_dark">#F57C00</color> <!-- Material Orange 700 -->
+
+    <color name="pink">#E91E63</color> <!-- Material Pink 500 -->
+    <color name="pink_light">#F06292</color> <!-- Material Pink 300 -->
+    <color name="pink_dark">#C2185B</color> <!-- Material Pink 700 -->
+
+    <color name="indigo">#3F51B5</color> <!-- Material Indigo 500 -->
+    <color name="indigo_light">#7986CB</color> <!-- Material Indigo 300 -->
+    <color name="indigo_dark">#303F9F</color> <!-- Material Indigo 700 -->
+
+    <color name="cyan">#00BCD4</color> <!-- Material Cyan 500 -->
+    <color name="cyan_light">#4DD0E1</color> <!-- Material Cyan 300 -->
+    <color name="cyan_dark">#0097A7</color> <!-- Material Cyan 700 -->
+
+    <color name="amber">#FFC107</color> <!-- Material Amber 500 -->
+    <color name="deep_purple">#673AB7</color> <!-- Material Deep Purple 500 -->
+    <color name="lime">#CDDC39</color> <!-- Material Lime 500 -->
+    <color name="grey">#9E9E9E</color> <!-- Material Grey 500 -->
+
+    <!-- Fixed red color (your original was incomplete) -->
+
+    <color name="red_light">#FF867F</color> <!-- Material Red A100 -->
+    <color name="red_dark">#D32F2F</color> <!-- Material Red 700 -->
 </resources>

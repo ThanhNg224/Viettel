@@ -11,5 +11,5 @@ class DocumentViewModel : ViewModel() {
     var chipPortrait: Bitmap? = null
     var mrzInfo: MRZInfo? = null
     var eid: Eid? = null
-
+    val portraitActions: MutableList<Bitmap?> = MutableList(4) { null }
 }

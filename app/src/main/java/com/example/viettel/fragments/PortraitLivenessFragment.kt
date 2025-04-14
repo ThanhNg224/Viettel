@@ -2,6 +2,7 @@ package com.example.viettel.fragments
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -26,11 +27,16 @@ import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.media.MediaPlayer
+import androidx.fragment.app.activityViewModels
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.viewmodel.DocumentViewModel
+import kotlin.getValue
 
 
 class PortraitLivenessFragment : Fragment() {
+    private var lastCapturedBitmap: Bitmap? = null
 
+    private val docViewModel: DocumentViewModel by activityViewModels()
     private lateinit var previewView: PreviewView
     private lateinit var captureButton: ImageButton
     private lateinit var instructionText: TextView
@@ -185,11 +191,13 @@ class PortraitLivenessFragment : Fragment() {
      * Analyze the captured image using MLKit FaceDetection
      */
     private fun analyzeImage(byteArray: ByteArray) {
-        // Build MLKit InputImage
+        // Convert the byte array to a Bitmap and save it as the last captured image
         val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        lastCapturedBitmap = bmp
+
+        // Create an ML Kit InputImage from the bitmap
         val image = InputImage.fromBitmap(bmp, 0)
 
-        // FaceDetector options
         val highAccuracyOpts = FaceDetectorOptions.Builder()
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
             .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
@@ -197,64 +205,42 @@ class PortraitLivenessFragment : Fragment() {
             .build()
         val detector = FaceDetection.getClient(highAccuracyOpts)
 
-        // Process
         detector.process(image)
             .addOnSuccessListener { faces ->
                 if (faces.isEmpty()) {
                     Toast.makeText(requireContext(), "Không thấy khuôn mặt nào!", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
-
                 }
-                // We only need first face
+                // Use the first detected face for comparison
                 val face = faces[0]
                 checkFaceAction(face)
             }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Lỗi nhận diện khuôn mặt: ${it.message}", Toast.LENGTH_SHORT).show()
-                Log.e(TAG, "Face detection failed", it)
+            .addOnFailureListener { e ->
+                Toast.makeText(requireContext(), "Lỗi nhận diện khuôn mặt: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Face detection failed", e)
             }
     }
 
-    /**
-     * Check if the face action matches the current instruction
-     */
     private fun checkFaceAction(face: Face) {
         val instruction = instructions[currentIndex]
-
-        // Example thresholds
-        val smilingProb = face.smilingProbability ?: -1f
-        val leftEyeOpenProb = face.leftEyeOpenProbability ?: -1f
-        val rightEyeOpenProb = face.rightEyeOpenProbability ?: -1f
-        val headY = face.headEulerAngleY // negative = turn left, positive = turn right
-
-        // Decide pass/fail
         val pass = when {
-            instruction.contains("cười") -> {
-                // E.g. pass if smilingProbability > 0.6
-                smilingProb > 0.4
-            }
-            instruction.contains("chớp mắt") -> {
-                // E.g. pass if eyes are closed enough
-                leftEyeOpenProb < 0.3 && rightEyeOpenProb < 0.3
-            }
-            instruction.contains("trái") -> {
-                // pass if user turned head < -15
-                headY < -15
-            }
-            instruction.contains("phải") -> {
-                // pass if user turned head > 15
-                headY > 15
-            }
+            instruction.contains("cười") -> (face.smilingProbability ?: -1f) > 0.4f
+            instruction.contains("chớp mắt") -> (face.leftEyeOpenProbability ?: 1f) < 0.3f && (face.rightEyeOpenProbability ?: 1f) < 0.3f
+            instruction.contains("trái") -> face.headEulerAngleY < -15
+            instruction.contains("phải") -> face.headEulerAngleY > 15
             else -> false
         }
 
         if (pass) {
-            // Show green tick for the currentIndex
+            // Show success tick and feedback
             emojiTicks[currentIndex].visibility = View.VISIBLE
             showResultOverlay(true)
             playSound(R.raw.siuuu)
 
-            // Move to next
+            // Save the currently captured image for this action into the ViewModel
+            docViewModel.portraitActions[currentIndex] = lastCapturedBitmap
+
+            // Move to the next challenge
             currentIndex++
             if (currentIndex < instructions.size) {
                 instructionText.text = instructions[currentIndex]
@@ -263,18 +249,18 @@ class PortraitLivenessFragment : Fragment() {
                 Toast.makeText(requireContext(), "Tất cả hành động đã hoàn thành!", Toast.LENGTH_SHORT).show()
             }
         } else {
-            // Failed
+            // Show failure feedback
             showResultOverlay(false)
             playSound(R.raw.fail_sound)
-
             Toast.makeText(requireContext(), "Bạn chưa thực hiện đúng. Hãy thử lại!", Toast.LENGTH_SHORT).show()
         }
+
         if (currentIndex >= instructions.size) {
             Log.d("PortraitLiveness", "All actions done. Ignoring capture.")
             return
         }
-
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

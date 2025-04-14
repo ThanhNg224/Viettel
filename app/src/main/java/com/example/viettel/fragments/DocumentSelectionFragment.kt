@@ -15,9 +15,6 @@ import com.example.viettel.utils.ProgressUtils
 
 
 class DocumentSelectionFragment : Fragment() {
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

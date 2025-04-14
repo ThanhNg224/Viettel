@@ -186,6 +186,4 @@ class EidDetailsFragment : Fragment() {
             appendLine("• Active Auth (AA): ${verdictToStr(vs.aa)}")
         }
     }
-
-
 }
