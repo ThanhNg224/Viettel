@@ -1,6 +1,6 @@
 package com.example.viettel.fragments
 
-
+import androidx.fragment.app.activityViewModels
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -11,13 +11,13 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.AspectRatio
+
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.viewmodel.DocumentViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import vn.leeon.eidsdk.utils.ImageUtils
 
@@ -37,6 +38,8 @@ class CaptureFrontPhotoFragment : Fragment() {
     private lateinit var previewView: PreviewView
     private lateinit var successTick: ImageView
     private lateinit var captureButton: ImageButton
+    private val docViewModel: DocumentViewModel by activityViewModels()
+
 
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -145,7 +148,7 @@ class CaptureFrontPhotoFragment : Fragment() {
                     }
 
                     bmp?.let {
-                        (activity as? MainActivity)?.setFrontBitmap(it)
+                        docViewModel.frontImage = it
                     }
 
                     requireActivity().runOnUiThread {

@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.viewmodel.DocumentViewModel
 import vn.leeon.eidsdk.data.Eid
 import vn.leeon.eidsdk.jmrtd.FeatureStatus
 import vn.leeon.eidsdk.jmrtd.VerificationStatus
@@ -19,7 +21,8 @@ import java.util.Locale
 
 class EidDetailsFragment : Fragment() {
 
-    private var eid: Eid? = null
+    private val eid: Eid? get() = docViewModel.eid
+
 
     private lateinit var imgFront: ImageView
     private lateinit var imgBack: ImageView
@@ -41,6 +44,8 @@ class EidDetailsFragment : Fragment() {
     private lateinit var txtDateOfIssue: TextView
     private lateinit var txtDateExpiry: TextView
     private lateinit var txtPersonalIdentification: TextView
+    private val docViewModel: DocumentViewModel by activityViewModels()
+
 
 
     private lateinit var txtSignatureInfo: TextView
@@ -50,9 +55,7 @@ class EidDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            eid = it.getParcelable(ARG_EID)
-        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -88,16 +91,31 @@ class EidDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        displayCapturedImages()
+
+        view.postDelayed({
+            displayCapturedImages()
+            Log.d("EidDetails", "front=${docViewModel.frontImage}, back=${docViewModel.backImage}, chip=${docViewModel.chipPortrait}")
+
+        }, 100) // wait 100ms just to ensure view + ViewModel are ready
+
         displayEidInfo()
     }
 
     private fun displayCapturedImages() {
-        val mainActivity = activity as? MainActivity
-        mainActivity?.getFrontBitmap()?.let { imgFront.setImageBitmap(it) }
-        mainActivity?.getBackBitmap()?.let { imgBack.setImageBitmap(it) }
-        eid?.face?.let { imgChipFace.setImageBitmap(it) }
+        Log.d("EidDetails", "chipPortrait = ${docViewModel.chipPortrait}")
+
+        docViewModel.frontImage?.let { imgFront.setImageBitmap(it) }
+        docViewModel.backImage?.let { imgBack.setImageBitmap(it) }
+
+        if (docViewModel.chipPortrait != null) {
+            imgChipFace.setImageBitmap(docViewModel.chipPortrait)
+            Log.d("EidDetails", "✅ chipPortrait applied to imgChipFace")
+        } else {
+            Log.w("EidDetails", "chipPortrait is NULL, retrying in 200ms...")
+            view?.postDelayed({ displayCapturedImages() }, 200)
+        }
     }
+
 
     private fun displayEidInfo() {
         val pod = eid?.personOptionalDetails
@@ -167,15 +185,5 @@ class EidDetailsFragment : Fragment() {
         }
     }
 
-    companion object {
-        private const val ARG_EID = "arg_eid"
 
-        fun newInstance(eid: Eid): EidDetailsFragment {
-            return EidDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_EID, eid)
-                }
-            }
-        }
-    }
 }

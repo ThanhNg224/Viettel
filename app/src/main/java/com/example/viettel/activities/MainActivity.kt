@@ -30,31 +30,7 @@ import org.jmrtd.lds.icao.MRZInfo
 
 class MainActivity : AppCompatActivity() {
 
-    // Stores the captured bitmaps from the front and back steps.
-    private var frontBitmap: Bitmap? = null
-    private var backBitmap: Bitmap? = null
-    var mrzInfo: MRZInfo? = null
 
-    fun setFrontBitmap(bitmap: Bitmap?) {
-        frontBitmap = bitmap
-    }
-
-    fun setBackBitmap(bitmap: Bitmap?) {
-        backBitmap = bitmap
-    }
-
-    fun getFrontBitmap(): Bitmap? {
-        return frontBitmap
-    }
-
-    fun getBackBitmap(): Bitmap? {
-        return backBitmap
-    }
-
-    // Save the MRZ info that we'll get via OCR from the back fragment.
-    fun setMRZInfo(mrz: MRZInfo) {
-        this.mrzInfo = mrz
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnContinue).setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
             when (currentFragment) {
-                is DocumentSelectionFragment -> replaceFragment(PortraitLivenessFragment())
+                is DocumentSelectionFragment -> replaceFragment(PlaceDocumentFragment())
                 is PlaceDocumentFragment -> replaceFragment(CaptureFrontPhotoFragment())
                 is CaptureFrontPhotoFragment -> replaceFragment(CaptureBackPhotoFragment())
                 is NfcFragment -> replaceFragment(EidDetailsFragment())

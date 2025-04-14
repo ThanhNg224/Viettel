@@ -12,7 +12,9 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.fragment.app.activityViewModels
+import com.example.viettel.viewmodel.DocumentViewModel
+
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -39,6 +41,8 @@ class CaptureBackPhotoFragment : Fragment() {
     private lateinit var captureButton: ImageButton
     private lateinit var textViewTitle: TextView
     private lateinit var successTick: ImageView
+    private val docViewModel: DocumentViewModel by activityViewModels()
+
 
     // ImageCapture object initialized inside startCamera()
     private lateinit var imageCapture: ImageCapture
@@ -140,7 +144,7 @@ class CaptureBackPhotoFragment : Fragment() {
                         BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
                     }
                     bmp?.let {
-                        (activity as? MainActivity)?.setBackBitmap(it)
+                        docViewModel.backImage = it
                     }
 
                     // Provide UI feedback
@@ -188,7 +192,7 @@ class CaptureBackPhotoFragment : Fragment() {
                     override fun onMRZRead(mrz: MRZInfo, timeRequired: Long) {
                         // Do NOT call mrz.toString() (it will trigger errors if the fields are too wide).
                         Log.d("CaptureBackPhoto", "MRZ read success: Document Number = ${mrz.documentNumber}")
-                        (activity as? MainActivity)?.setMRZInfo(mrz)
+                        docViewModel.mrzInfo = mrz
                         (activity as? MainActivity)?.animateToStep(5)
                         (activity as? MainActivity)?.launchNFCStep(mrz)
                         // Close the image proxy if not already closed.

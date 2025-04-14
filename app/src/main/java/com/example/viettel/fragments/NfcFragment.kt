@@ -1,5 +1,6 @@
 package com.example.viettel.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,7 +12,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.viettel.R
+import com.example.viettel.viewmodel.DocumentViewModel
 import io.reactivex.disposables.CompositeDisposable
 import net.sf.scuba.smartcards.CardServiceException
 import net.sf.scuba.smartcards.ISO7816
@@ -23,13 +26,15 @@ import vn.leeon.eidsdk.facade.EidCallback
 import vn.leeon.eidsdk.facade.EidFacade
 import java.security.Security
 
-
 class NfcFragment : Fragment() {
+
     private lateinit var mrzInfo: MRZInfo
     private val disposable = CompositeDisposable()
     private var progressBar: ProgressBar? = null
     private var txtStatus: TextView? = null
     private val uiHandler = Handler(Looper.getMainLooper())
+    private val docViewModel: DocumentViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,14 +79,28 @@ class NfcFragment : Fragment() {
                 override fun onEidRead(eid: Eid?) {
                     uiHandler.post {
                         if (eid == null) {
-                            txtStatus?.text = "Read failed: No data returned."
-                            Toast.makeText(context, "No data found on chip", Toast.LENGTH_SHORT).show()
+                            txtStatus?.text = "❌ Không đọc được dữ liệu từ chip"
+                            Toast.makeText(context, "Không có dữ liệu", Toast.LENGTH_SHORT).show()
                         } else {
-                            txtStatus?.text = "✅ Chip data read successfully"
-                            showEidDetails(eid)
+                            txtStatus?.text = "✅ Đọc dữ liệu chip thành công"
+
+                            // ✅ Store everything
+                            docViewModel.eid = eid
+                            eid.face?.let { bitmap ->
+                                docViewModel.chipPortrait = bitmap
+                                Log.d("NFC", "✅ chipPortrait set from eid.face")
+                            } ?: Log.w("NFC", "❌ eid.face was null")
+
+
+                            // Wait to ensure everything's ready
+                            uiHandler.postDelayed({
+                                showEidDetails()
+                            }, 150)
                         }
                     }
                 }
+
+
 
                 override fun onAccessDeniedException(ex: org.jmrtd.AccessDeniedException) =
                     handleCardException(ex)
@@ -108,16 +127,17 @@ class NfcFragment : Fragment() {
         disposable.add(disposableNfc)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun handleCardException(exception: Exception?) {
         Log.e(TAG, "CardException: ${exception?.message}", exception)
         uiHandler.post {
             progressBar?.visibility = View.GONE
-            txtStatus?.text = "❌ Error reading chip:\n${exception?.message}"
+            txtStatus?.text = "❌ Có lỗi khi đọc chip:\n${exception?.message}"
         }
     }
 
-    private fun showEidDetails(eid: Eid) {
-        val detailsFragment = EidDetailsFragment.newInstance(eid)
+    private fun showEidDetails() {
+        val detailsFragment = EidDetailsFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, detailsFragment)
             .addToBackStack(null)
@@ -144,7 +164,9 @@ class NfcFragment : Fragment() {
         }
 
         fun newInstance(mrzInfo: MRZInfo) = NfcFragment().apply {
-            arguments = Bundle().apply { putSerializable(ARG_MRZ_INFO, mrzInfo) }
+            arguments = Bundle().apply {
+                putSerializable(ARG_MRZ_INFO, mrzInfo)
+            }
         }
     }
 }
