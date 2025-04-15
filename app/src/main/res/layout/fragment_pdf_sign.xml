@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Header -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardHeader"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <!-- Title -->
+                <TextView
+                    android:id="@+id/tvDocumentTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Thông tin hồ sơ"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/progressBarContainer"
+                    app:layout_constraintHorizontal_weight="1.5" />
+
+                <!-- Track line & Progress line -->
+                <View
+                    android:id="@+id/trackLine"
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:background="@android:color/darker_gray"
+                    app:layout_constraintStart_toStartOf="@id/progressBarContainer"
+                    app:layout_constraintEnd_toEndOf="@id/progressBarContainer"
+                    app:layout_constraintTop_toTopOf="@id/progressBarContainer"
+                    app:layout_constraintBottom_toBottomOf="@id/progressBarContainer"
+                    app:layout_constraintVertical_bias="0.3" />
+
+                <View
+                    android:id="@+id/progressLine"
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:background="@android:color/holo_red_light"
+                    app:layout_constraintStart_toStartOf="@id/progressBarContainer"
+                    app:layout_constraintTop_toTopOf="@id/progressBarContainer"
+                    app:layout_constraintBottom_toBottomOf="@id/progressBarContainer"
+                    app:layout_constraintVertical_bias="0.3" />
+
+                <!-- Steps -->
+                <LinearLayout
+                    android:id="@+id/progressBarContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvDocumentTitle"
+                    app:layout_constraintHorizontal_weight="2">
+
+                    <!-- Step 1: Chọn giấy tờ (red tick) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/circle_redtick" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chọn giấy tờ"
+                            android:textSize="10sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- Step 2: Đặt giấy tờ (red tick) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/circle_redtick" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đặt giấy tờ"
+                            android:textSize="10sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- Step 3: Chụp ảnh trước (red tick) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/circle_redtick" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chụp ảnh trước"
+                            android:textSize="10sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- Step 4: Chụp ảnh sau -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/circle_redtick" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chụp ảnh sau"
+                            android:textSize="10sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- Step 5: Quét chip -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/circle_redtick" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Quét chip"
+                            android:textSize="10sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- Step 6: Chân dung -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/circle_redtick" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chân dung"
+                            android:textSize="10sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- Step 7: Thanh toán -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/circle_border1" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thanh toán"
+                            android:textSize="10sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- Step 8: Khảo sát -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/circle_border1" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Khảo sát"
+                            android:textSize="10sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Vùng nội dung bên dưới Header -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/content_area"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/cardHeader"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <!-- PDF Container -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/pdf_container"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@android:color/darker_gray"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/signature_card"
+                    app:layout_constraintWidth_percent="0.5">
+
+                    <!-- CardView chứa PDFView (bo góc tại đây) -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_pdf"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/pdf_controls"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintDimensionRatio="3:4"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="8dp">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <!-- PDFView (bo tròn vùng hiển thị) -->
+                            <com.github.barteksc.pdfviewer.PDFView
+                                android:id="@+id/pdfView"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clipToOutline="true"/>
+
+                            <!-- Nút zoom nằm góc phải trên -->
+                            <ImageButton
+                                android:id="@+id/btn_zoom_pdf"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_margin="8dp"
+                                android:background="@drawable/btn_zoom"
+                                android:contentDescription="Phóng to PDF"
+                                android:layout_gravity="top|end" />
+                        </FrameLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Điều khiển chuyển trang -->
+                    <LinearLayout
+                        android:id="@+id/pdf_controls"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toTopOf="@id/checkbox_agree_policy"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageButton
+                            android:id="@+id/btn_back_page"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/circle_button_background"
+                            android:src="@drawable/ic_arrow_left_red"
+                            android:contentDescription="Trang trước" />
+
+                        <TextView
+                            android:id="@+id/tv_page_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="16dp"
+                            android:text="1 / 1"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black" />
+
+                        <ImageButton
+                            android:id="@+id/btn_next_page"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/circle_button_background"
+                            android:src="@drawable/ic_arrow_right_red"
+                            android:contentDescription="Trang tiếp theo" />
+                    </LinearLayout>
+
+                    <!-- CheckBox -->
+                    <CheckBox
+                        android:id="@+id/checkbox_agree_policy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/checkbox_tint"
+                        android:text="Tôi đồng ý với chính sách xử lý ... Viettel"
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/pdf_container"
+                        app:layout_constraintEnd_toEndOf="@id/pdf_container"
+                        app:layout_constraintStart_toStartOf="@id/pdf_container"
+                        tools:ignore="TextSizeCheck" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Signature -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/signature_card"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/pdf_container"
+                    app:layout_constraintWidth_percent="0.5">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/signature_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vùng ký"
+                            android:textStyle="bold"
+                            android:textSize="18dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="12dp"/>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_clear_signature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ký lại"
+                            android:layout_alignBaseline="@id/signature_title"
+                            android:layout_alignParentEnd="true"
+                            android:background="@drawable/rounded_button_red"
+                            android:textColor="@android:color/white"
+                            android:drawableStart="@drawable/reload"
+                            android:drawablePadding="8dp" />
+
+                        <com.example.viettel.fragments.SignatureView
+                            android:id="@+id/signature_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:layout_below="@id/signature_title"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/dashed_red_border" />
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <include
+        android:id="@+id/layout_zoom_popup"
+        layout="@layout/zoom_pdf_popup"
+        android:visibility="gone"/>
+
+</FrameLayout>

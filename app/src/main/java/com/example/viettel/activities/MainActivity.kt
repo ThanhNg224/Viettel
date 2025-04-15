@@ -22,6 +22,7 @@ import com.example.viettel.fragments.CaptureFrontPhotoFragment
 import com.example.viettel.fragments.DocumentSelectionFragment
 import com.example.viettel.fragments.EidDetailsFragment
 import com.example.viettel.fragments.NfcFragment
+import com.example.viettel.fragments.PdfSignFragment
 import com.example.viettel.fragments.PlaceDocumentFragment
 import com.example.viettel.fragments.PortraitComparisonFragment
 import com.example.viettel.fragments.PortraitLivenessFragment
@@ -103,13 +104,14 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnContinue).setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
             when (currentFragment) {
-                is DocumentSelectionFragment -> replaceFragment(PlaceDocumentFragment())
+                is DocumentSelectionFragment -> replaceFragment(PdfSignFragment())
                 is PlaceDocumentFragment -> replaceFragment(CaptureFrontPhotoFragment())
                 is CaptureFrontPhotoFragment -> replaceFragment(CaptureBackPhotoFragment())
                 is NfcFragment -> replaceFragment(EidDetailsFragment())
                 is EidDetailsFragment -> replaceFragment(PortraitLivenessFragment())
                 is PortraitLivenessFragment -> replaceFragment(PortraitComparisonFragment())
-                is PortraitComparisonFragment -> Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
+                is PortraitComparisonFragment -> replaceFragment(PdfSignFragment())
+                is PdfSignFragment -> Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
                 else -> Toast.makeText(this, "Không xác định bước hiện tại", Toast.LENGTH_SHORT).show()
             }
         }

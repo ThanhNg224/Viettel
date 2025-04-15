@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.viettel.R
+import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.viewmodel.DocumentViewModel
 import io.reactivex.disposables.CompositeDisposable
 import net.sf.scuba.smartcards.CardServiceException
@@ -26,6 +27,7 @@ import vn.leeon.eidsdk.facade.EidCallback
 import vn.leeon.eidsdk.facade.EidFacade
 import java.security.Security
 
+
 class NfcFragment : Fragment() {
 
     private lateinit var mrzInfo: MRZInfo
@@ -34,7 +36,6 @@ class NfcFragment : Fragment() {
     private var txtStatus: TextView? = null
     private val uiHandler = Handler(Looper.getMainLooper())
     private val docViewModel: DocumentViewModel by activityViewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,8 @@ class NfcFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ProgressUtils.animateProgressToStep(view, 5)
+
         handleNfcTag()
     }
 
@@ -84,23 +87,20 @@ class NfcFragment : Fragment() {
                         } else {
                             txtStatus?.text = "✅ Đọc dữ liệu chip thành công"
 
-                            // ✅ Store everything
+                            // Save into ViewModel
                             docViewModel.eid = eid
                             eid.face?.let { bitmap ->
                                 docViewModel.chipPortrait = bitmap
                                 Log.d("NFC", "✅ chipPortrait set from eid.face")
                             } ?: Log.w("NFC", "❌ eid.face was null")
 
-
-                            // Wait to ensure everything's ready
+                            // Navigate to details after a short delay
                             uiHandler.postDelayed({
                                 showEidDetails()
                             }, 150)
                         }
                     }
                 }
-
-
 
                 override fun onAccessDeniedException(ex: org.jmrtd.AccessDeniedException) =
                     handleCardException(ex)

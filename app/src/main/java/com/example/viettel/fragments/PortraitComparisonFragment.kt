@@ -1,5 +1,6 @@
 package com.example.viettel.fragments
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
@@ -173,6 +174,7 @@ class PortraitComparisonFragment : Fragment() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun updateMatchUI(score: Double) {
         if (score < 0) {
             txtMatchResult.text = "Không thể so sánh chân dung"

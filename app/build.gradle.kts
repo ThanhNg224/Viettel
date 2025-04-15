@@ -21,7 +21,7 @@ android {
         }
     }
 
-    // 👇 This MUST be OUTSIDE of defaultConfig!
+    // This MUST be OUTSIDE of defaultConfig!
     sourceSets {
         getByName("main") {
             jniLibs.srcDirs("libs", "src/main/jniLibs")
@@ -111,4 +111,8 @@ dependencies {
     // RxJava
     implementation("io.reactivex.rxjava2:rxjava:2.2.21")
     implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+
+    //PDF reader
+    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
+
 }

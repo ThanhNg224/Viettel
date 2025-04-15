@@ -19,8 +19,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url = uri("https://jitpack.io") }
+        maven(url = "https://repository.liferay.com/nexus/content/repositories/public/")
 
-        // ✅ Include this to resolve local AAR files in /libs
+        // Include this to resolve local AAR files in /libs
         flatDir {
             dirs("app/libs", "eidsdk/libs")
         }
@@ -29,6 +30,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Viettel"
 
-// ✅ Include both modules
+// Include both modules
 include(":app")
 include(":eidsdk")

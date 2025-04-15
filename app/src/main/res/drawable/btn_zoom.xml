@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Góc trên trái -->
+    <path
+        android:fillColor="#FF0033"
+        android:pathData="M10,6c-2.21,0 -4,1.79 -4,4v6h4v-6h6v-4h-6z" />
+
+    <!-- Góc trên phải -->
+    <path
+        android:fillColor="#FF0033"
+        android:pathData="M38,6h-6v4h6v6h4v-6c0,-2.21 -1.79,-4 -4,-4z" />
+
+    <!-- Góc dưới trái -->
+    <path
+        android:fillColor="#FF0033"
+        android:pathData="M6,38v-6h4v6h6v4h-6c-2.21,0 -4,-1.79 -4,-4z" />
+
+    <!-- Góc dưới phải -->
+    <path
+        android:fillColor="#FF0033"
+        android:pathData="M38,42c2.21,0 4,-1.79 4,-4v-6h-4v6h-6v4h6z" />
+</vector>
