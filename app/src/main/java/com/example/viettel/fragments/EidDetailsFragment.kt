@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.viettel.R
-
 import com.example.viettel.viewmodel.DocumentViewModel
 import vn.leeon.eidsdk.data.Eid
 import vn.leeon.eidsdk.jmrtd.FeatureStatus
@@ -22,8 +21,9 @@ import java.util.Locale
 
 class EidDetailsFragment : Fragment() {
 
+    private val docViewModel: DocumentViewModel by activityViewModels()
+    //get Eid from the view model rather than a local property.
     private val eid: Eid? get() = docViewModel.eid
-
 
     private lateinit var imgFront: ImageView
     private lateinit var imgBack: ImageView
@@ -34,10 +34,8 @@ class EidDetailsFragment : Fragment() {
     private lateinit var txtGender: TextView
     private lateinit var txtNationality: TextView
     private lateinit var txtDocNumber: TextView
-
     private lateinit var txtFatherName: TextView
     private lateinit var txtMotherName: TextView
-
     private lateinit var txtPlaceOfOrigin: TextView
     private lateinit var txtPlaceOfResidence: TextView
     private lateinit var txtReligion: TextView
@@ -45,19 +43,11 @@ class EidDetailsFragment : Fragment() {
     private lateinit var txtDateOfIssue: TextView
     private lateinit var txtDateExpiry: TextView
     private lateinit var txtPersonalIdentification: TextView
-    private val docViewModel: DocumentViewModel by activityViewModels()
-
-
 
     private lateinit var txtSignatureInfo: TextView
     private lateinit var txtVerificationStatus: TextView
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_eid_details, container, false)
@@ -76,8 +66,6 @@ class EidDetailsFragment : Fragment() {
         txtMotherName = view.findViewById(R.id.txtMotherName)
         txtPersonalIdentification = view.findViewById(R.id.txtPersonalIdentification)
 
-
-
         txtPlaceOfOrigin = view.findViewById(R.id.txtPlaceOfOrigin)
         txtPlaceOfResidence = view.findViewById(R.id.txtPlaceOfResidence)
         txtReligion = view.findViewById(R.id.txtReligion)
@@ -92,31 +80,26 @@ class EidDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        // Slight delay to ensure ViewModel is ready
         view.postDelayed({
             displayCapturedImages()
             Log.d("EidDetails", "front=${docViewModel.frontImage}, back=${docViewModel.backImage}, chip=${docViewModel.chipPortrait}")
-
-        }, 100) // wait 100ms just to ensure view + ViewModel are ready
+        }, 100)
 
         displayEidInfo()
     }
 
     private fun displayCapturedImages() {
-        Log.d("EidDetails", "chipPortrait = ${docViewModel.chipPortrait}")
-
         docViewModel.frontImage?.let { imgFront.setImageBitmap(it) }
         docViewModel.backImage?.let { imgBack.setImageBitmap(it) }
-
         if (docViewModel.chipPortrait != null) {
             imgChipFace.setImageBitmap(docViewModel.chipPortrait)
-            Log.d("EidDetails", "✅ chipPortrait applied to imgChipFace")
+            Log.d("EidDetails", "chipPortrait applied to imgChipFace")
         } else {
             Log.w("EidDetails", "chipPortrait is NULL, retrying in 200ms...")
             view?.postDelayed({ displayCapturedImages() }, 200)
         }
     }
-
 
     @SuppressLint("SetTextI18n")
     private fun displayEidInfo() {
@@ -130,13 +113,17 @@ class EidDetailsFragment : Fragment() {
             txtNationality.text = pod.nationality ?: "-"
             txtFatherName.text = pod.fatherName ?: "-"
             txtMotherName.text = pod.motherName ?: "-"
-
             txtPlaceOfOrigin.text = pod.placeOfOrigin ?: "-"
             txtPlaceOfResidence.text = pod.placeOfResidence ?: "-"
             txtReligion.text = pod.religion ?: "-"
             txtEthnicity.text = pod.ethnicity ?: "-"
             txtDateOfIssue.text = pod.dateOfIssue ?: "-"
             txtDateExpiry.text = pod.dateOfExpiry ?: "-"
+
+            // Save the user info in the ViewModel for later use
+            docViewModel.userInfo = pod
+        } else {
+            Log.w("EidDetails", "No person optional details found in eid!")
         }
 
         val cert = eid?.sodFile?.docSigningCertificate
@@ -146,7 +133,6 @@ class EidDetailsFragment : Fragment() {
             } catch (e: Exception) {
                 "Không thể tạo SHA-1"
             }
-
             txtSignatureInfo.text = buildString {
                 appendLine("Serial: ${cert.serialNumber}")
                 appendLine("Public Key: ${cert.publicKey.algorithm}")
@@ -169,7 +155,6 @@ class EidDetailsFragment : Fragment() {
 
     private fun buildVerificationStatusText(vs: VerificationStatus?, fs: FeatureStatus?): String {
         if (vs == null || fs == null) return "Không có kết quả xác thực"
-
         fun verdictToStr(v: VerificationStatus.Verdict?): String {
             return when (v) {
                 VerificationStatus.Verdict.SUCCEEDED -> "✔️ Thành công"
@@ -177,7 +162,6 @@ class EidDetailsFragment : Fragment() {
                 else -> "❔ Không rõ"
             }
         }
-
         return buildString {
             appendLine("🛡️ Kết quả xác thực chip:")
             appendLine("• Document check (HT): ${verdictToStr(vs.ht)}")

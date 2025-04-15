@@ -68,6 +68,9 @@ class CaptureFrontPhotoFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // 👇 Hide the Continue button unless the image already exists
+        (activity as? MainActivity)?.setContinueVisible(docViewModel.frontImage != null)
+
 
         textViewTitle = view.findViewById(R.id.tvInstruction)
         previewView = view.findViewById(R.id.view_finder)
@@ -93,6 +96,7 @@ class CaptureFrontPhotoFragment : Fragment() {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
@@ -105,7 +109,7 @@ class CaptureFrontPhotoFragment : Fragment() {
                 .setTargetResolution(Size(1280, 720)) // Fallback for stable aspect ratio
                 .build()
                 .also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
+                    it.surfaceProvider = previewView.surfaceProvider
                 }
 
             imageCapture = ImageCapture.Builder()
@@ -151,6 +155,7 @@ class CaptureFrontPhotoFragment : Fragment() {
 
                     bmp?.let {
                         docViewModel.frontImage = it
+                        (activity as? MainActivity)?.setContinueVisible(true)
                     }
 
                     requireActivity().runOnUiThread {
@@ -162,7 +167,7 @@ class CaptureFrontPhotoFragment : Fragment() {
                                     animate().alpha(0f).setDuration(300).withEndAction {
                                         visibility = View.GONE
                                         (activity as? MainActivity)?.replaceFragment(
-                                            com.example.viettel.fragments.CaptureBackPhotoFragment()
+                                            CaptureBackPhotoFragment()
                                         )
                                     }.start()
                                 }, 2000)

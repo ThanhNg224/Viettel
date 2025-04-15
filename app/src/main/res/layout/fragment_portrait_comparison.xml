@@ -322,41 +322,268 @@
                 </LinearLayout>
 
                 <!-- Right side (Small) -->
+                <!-- Right side: Customer information, now scrollable with extra fields -->
                 <LinearLayout
-                    android:id="@+id/rightChipStatus"
+                    android:id="@+id/rightCustomerInfo"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:background="#E0E0E0"
-                    android:gravity="center"
                     android:padding="12dp">
 
                     <TextView
-                        android:id="@+id/txtChipSuccess"
+                        android:id="@+id/txtCustomerInfoTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đọc thông tin trên chip thành công"
-                        android:textColor="#000"
-                        android:textSize="20sp"
+                        android:text="Thông tin khách hàng"
                         android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="#000000"
                         android:layout_marginBottom="12dp" />
 
-                    <ImageView
-                        android:id="@+id/imgIdFront"
-                        android:layout_width="280dp"
-                        android:layout_height="176dp"
-                        android:scaleType="fitCenter"
-                        android:layout_marginBottom="12dp"
-                        android:background="@android:color/darker_gray" />
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/imgTickSuccess"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_success_tick"
-                         />
+                        <LinearLayout
+                            android:id="@+id/userInfoLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+
+                            <!-- Name -->
+                            <TextView
+                                android:id="@+id/txtUserNameLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Họ tên:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtUserNameValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Date of Birth -->
+                            <TextView
+                                android:id="@+id/txtDOBLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ngày sinh:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtDOBValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Gender -->
+                            <TextView
+                                android:id="@+id/txtGenderLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Giới tính:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtGenderValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Nationality -->
+                            <TextView
+                                android:id="@+id/txtNationalityLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Quốc tịch:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtNationalityValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Document Number -->
+                            <TextView
+                                android:id="@+id/txtDocNumberLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Số giấy tờ:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtDocNumberValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Personal Identification -->
+                            <TextView
+                                android:id="@+id/txtPersonalIdLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Đặc điểm nhận dạng:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtPersonalIdValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Father's Name -->
+                            <TextView
+                                android:id="@+id/txtFatherNameLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tên Cha:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtFatherNameValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Mother's Name -->
+                            <TextView
+                                android:id="@+id/txtMotherNameLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tên Mẹ:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtMotherNameValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Place of Origin -->
+                            <TextView
+                                android:id="@+id/txtPlaceOfOriginLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nguyên quán:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtPlaceOfOriginValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Place of Residence -->
+                            <TextView
+                                android:id="@+id/txtPlaceOfResidenceLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nơi thường trú:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtPlaceOfResidenceValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Religion -->
+                            <TextView
+                                android:id="@+id/txtReligionLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tôn giáo:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtReligionValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Ethnicity -->
+                            <TextView
+                                android:id="@+id/txtEthnicityLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Dân tộc:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtEthnicityValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Date of Issue -->
+                            <TextView
+                                android:id="@+id/txtDateOfIssueLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ngày cấp:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtDateOfIssueValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                            <!-- Date Expiry -->
+                            <TextView
+                                android:id="@+id/txtDateExpiryLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ngày hết hạn:"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/txtDateExpiryValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginBottom="8dp"/>
+
+                        </LinearLayout>
+                    </ScrollView>
                 </LinearLayout>
+
+
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

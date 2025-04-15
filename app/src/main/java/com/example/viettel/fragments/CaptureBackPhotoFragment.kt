@@ -71,6 +71,9 @@ class CaptureBackPhotoFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // 👇 Hide the Continue button unless the image already exists
+        (activity as? MainActivity)?.setContinueVisible(docViewModel.backImage != null)
+
         previewView = view.findViewById(R.id.view_finder)
         captureButton = view.findViewById(R.id.btnCapture)
         textViewTitle = view.findViewById(R.id.tvInstruction)
@@ -147,6 +150,8 @@ class CaptureBackPhotoFragment : Fragment() {
                     }
                     bmp?.let {
                         docViewModel.backImage = it
+                        (activity as? MainActivity)?.setContinueVisible(true)
+
                     }
 
                     // Provide UI feedback

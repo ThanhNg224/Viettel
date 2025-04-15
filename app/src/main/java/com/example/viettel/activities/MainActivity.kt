@@ -163,4 +163,10 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(NfcFragment.newInstance(mrzInfo))
         animateToStep(5)
     }
+    fun setContinueVisible(visible: Boolean) {
+        findViewById<Button>(R.id.btnContinue)?.visibility =
+            if (visible) View.VISIBLE else View.GONE
+    }
+
+
 }
