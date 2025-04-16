@@ -14,6 +14,7 @@ class DocumentViewModel : ViewModel() {
     var eid: Eid? = null
     val portraitActions = mutableMapOf<PortraitAction, Bitmap?>()
     var userInfo: PersonOptionalDetails? = null
+    var signatureBitmap: Bitmap? = null
 
 
 }

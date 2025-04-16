@@ -1,8 +1,10 @@
-package com.example.viettel.fragments
+package com.example.viettel.fragments.step6
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -50,9 +52,9 @@ class ZoomPdfDialogFragment(private val startPage: Int) : DialogFragment() {
                 .enableAnnotationRendering(true)
                 .enableAntialiasing(true)
                 .load()
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             Toast.makeText(context, "Không thể mở PDF trong popup", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(context, "Lỗi khi tải PDF", Toast.LENGTH_SHORT).show()
         }
     }

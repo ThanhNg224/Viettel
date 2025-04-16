@@ -1,4 +1,6 @@
-package com.example.viettel.fragments
+@file:Suppress("DEPRECATION")
+
+package com.example.viettel.fragments.step5
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -14,20 +16,23 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.viettel.R
+import com.example.viettel.activities.MainActivity
 import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.viewmodel.DocumentViewModel
 import io.reactivex.disposables.CompositeDisposable
 import net.sf.scuba.smartcards.CardServiceException
 import net.sf.scuba.smartcards.ISO7816
+import org.jmrtd.AccessDeniedException
 import org.jmrtd.BACDeniedException
 import org.jmrtd.PACEException
 import org.jmrtd.lds.icao.MRZInfo
+import org.spongycastle.jce.provider.BouncyCastleProvider
 import vn.leeon.eidsdk.data.Eid
 import vn.leeon.eidsdk.facade.EidCallback
 import vn.leeon.eidsdk.facade.EidFacade
 import java.security.Security
 
-
+@Suppress("DEPRECATION")
 class NfcFragment : Fragment() {
 
     private lateinit var mrzInfo: MRZInfo
@@ -40,7 +45,8 @@ class NfcFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val mrz = it.getSerializable(ARG_MRZ_INFO) as? MRZInfo
+            val mrz = it.getSerializable(ARG_MRZ_INFO, MRZInfo::class.java)
+
             if (mrz != null) mrzInfo = mrz
         }
     }
@@ -102,7 +108,7 @@ class NfcFragment : Fragment() {
                     }
                 }
 
-                override fun onAccessDeniedException(ex: org.jmrtd.AccessDeniedException) =
+                override fun onAccessDeniedException(ex: AccessDeniedException) =
                     handleCardException(ex)
 
                 override fun onBACDeniedException(ex: BACDeniedException) =
@@ -137,11 +143,9 @@ class NfcFragment : Fragment() {
     }
 
     private fun showEidDetails() {
-        val detailsFragment = EidDetailsFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, detailsFragment)
-            .addToBackStack(null)
-            .commit()
+        EidDetailsFragment()
+        (activity as? MainActivity)?.replaceFragment(EidDetailsFragment())
+
     }
 
     override fun onDestroyView() {
@@ -160,7 +164,7 @@ class NfcFragment : Fragment() {
         private const val ARG_MRZ_INFO = "mrz_info"
 
         init {
-            Security.insertProviderAt(org.spongycastle.jce.provider.BouncyCastleProvider(), 1)
+            Security.insertProviderAt(BouncyCastleProvider(), 1)
         }
 
         fun newInstance(mrzInfo: MRZInfo) = NfcFragment().apply {

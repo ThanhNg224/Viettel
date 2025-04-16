@@ -1,4 +1,4 @@
-package com.example.viettel.fragments
+package com.example.viettel.fragments.step5
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -130,7 +130,7 @@ class EidDetailsFragment : Fragment() {
         if (cert != null) {
             val sha1 = try {
                 MessageDigest.getInstance("SHA-1").digest(cert.encoded).joinToString("") { "%02X".format(it) }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 "Không thể tạo SHA-1"
             }
             txtSignatureInfo.text = buildString {

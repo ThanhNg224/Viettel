@@ -1,5 +1,4 @@
-package com.example.viettel.fragments
-
+package com.example.viettel.fragments.step1_2
 
 import android.os.Bundle
 import android.view.View
@@ -7,7 +6,6 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.utils.ProgressUtils
-
 
 class PlaceDocumentFragment : Fragment(R.layout.fragment_place_document) {
 
@@ -23,12 +21,7 @@ class PlaceDocumentFragment : Fragment(R.layout.fragment_place_document) {
             "passport" -> imgIllustration.setImageResource(R.drawable.ic_passport_placement)
         }
 
-
-
-
         ProgressUtils.animateProgressToStep(view, 2)
 
     }
 }
-
-

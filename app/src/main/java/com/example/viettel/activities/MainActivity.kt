@@ -17,15 +17,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
-import com.example.viettel.fragments.CaptureBackPhotoFragment
-import com.example.viettel.fragments.CaptureFrontPhotoFragment
-import com.example.viettel.fragments.DocumentSelectionFragment
-import com.example.viettel.fragments.EidDetailsFragment
-import com.example.viettel.fragments.NfcFragment
-import com.example.viettel.fragments.PdfSignFragment
-import com.example.viettel.fragments.PlaceDocumentFragment
-import com.example.viettel.fragments.PortraitComparisonFragment
-import com.example.viettel.fragments.PortraitLivenessFragment
+import com.example.viettel.fragments.step3_4.CaptureBackPhotoFragment
+import com.example.viettel.fragments.step3_4.CaptureFrontPhotoFragment
+import com.example.viettel.fragments.step1_2.DocumentSelectionFragment
+import com.example.viettel.fragments.step5.EidDetailsFragment
+import com.example.viettel.fragments.step5.NfcFragment
+import com.example.viettel.fragments.step7.PaymentFragment
+import com.example.viettel.fragments.step6.PdfSignFragment
+import com.example.viettel.fragments.step1_2.PlaceDocumentFragment
+import com.example.viettel.fragments.step6.PortraitComparisonFragment
+import com.example.viettel.fragments.step6.PortraitLivenessFragment
+import com.example.viettel.fragments.step6.VideoCallFragment
 import com.google.android.material.snackbar.Snackbar
 import org.jmrtd.lds.icao.MRZInfo
 
@@ -104,14 +106,17 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnContinue).setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
             when (currentFragment) {
-                is DocumentSelectionFragment -> replaceFragment(PdfSignFragment())
+                is DocumentSelectionFragment -> replaceFragment(DocumentSelectionFragment())
                 is PlaceDocumentFragment -> replaceFragment(CaptureFrontPhotoFragment())
                 is CaptureFrontPhotoFragment -> replaceFragment(CaptureBackPhotoFragment())
                 is NfcFragment -> replaceFragment(EidDetailsFragment())
                 is EidDetailsFragment -> replaceFragment(PortraitLivenessFragment())
                 is PortraitLivenessFragment -> replaceFragment(PortraitComparisonFragment())
                 is PortraitComparisonFragment -> replaceFragment(PdfSignFragment())
-                is PdfSignFragment -> Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
+                is PdfSignFragment -> replaceFragment(VideoCallFragment())
+                is VideoCallFragment -> replaceFragment(PaymentFragment())
+                is PaymentFragment -> Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
+
                 else -> Toast.makeText(this, "Không xác định bước hiện tại", Toast.LENGTH_SHORT).show()
             }
         }

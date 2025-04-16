@@ -1,5 +1,4 @@
-package com.example.viettel.fragments
-
+package com.example.viettel.fragments.step1_2
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.viettel.activities.MainActivity
 import com.example.viettel.utils.ProgressUtils
-
 
 class DocumentSelectionFragment : Fragment() {
     override fun onCreateView(

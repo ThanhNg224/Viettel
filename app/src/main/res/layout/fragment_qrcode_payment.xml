@@ -33,7 +33,7 @@
                     android:id="@+id/tvDocumentTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Thông tin hồ sơ"
+                    android:text="Thông tin đơn hàng"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -223,7 +223,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_marginBottom="4dp"
-                            android:background="@drawable/circle_border1" />
+                            android:background="@drawable/circle_redtick" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -267,168 +267,227 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <!-- PDF Container -->
+                <!-- QrCode -->
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/pdf_container"
+                    android:id="@+id/namePaymentCard"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@android:color/darker_gray"
+                    android:background="#FFFFFF"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/signature_card"
-                    app:layout_constraintWidth_percent="0.5">
+                    app:layout_constraintWidth_percent="0.45">
 
-                    <!-- CardView chứa PDFView (bo góc tại đây) -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/card_pdf"
+                    <!-- Tiêu đề -->
+                    <ImageView
+                        android:id="@+id/qrScanImg"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="4dp"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/pdf_controls"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintDimensionRatio="3:4"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="8dp">
+                        app:layout_constraintWidth_percent="0.55"
+                        app:layout_constraintHeight_percent="0.55"
+                        app:layout_constraintVertical_bias="0.1"
+                        android:layout_margin="16dp"
+                        android:src="@drawable/qrscan_image"
+                        android:scaleType="centerCrop" />
 
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <!-- PDFView (bo tròn vùng hiển thị) -->
-                            <com.github.barteksc.pdfviewer.PDFView
-                                android:id="@+id/pdfView"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:clipToOutline="true"/>
-
-                            <!-- Nút zoom nằm góc phải trên -->
-                            <ImageButton
-                                android:id="@+id/btn_zoom_pdf"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_margin="8dp"
-                                android:background="@drawable/btn_zoom"
-                                android:contentDescription="Phóng to PDF"
-                                android:layout_gravity="top|end" />
-                        </FrameLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Điều khiển chuyển trang -->
-                    <LinearLayout
-                        android:id="@+id/pdf_controls"
+                    <TextView
+                        android:id="@+id/namePayment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/qrScanImg"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="25dp"
+                        android:text="Thanh toán bằng QR Code"
+                        android:textSize="30dp"
+                        android:textColor="#333333"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/namePayment"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="25dp"
                         android:gravity="center"
-                        app:layout_constraintBottom_toTopOf="@id/checkbox_agree_policy"
+                        android:maxWidth="500dp"
+                        android:text="Quý khách vui lòng chọn tiếp tục để thanh toán bằng Qr Code"
+                        android:textSize="22dp"
+                        android:textStyle="bold"/>
+
+
+                    <!-- CardView chứa nội dung đơn hàng -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/billInformation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="2dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/namePayment"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
 
-                        <ImageButton
-                            android:id="@+id/btn_back_page"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:background="@drawable/circle_button_background"
-                            android:src="@drawable/ic_arrow_left_red"
-                            android:contentDescription="Trang trước" />
-
-                        <TextView
-                            android:id="@+id/tv_page_number"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:text="1 / 1"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@android:color/black" />
-
-                        <ImageButton
-                            android:id="@+id/btn_next_page"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:background="@drawable/circle_button_background"
-                            android:src="@drawable/ic_arrow_right_red"
-                            android:contentDescription="Trang tiếp theo" />
-                    </LinearLayout>
-
-                    <!-- CheckBox -->
-                    <CheckBox
-                        android:id="@+id/checkbox_agree_policy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="@color/checkbox_tint"
-                        android:text="Tôi đồng ý với chính sách xử lý ... Viettel"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@id/pdf_container"
-                        app:layout_constraintEnd_toEndOf="@id/pdf_container"
-                        app:layout_constraintStart_toStartOf="@id/pdf_container"
-                        tools:ignore="TextSizeCheck" />
-
+                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- Signature -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/signature_card"
+                <!-- Method Payment -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/paymentCard"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:cardElevation="6dp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="#F2F2F2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/pdf_container"
-                    app:layout_constraintWidth_percent="0.5">
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@id/namePaymentCard"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintWidth_percent="0.55">
 
-                    <RelativeLayout
+                    <!-- Tiêu đề -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/totalBill"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="40dp"
+                        android:background="#FFFFFF"
                         android:padding="16dp">
 
                         <TextView
-                            android:id="@+id/signature_title"
+                            android:id="@+id/tvOrderInfo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vùng ký"
+                            android:text="Thanh toán đơn hàng 15263773883838"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginStart="20dp" />
+
+                        <!-- Số tiền -->
+                        <TextView
+                            android:id="@+id/tvAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="220.000 VNĐ"
+                            android:textColor="#D90000"
                             android:textStyle="bold"
-                            android:textSize="18dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginTop="12dp"/>
+                            android:textSize="22sp"
+                            app:layout_constraintTop_toBottomOf="@id/tvOrderInfo"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="8dp"/>
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_clear_signature"
+                        <ImageView
+                            android:id="@+id/statusTick"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="4dp"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.8"
+                            android:src="@drawable/ic_success_tick"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <!-- CardView chứa nội dung đơn hàng -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/paymentOptions"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="25dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalBill"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <TextView
+                            android:id="@+id/qrCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ký lại"
-                            android:layout_alignBaseline="@id/signature_title"
-                            android:layout_alignParentEnd="true"
-                            android:background="@drawable/rounded_button_red"
-                            android:textColor="@android:color/white"
-                            android:drawableStart="@drawable/reload"
-                            android:drawablePadding="8dp" />
+                            android:text="Quét mã QR sau đây để thanh toán"
+                            android:textColor="#333333"
+                            android:textSize="30dp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                        <com.example.viettel.fragments.step6.SignatureView
-                            android:id="@+id/signature_view"
+                        <LinearLayout
+                            android:id="@+id/paymentStatusLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="250dp"
-                            android:layout_below="@id/signature_title"
-                            android:layout_marginTop="20dp"
-                            android:background="@drawable/dashed_red_border" />
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
+                            android:layout_height="wrap_content"
+                            android:background="#F2F2F2"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="8dp"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@id/qrCode"
+                            app:layout_constraintEnd_toEndOf="@id/qrCode"
+                            app:layout_constraintStart_toStartOf="@id/qrCode"
+                            app:layout_constraintTop_toTopOf="@id/qrCode">
+
+                            <TextView
+                                android:id="@+id/tvPaymentSuccess"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Thanh toán thành công"
+                                android:textSize="30dp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"/>
+                        </LinearLayout>
+
+                        <!-- Dòng phụ khi thất bại -->
+                        <TextView
+                            android:id="@+id/statusSubText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Không có phản hồi của ngân hàng thụ hưởng, vui lòng thử lại sau"
+                            android:textColor="#FF000000"
+                            android:textSize="18dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/qrCode"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            app:cardCornerRadius="40dp"
+                            app:cardElevation="4dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHeight_percent="0.55"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/qrCode"
+                            app:layout_constraintVertical_bias="0.22"
+                            app:layout_constraintWidth_percent="0.55">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/qr_bg" />
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
-    <include
-        android:id="@+id/layout_zoom_popup"
-        layout="@layout/zoom_pdf_popup"
-        android:visibility="gone"/>
-
 </FrameLayout>
