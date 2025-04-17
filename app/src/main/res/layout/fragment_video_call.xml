@@ -54,7 +54,7 @@
             <!-- Red progress line -->
             <View
                 android:id="@+id/progressLine"
-                android:layout_width="0dp"
+                android:layout_width="1dp"
                 android:layout_height="6dp"
                 android:background="@android:color/holo_red_light"
                 app:layout_constraintStart_toStartOf="@+id/progressBarContainer"
@@ -88,7 +88,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_redtick" />
+                        android:background="@drawable/circle_redtick"
+                        android:importantForAccessibility="no" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -104,6 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginHorizontal="2dp"
+                    android:importantForAccessibility="no"
                     android:orientation="vertical"
                     android:gravity="center">
                     <ImageView

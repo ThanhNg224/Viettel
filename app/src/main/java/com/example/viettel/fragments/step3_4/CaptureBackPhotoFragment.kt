@@ -148,4 +148,6 @@ class CaptureBackPhotoFragment : Fragment() {
                 imageProxy.close()
             }
     }
+    fun isBackCaptured(): Boolean =
+        activityViewModels<DocumentViewModel>().value.backImage != null
 }

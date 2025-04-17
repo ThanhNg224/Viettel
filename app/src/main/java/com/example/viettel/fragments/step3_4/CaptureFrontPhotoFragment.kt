@@ -85,22 +85,28 @@ class CaptureFrontPhotoFragment : Fragment() {
 
         imageProxy.close()
 
-        // Animate success tick
         requireActivity().runOnUiThread {
             successTick.apply {
                 alpha = 0f
                 visibility = View.VISIBLE
                 animate().alpha(1f).setDuration(300).withEndAction {
-                    postDelayed({
+                    postDelayed({6
                         animate().alpha(0f).setDuration(300).withEndAction {
                             visibility = View.GONE
+
+                            // ✅ camera has fully finished — now we can safely auto-navigate
                             (activity as? MainActivity)?.replaceFragment(CaptureBackPhotoFragment())
                         }.start()
-                    }, 2000)
+                    }, 2000) // how long the tick stays on screen
                 }.start()
             }
 
             Toast.makeText(requireContext(), "Ảnh mặt trước đã chụp xong!", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+    fun isFrontCaptured(): Boolean =
+        activityViewModels<DocumentViewModel>().value.frontImage != null
+
 }

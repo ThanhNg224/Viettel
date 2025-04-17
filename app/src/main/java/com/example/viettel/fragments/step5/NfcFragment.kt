@@ -45,7 +45,9 @@ class NfcFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val mrz = it.getSerializable(ARG_MRZ_INFO, MRZInfo::class.java)
+            @Suppress("DEPRECATION")
+            val mrz = arguments?.getSerializable(ARG_MRZ_INFO) as? MRZInfo
+
 
             if (mrz != null) mrzInfo = mrz
         }

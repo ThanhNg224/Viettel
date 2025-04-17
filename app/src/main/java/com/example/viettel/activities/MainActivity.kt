@@ -17,6 +17,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
+import com.example.viettel.fragments.EndFragment
+import com.example.viettel.fragments.FeedbackFragment
+import com.example.viettel.fragments.ServiceEvaluationFragment
 import com.example.viettel.fragments.step3_4.CaptureBackPhotoFragment
 import com.example.viettel.fragments.step3_4.CaptureFrontPhotoFragment
 import com.example.viettel.fragments.step1_2.DocumentSelectionFragment
@@ -106,20 +109,78 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnContinue).setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
             when (currentFragment) {
-                is DocumentSelectionFragment -> replaceFragment(DocumentSelectionFragment())
-                is PlaceDocumentFragment -> replaceFragment(CaptureFrontPhotoFragment())
-                is CaptureFrontPhotoFragment -> replaceFragment(CaptureBackPhotoFragment())
-                is NfcFragment -> replaceFragment(EidDetailsFragment())
-                is EidDetailsFragment -> replaceFragment(PortraitLivenessFragment())
-                is PortraitLivenessFragment -> replaceFragment(PortraitComparisonFragment())
-                is PortraitComparisonFragment -> replaceFragment(PdfSignFragment())
-                is PdfSignFragment -> replaceFragment(VideoCallFragment())
-                is VideoCallFragment -> replaceFragment(PaymentFragment())
-                is PaymentFragment -> Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
+                is DocumentSelectionFragment ->
+                    replaceFragment(PlaceDocumentFragment())
 
-                else -> Toast.makeText(this, "Không xác định bước hiện tại", Toast.LENGTH_SHORT).show()
+                is PlaceDocumentFragment ->
+                    replaceFragment(CaptureFrontPhotoFragment())
+
+                is CaptureFrontPhotoFragment -> {
+                    val frag = currentFragment
+                    if (frag.isFrontCaptured()) {
+                        replaceFragment(CaptureBackPhotoFragment())
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Vui lòng chụp ảnh mặt trước trước khi tiếp tục",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                is CaptureBackPhotoFragment -> {
+                    val frag = currentFragment
+                    if (frag.isBackCaptured()) {
+                        replaceFragment(NfcFragment())
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Vui lòng chụp ảnh mặt sau trước khi tiếp tục",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                is NfcFragment ->
+                    replaceFragment(EidDetailsFragment())
+
+                is EidDetailsFragment ->
+                    replaceFragment(PortraitLivenessFragment())
+
+                is PortraitLivenessFragment ->
+                    replaceFragment(PortraitComparisonFragment())
+
+                is PortraitComparisonFragment ->
+                    replaceFragment(PdfSignFragment())
+
+                is PdfSignFragment ->
+                    replaceFragment(VideoCallFragment())
+
+                is VideoCallFragment ->
+                    replaceFragment(PaymentFragment())
+
+                is ServiceEvaluationFragment ->
+                    replaceFragment(EndFragment())
+
+                is FeedbackFragment -> {
+                    if (currentFragment.isFeedbackValid()) {
+                        currentFragment.onContinuePressed()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Vui lòng chọn ít nhất một lý do",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                is EndFragment ->
+                    Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
+
+                else ->
+                    Toast.makeText(this, "Không xác định bước hiện tại", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     /**
@@ -174,6 +235,18 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnContinue)?.visibility =
             if (visible) View.VISIBLE else View.GONE
     }
+    fun setContinueEnabled(enabled: Boolean) {
+        findViewById<Button>(R.id.btnContinue)?.isEnabled = enabled
+    }
+    fun setBackEnabled(enabled: Boolean) {
+        findViewById<Button>(R.id.btnBack)?.isEnabled = enabled
+    }
+    fun setBackVisible(visible: Boolean) {
+        findViewById<Button>(R.id.btnBack)?.visibility =
+            if (visible) View.VISIBLE else View.GONE
+    }
 
 
 }
+
+

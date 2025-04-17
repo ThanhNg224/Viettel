@@ -28,7 +28,7 @@
                 android:id="@+id/tvDocumentTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Chọn loại giấy tờ"
+                android:text="Khảo sát"
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -111,7 +111,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -153,7 +153,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -174,7 +174,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -216,7 +216,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -237,7 +237,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginBottom="4dp"
-                        android:background="@drawable/circle_border1" />
+                        android:background="@drawable/circle_redtick" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -249,7 +249,6 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Card Content Area: CCCD or Passport options -->
         <LinearLayout
             android:id="@+id/cardContent"
             android:layout_width="0dp"
@@ -264,101 +263,223 @@
 
             <TextView
                 android:id="@+id/tvInstruction"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
+                android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:textSize="26sp"
+                android:textSize="20dp"
                 android:textStyle="bold"
-                android:text="@string/your_html_instruction"
+                android:maxWidth="680dp"
+                android:text="Đã hoàn thành giao dịch mua SIM trả trước, vui lòng thực hiện khảo sát sau
+về đánh giá trải nghiệm khách hàng"
                 android:lineSpacingExtra="4dp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/contentOptions"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp">
 
-                <!-- CCCD option -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/option1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/option2"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_percent="0.5">
+                <!-- Emoji Item 1 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="40dp">
+
+                    <ImageButton
+                        android:id="@+id/emoji1"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_very_dissatisfied"
+                        android:contentDescription="Very Dissatisfied" />
 
                     <TextView
-                        android:id="@+id/textOption1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Căn cước công dân"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:text="1"
+                        android:textSize="20dp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imageOption1"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintWidth_percent="0.6"
-                        app:layout_constraintTop_toBottomOf="@id/textOption1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                <!-- Emoji 2 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="40dp">
+
+                    <ImageButton
+                        android:id="@+id/emoji2"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:scaleType="fitCenter"
-                        android:background="@drawable/white_circle"
-                        android:padding="16dp"
-                        android:src="@drawable/cccd_image" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!-- Passport option -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/option2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/option1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_percent="0.5">
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_dissatisfied"
+                        android:contentDescription="Dissatisfied" />
 
                     <TextView
-                        android:id="@+id/textOption2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Hộ chiếu"
-                        android:textColor="@color/black"
-                        android:textSize="14dp"
+                        android:text="2"
+                        android:textSize="20dp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imageOption2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@drawable/white_circle"
-                        android:padding="16dp"
+                <!-- Emoji 3 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="40dp">
+
+                    <ImageButton
+                        android:id="@+id/emoji3"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/passport_image"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textOption2"
-                        app:layout_constraintWidth_percent="0.6" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_somewhat_dissatisfied"
+                        android:contentDescription="Somewhat Dissatisfied" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- Emoji 4 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="40dp">
+
+                    <ImageButton
+                        android:id="@+id/emoji4"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_neutral"
+                        android:contentDescription="Neutral" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- Emoji Item 5 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="40dp">
+
+                    <ImageButton
+                        android:id="@+id/emoji5"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_somewhat_satisfied"
+                        android:contentDescription="Somewhat Satisfied" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- Emoji Item 6 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="40dp">
+
+                    <ImageButton
+                        android:id="@+id/emoji6"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_satisfied"
+                        android:contentDescription="Satisfied" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="6"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- Emoji Item 7 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/emoji7"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_very_satisfied"
+                        android:contentDescription="Very Satisfied" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

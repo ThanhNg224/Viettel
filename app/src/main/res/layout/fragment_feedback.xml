@@ -33,7 +33,7 @@
                     android:id="@+id/tvDocumentTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Thông tin đơn hàng"
+                    android:text="Khảo sát"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -245,7 +245,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_marginBottom="4dp"
-                            android:background="@drawable/circle_border1" />
+                            android:background="@drawable/circle_redtick" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -257,236 +257,208 @@
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Vùng nội dung bên dưới Header -->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/content_area"
+                android:id="@+id/cardContent"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/cardHeader"
+                android:background="#FFEEEE"
+                android:padding="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/cardHeader"
+                app:layout_constraintVertical_bias="0.0">
 
-                <!-- QrCode -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/namePaymentCard"
+                <TextView
+                    android:id="@+id/tvInstruction"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="#FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintWidth_percent="0.45">
-
-                    <!-- Tiêu đề -->
-                    <ImageView
-                        android:id="@+id/qrScanImg"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintWidth_percent="0.55"
-                        app:layout_constraintHeight_percent="0.55"
-                        app:layout_constraintVertical_bias="0.1"
-                        android:layout_margin="16dp"
-                        android:src="@drawable/qrscan_image"
-                        android:scaleType="centerCrop" />
-
-                    <TextView
-                        android:id="@+id/namePayment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/qrScanImg"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginTop="25dp"
-                        android:text="Thanh toán bằng QR Code"
-                        android:textSize="30dp"
-                        android:textColor="#333333"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/namePayment"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginTop="25dp"
-                        android:gravity="center"
-                        android:maxWidth="500dp"
-                        android:text="Quý khách vui lòng chọn tiếp tục để thanh toán bằng Qr Code"
-                        android:textSize="22dp"
-                        android:textStyle="bold"/>
-
-
-                    <!-- CardView chứa nội dung đơn hàng -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/billInformation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintTop_toBottomOf="@id/namePayment"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
-
-                    </androidx.cardview.widget.CardView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!-- Method Payment -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/paymentCard"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="#F2F2F2"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Cảm ơn quý khách đã tham gia khảo sát"
+                    android:textColor="@android:color/black"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@id/namePaymentCard"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:layout_constraintWidth_percent="0.55">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <!-- Tiêu đề -->
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/totalBill"
+                <!-- Danh sách checkbox -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutCheckboxes"
+                    android:layout_width="700dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvInstruction">
+
+                    <!-- Checkbox 1 -->
+                    <LinearLayout
+                        android:id="@+id/checkBox1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="40dp"
-                        android:background="#FFFFFF"
-                        android:padding="16dp">
+                        android:background="@drawable/border_box"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        app:layout_constraintTop_toTopOf="parent">
+
 
                         <TextView
-                            android:id="@+id/tvOrderInfo"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Thanh toán đơn hàng 15263773883838"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="Tính năng khó sử dụng"
                             android:textColor="#000000"
-                            android:textSize="16sp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:layout_marginStart="20dp" />
+                            android:textSize="20dp" />
 
-                        <!-- Số tiền -->
-                        <TextView
-                            android:id="@+id/tvAmount"
+                        <CheckBox
+                            android:id="@+id/checkbox_reason_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="220.000 VNĐ"
-                            android:textColor="#D90000"
-                            android:textStyle="bold"
-                            android:textSize="22sp"
-                            app:layout_constraintTop_toBottomOf="@id/tvOrderInfo"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="8dp"/>
+                            android:buttonTint="@color/red" />
+                    </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/statusTick"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="4dp"
-                            android:visibility="gone"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.8"
-                            android:src="@drawable/ic_success_tick"/>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <!-- CardView chứa nội dung đơn hàng -->
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/paymentOptions"
+                    <!-- Checkbox 2 -->
+                    <LinearLayout
+                        android:id="@+id/checkBox2"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="25dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/totalBill"
-                        app:layout_constraintVertical_bias="0.0">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/border_box"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        app:layout_constraintTop_toBottomOf="@id/checkBox1">
 
                         <TextView
-                            android:id="@+id/qrCode"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="Thông tin về sản phẩm, dịch vụ không rõ ràng"
+                            android:textColor="#000000"
+                            android:textSize="20dp" />
+
+                        <CheckBox
+                            android:id="@+id/checkbox_reason_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Quét mã QR sau đây để thanh toán"
-                            android:textColor="#333333"
-                            android:textSize="30dp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"/>
+                            android:buttonTint="@color/red" />
+                    </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/paymentStatusLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#F2F2F2"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:padding="8dp"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@id/qrCode"
-                            app:layout_constraintEnd_toEndOf="@id/qrCode"
-                            app:layout_constraintStart_toStartOf="@id/qrCode"
-                            app:layout_constraintTop_toTopOf="@id/qrCode">
+                    <!-- Checkbox 3 -->
+                    <LinearLayout
+                        android:id="@+id/checkBox3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/border_box"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        app:layout_constraintTop_toBottomOf="@id/checkBox2">
 
-                            <TextView
-                                android:id="@+id/tvPaymentSuccess"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Thanh toán thành công"
-                                android:textSize="30dp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"/>
-                        </LinearLayout>
-
-                        <!-- Dòng phụ khi thất bại -->
                         <TextView
-                            android:id="@+id/statusSubText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="Giao diện, bố cục sắp xếp chưa hợp lý"
+                            android:textColor="#000000"
+                            android:textSize="20dp" />
+
+                        <CheckBox
+                            android:id="@+id/checkbox_reason_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Không có phản hồi của ngân hàng thụ hưởng, vui lòng thử lại sau"
-                            android:textColor="#FF000000"
-                            android:textSize="18dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/qrCode"
-                            android:layout_marginTop="10dp"
-                            android:visibility="gone"/>
+                            android:buttonTint="@color/red" />
+                    </LinearLayout>
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="200dp"
-                            android:layout_height="200dp"
-                            app:cardCornerRadius="40dp"
-                            app:cardElevation="4dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHeight_percent="0.55"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/qrCode"
-                            app:layout_constraintVertical_bias="0.22"
-                            app:layout_constraintWidth_percent="0.55">
+                    <!-- Checkbox 4 -->
+                    <LinearLayout
+                        android:id="@+id/checkBox4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/border_box"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        app:layout_constraintTop_toBottomOf="@id/checkBox3">
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/qr_bg" />
-                        </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="Thời gian phản hồi của ứng dụng chậm"
+                            android:textColor="#000000"
+                            android:textSize="20dp" />
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        <CheckBox
+                            android:id="@+id/checkbox_reason_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/red" />
+                    </LinearLayout>
+
+                    <!-- Checkbox 5 -->
+                    <LinearLayout
+                        android:id="@+id/checkBox5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/border_box"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        app:layout_constraintTop_toBottomOf="@id/checkBox4">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="Lý do khác"
+                            android:textColor="#000000"
+                            android:textSize="20dp" />
+
+                        <CheckBox
+                            android:id="@+id/checkbox_reason_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/red" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/editText_checkBox5"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/border_box"
+                        android:hint=" Quý khách vui lòng đóng góp ý kiến để Viettel hoàn thiện chất lượng sản phẩm/ dịch vụ"
+                        android:padding="12dp"
+                        android:visibility="gone"
+                        android:gravity="top|start"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp"
+                        app:layout_constraintTop_toBottomOf="@id/checkBox5"/>
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

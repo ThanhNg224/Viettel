@@ -57,7 +57,7 @@
 
                 <View
                     android:id="@+id/progressLine"
-                    android:layout_width="0dp"
+                    android:layout_width="1dp"
                     android:layout_height="6dp"
                     android:background="@android:color/holo_red_light"
                     app:layout_constraintStart_toStartOf="@id/progressBarContainer"

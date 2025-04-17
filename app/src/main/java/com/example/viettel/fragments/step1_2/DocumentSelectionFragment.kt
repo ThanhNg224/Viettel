@@ -22,6 +22,12 @@ class DocumentSelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.apply {
+            setBackVisible(false)
+            setContinueVisible(false)
+        }
+
+
 
         val optionCCCD = view.findViewById<ConstraintLayout>(R.id.option1)
         val optionPassport = view.findViewById<ConstraintLayout>(R.id.option2)
@@ -46,6 +52,12 @@ class DocumentSelectionFragment : Fragment() {
                     putString("docType", "cccd")
                 }
             }
+            (activity as? MainActivity)?.apply {
+                setBackVisible(true)
+                setContinueVisible(true)
+                setContinueEnabled(true)  // once picked, continue is clickable
+            }
+
 
             (activity as? MainActivity)?.replaceFragment(fragment)
         }
