@@ -31,7 +31,7 @@ class PlaceDocumentFragment : Fragment(R.layout.fragment_place_document) {
     }
     override fun onResume() {
         super.onResume()
-        // every time we come back here, keep both hidden
+
         (activity as? MainActivity)?.apply {
             setBackVisible(true)
             setContinueVisible(true)

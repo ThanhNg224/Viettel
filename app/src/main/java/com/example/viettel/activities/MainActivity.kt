@@ -130,12 +130,12 @@ class MainActivity : AppCompatActivity() {
 
                 is CaptureBackPhotoFragment -> {
                     val frag = currentFragment
-                    if (frag.isBackCaptured()) {
+                    if (frag.isMRZReady()) {
                         replaceFragment(NfcFragment())
                     } else {
                         Toast.makeText(
                             this,
-                            "Vui lòng chụp ảnh mặt sau trước khi tiếp tục",
+                            "Vui lòng chụp ảnh mặt sau hợp lệ trước khi tiếp tục",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -237,9 +237,6 @@ class MainActivity : AppCompatActivity() {
     }
     fun setContinueEnabled(enabled: Boolean) {
         findViewById<Button>(R.id.btnContinue)?.isEnabled = enabled
-    }
-    fun setBackEnabled(enabled: Boolean) {
-        findViewById<Button>(R.id.btnBack)?.isEnabled = enabled
     }
     fun setBackVisible(visible: Boolean) {
         findViewById<Button>(R.id.btnBack)?.visibility =

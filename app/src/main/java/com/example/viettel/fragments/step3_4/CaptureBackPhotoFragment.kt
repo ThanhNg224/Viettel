@@ -63,12 +63,15 @@ class CaptureBackPhotoFragment : Fragment() {
         }
 
         captureButton.setOnClickListener {
+            (activity as? MainActivity)?.setContinueEnabled(false)
+
             cameraHelper.takePhoto(
                 onCaptured = { imageProxy ->
                     handleCapture(imageProxy)
                 },
                 onFail = {
                     Toast.makeText(requireContext(), "Lỗi chụp ảnh: ${it.message}", Toast.LENGTH_SHORT).show()
+                    (activity as? MainActivity)?.setContinueEnabled(true)
                 }
             )
         }
@@ -100,6 +103,7 @@ class CaptureBackPhotoFragment : Fragment() {
                 postDelayed({
                     animate().alpha(0f).setDuration(300).withEndAction {
                         visibility = View.GONE
+                        (activity as? MainActivity)?.setContinueEnabled(true)
                     }.start()
                 }, 2000)
             }.start()
@@ -148,6 +152,8 @@ class CaptureBackPhotoFragment : Fragment() {
                 imageProxy.close()
             }
     }
-    fun isBackCaptured(): Boolean =
-        activityViewModels<DocumentViewModel>().value.backImage != null
+    fun isMRZReady(): Boolean {
+        return docViewModel.mrzInfo != null
+    }
+
 }
