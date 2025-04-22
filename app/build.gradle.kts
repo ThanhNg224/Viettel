@@ -19,6 +19,16 @@ android {
         ndk {
             abiFilters += "armeabi-v7a"
         }
+        packaging {
+            resources {
+                excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+                excludes += "META-INF/DEPENDENCIES"
+                excludes += "META-INF/LICENSE"
+                excludes += "META-INF/LICENSE.txt"
+                excludes += "META-INF/NOTICE"
+                excludes += "META-INF/NOTICE.txt"
+            }
+        }
     }
 
     // This MUST be OUTSIDE of defaultConfig!
@@ -39,12 +49,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 
     buildFeatures {
@@ -58,6 +68,7 @@ android {
 configurations.all {
     resolutionStrategy {
         force("org.bouncycastle:bcprov-jdk18on:1.76")
+        force("org.bouncycastle:bcutil-jdk18on:1.76")
         eachDependency {
             if (requested.group == "org.bouncycastle" && requested.name.contains("jdk15on")) {
                 useTarget("org.bouncycastle:bcprov-jdk18on:1.76")
@@ -70,6 +81,7 @@ configurations.all {
 
 dependencies {
     implementation(project(":eidsdk"))
+    implementation(files("libs/ControlLightLib.jar"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

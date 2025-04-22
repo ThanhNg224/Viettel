@@ -5,5 +5,5 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
 
     // Manually declare android.library plugin (used in eidsdk)
-    id("com.android.library") version "8.9.1" apply false
+    id("com.android.library") version "8.9.2" apply false
 }

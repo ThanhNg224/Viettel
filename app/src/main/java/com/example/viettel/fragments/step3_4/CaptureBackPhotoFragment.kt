@@ -28,6 +28,8 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import org.jmrtd.lds.icao.MRZInfo
 import vn.leeon.eidsdk.utils.ImageUtils
 import vn.leeon.eidsdk.utils.OcrUtils
+import com.joyusing.controllight.ControlLightUtil
+
 
 class CaptureBackPhotoFragment : Fragment() {
 
@@ -48,6 +50,9 @@ class CaptureBackPhotoFragment : Fragment() {
     @ExperimentalGetImage
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+// Turn on LED
+        ControlLightUtil.openLight()
+        ControlLightUtil.setLight("5")
 
         previewView = view.findViewById(R.id.view_finder)
         captureButton = view.findViewById(R.id.btnCapture)
@@ -76,6 +81,13 @@ class CaptureBackPhotoFragment : Fragment() {
             )
         }
     }
+    override fun onResume() {
+        super.onResume()
+        // 💡 Re-trigger LED when returning to fragment
+        ControlLightUtil.openLight()
+        ControlLightUtil.setLight("5")
+    }
+
 
     @ExperimentalGetImage
     private fun handleCapture(imageProxy: ImageProxy) {
@@ -154,6 +166,12 @@ class CaptureBackPhotoFragment : Fragment() {
     }
     fun isMRZReady(): Boolean {
         return docViewModel.mrzInfo != null
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        //Turn off LED
+        ControlLightUtil.closeLight()
     }
 
 }

@@ -22,6 +22,7 @@ import com.example.viettel.utils.CameraHelper
 import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.viewmodel.DocumentViewModel
 import vn.leeon.eidsdk.utils.ImageUtils
+import com.joyusing.controllight.ControlLightUtil
 
 class CaptureFrontPhotoFragment : Fragment() {
 
@@ -43,6 +44,9 @@ class CaptureFrontPhotoFragment : Fragment() {
     @OptIn(ExperimentalGetImage::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Turn on LED
+        ControlLightUtil.openLight()
+        ControlLightUtil.setLight("5")
 
         textViewTitle = view.findViewById(R.id.tvInstruction)
         previewView = view.findViewById(R.id.view_finder)
@@ -70,6 +74,13 @@ class CaptureFrontPhotoFragment : Fragment() {
             )
         }
     }
+    override fun onResume() {
+        super.onResume()
+        // 💡 Re-trigger LED when returning to fragment
+        ControlLightUtil.openLight()
+        ControlLightUtil.setLight("5")
+    }
+
 
     @ExperimentalGetImage
     private fun handleCaptureSuccess(imageProxy: ImageProxy) {
@@ -103,6 +114,12 @@ class CaptureFrontPhotoFragment : Fragment() {
 
             Toast.makeText(requireContext(), "Ảnh mặt trước đã chụp xong!", Toast.LENGTH_SHORT).show()
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        //Turn off LED
+        ControlLightUtil.closeLight()
     }
 
 
