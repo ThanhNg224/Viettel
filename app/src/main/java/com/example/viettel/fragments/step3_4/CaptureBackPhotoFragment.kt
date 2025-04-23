@@ -2,12 +2,8 @@ package com.example.viettel.fragments.step3_4
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,8 +26,6 @@ import org.jmrtd.lds.icao.MRZInfo
 import vn.leeon.eidsdk.utils.ImageUtils
 import vn.leeon.eidsdk.utils.OcrUtils
 import com.joyusing.controllight.ControlLightUtil
-import com.example.viettel.utils.NavigationButtonHelper
-
 
 class CaptureBackPhotoFragment : Fragment(R.layout.fragment_capture_back_photo) {
 

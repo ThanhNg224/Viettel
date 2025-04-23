@@ -1,4 +1,4 @@
-package com.example.viettel.fragments
+package com.example.viettel.fragments.step8
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
+
 import com.example.viettel.utils.ProgressUtils
 
 class FeedbackFragment : Fragment() {
@@ -28,7 +30,7 @@ class FeedbackFragment : Fragment() {
         ProgressUtils.animateProgressToStep(view, 8)
 
         val rating = arguments?.getInt("rating") ?: 0
-        val tvInstruction = view.findViewById<android.widget.TextView>(R.id.tvInstruction)
+        val tvInstruction = view.findViewById<TextView>(R.id.tvInstruction)
         tvInstruction.text = "Bạn đã đánh giá $rating sao. Vui lòng chọn lý do không hài lòng dưới đây:"
 
         checkboxReason5 = view.findViewById(R.id.checkbox_reason_5)
@@ -58,17 +60,6 @@ class FeedbackFragment : Fragment() {
     // 🔍 MainActivity checks this to know if it should enable Continue button
     fun isFeedbackValid(): Boolean {
         return allCheckboxes.any { it.isChecked }
-    }
-
-    // ✅ Called by MainActivity when Continue is pressed
-    fun onContinuePressed() {
-        val feedback = collectFeedback()
-        val fragment = EndFragment().apply {
-            arguments = Bundle().apply {
-                putString("feedback", feedback)
-            }
-        }
-        (activity as? MainActivity)?.replaceFragment(fragment)
     }
 
     private fun collectFeedback(): String = buildString {

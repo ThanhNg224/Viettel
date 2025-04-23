@@ -9,7 +9,6 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
-import com.example.viettel.fragments.step7.QrCodePaymentFragment
 import com.example.viettel.utils.ProgressUtils
 
 class PaymentFragment : Fragment(R.layout.fragment_payment) {

@@ -1,4 +1,4 @@
-package com.example.viettel.fragments
+package com.example.viettel.fragments.step8
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -95,7 +95,7 @@ class PortraitLivenessFragment : Fragment() {
         }
     }
 
-    @androidx.camera.core.ExperimentalGetImage
+    @ExperimentalGetImage
     private fun analyzeFace(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
         if (mediaImage == null) {
