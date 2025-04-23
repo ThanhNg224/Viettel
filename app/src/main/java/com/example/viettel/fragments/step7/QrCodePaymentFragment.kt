@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
+import com.example.viettel.utils.ProgressUtils
 
 class QrCodePaymentFragment : Fragment() {
 
@@ -14,5 +15,10 @@ class QrCodePaymentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.fragment_qrcode_payment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        ProgressUtils.animateProgressToStep(view, 8)
     }
 }

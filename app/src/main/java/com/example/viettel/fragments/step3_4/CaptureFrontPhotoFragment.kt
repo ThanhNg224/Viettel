@@ -55,6 +55,13 @@ class CaptureFrontPhotoFragment : Fragment() {
 
         textViewTitle.text = "Vui lòng chụp ảnh mặt trước của giấy tờ"
         ProgressUtils.animateProgressToStep(view, 3)
+        (activity as? MainActivity)?.apply {
+            setBackVisible(true)
+            setContinueVisible(true)
+            setContinueEnabled(isFrontCaptured())
+        }
+
+
 
         // Initialize CameraHelper
         cameraHelper = CameraHelper(requireContext(), viewLifecycleOwner, previewView)
@@ -64,12 +71,14 @@ class CaptureFrontPhotoFragment : Fragment() {
 
         // Capture Button
         captureButton.setOnClickListener {
+            (activity as? MainActivity)?.setContinueEnabled(false)
             cameraHelper.takePhoto(
                 onCaptured = { imageProxy ->
                     handleCaptureSuccess(imageProxy)
                 },
                 onFail = {
                     Toast.makeText(requireContext(), "Lỗi chụp ảnh: ${it.message}", Toast.LENGTH_SHORT).show()
+                    (activity as? MainActivity)?.setContinueEnabled(isFrontCaptured())
                 }
             )
         }
@@ -79,6 +88,11 @@ class CaptureFrontPhotoFragment : Fragment() {
         // 💡 Re-trigger LED when returning to fragment
         ControlLightUtil.openLight()
         ControlLightUtil.setLight("5")
+        if (::cameraHelper.isInitialized) {
+            cameraHelper.startCamera { e ->
+                Toast.makeText(requireContext(), "Không thể mở camera: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
@@ -101,7 +115,7 @@ class CaptureFrontPhotoFragment : Fragment() {
                 alpha = 0f
                 visibility = View.VISIBLE
                 animate().alpha(1f).setDuration(300).withEndAction {
-                    postDelayed({6
+                    postDelayed({
                         animate().alpha(0f).setDuration(300).withEndAction {
                             visibility = View.GONE
 
@@ -115,6 +129,8 @@ class CaptureFrontPhotoFragment : Fragment() {
             Toast.makeText(requireContext(), "Ảnh mặt trước đã chụp xong!", Toast.LENGTH_SHORT).show()
         }
     }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
 

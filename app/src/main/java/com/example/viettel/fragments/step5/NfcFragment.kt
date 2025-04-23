@@ -35,7 +35,8 @@ import java.security.Security
 @Suppress("DEPRECATION")
 class NfcFragment : Fragment() {
 
-    private lateinit var mrzInfo: MRZInfo
+    private var mrzInfo: MRZInfo? = null
+
     private val disposable = CompositeDisposable()
     private var progressBar: ProgressBar? = null
     private var txtStatus: TextView? = null
@@ -64,21 +65,37 @@ class NfcFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ProgressUtils.animateProgressToStep(view, 5)
-
+        (activity as? MainActivity)?.apply {
+            setBackVisible(true)
+            setContinueVisible(true)
+            setContinueEnabled(false)  // 🔒 Disable Continue on start
+        }
+        if (mrzInfo == null) {
+            Toast.makeText(requireContext(), "Không có dữ liệu MRZ", Toast.LENGTH_SHORT).show()
+            return
+        }
         handleNfcTag()
     }
 
     private fun handleNfcTag() {
+        val mrz = mrzInfo ?: return
         val disposableNfc = EidFacade.handleDocumentNfcTag(
             requireContext(),
-            mrzInfo,
+            mrz,
             object : EidCallback {
                 override fun onEidReadStart() {
                     uiHandler.post {
                         progressBar?.visibility = View.VISIBLE
-                        txtStatus?.text = "Đang đọc chip..."
+                        txtStatus?.text = "🔄 Đang đọc chip..."
+
+                        (activity as? MainActivity)?.apply {
+                            setBackVisible(true)
+                            setContinueVisible(true)
+                            setContinueEnabled(false)  // 🔒 Disable Continue during NFC read
+                        }
                     }
                 }
+
 
                 override fun onEidReadFinish() {
                     uiHandler.post {
@@ -107,6 +124,8 @@ class NfcFragment : Fragment() {
                                 showEidDetails()
                             }, 150)
                         }
+                        (activity as? MainActivity)?.setContinueEnabled(true)  // ✅ Re-enable Continue
+
                     }
                 }
 

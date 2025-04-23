@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
@@ -29,9 +30,10 @@ import org.jmrtd.lds.icao.MRZInfo
 import vn.leeon.eidsdk.utils.ImageUtils
 import vn.leeon.eidsdk.utils.OcrUtils
 import com.joyusing.controllight.ControlLightUtil
+import com.example.viettel.utils.NavigationButtonHelper
 
 
-class CaptureBackPhotoFragment : Fragment() {
+class CaptureBackPhotoFragment : Fragment(R.layout.fragment_capture_back_photo) {
 
     private lateinit var previewView: PreviewView
     private lateinit var captureButton: ImageButton
@@ -40,47 +42,49 @@ class CaptureBackPhotoFragment : Fragment() {
     private lateinit var cameraHelper: CameraHelper
     private val docViewModel: DocumentViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_capture_back_photo, container, false)
-    }
-
-    @ExperimentalGetImage
+    @OptIn(ExperimentalGetImage::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-// Turn on LED
-        ControlLightUtil.openLight()
-        ControlLightUtil.setLight("5")
 
-        previewView = view.findViewById(R.id.view_finder)
+        // 🔥 Initialize your views first
+        previewView   = view.findViewById(R.id.view_finder)
         captureButton = view.findViewById(R.id.btnCapture)
         textViewTitle = view.findViewById(R.id.tvInstruction)
-        successTick = view.findViewById(R.id.imgSuccessTick)
-
-        textViewTitle.text = "Vui lòng chụp ảnh mặt sau của giấy tờ"
+        successTick   = view.findViewById(R.id.imgSuccessTick)
         ProgressUtils.animateProgressToStep(view, 4)
+        // 🔄 Set up back/continue buttons
+        (activity as? MainActivity)?.apply {
+            setBackVisible(true)
+            setContinueVisible(true)
+            setContinueEnabled(isMRZReady())
+        }
 
+
+
+        // 📸 Only start camera in the normal (no-MRZ) flow
         cameraHelper = CameraHelper(requireContext(), viewLifecycleOwner, previewView)
-        cameraHelper.startCamera {
-            Toast.makeText(requireContext(), "Không thể mở camera: ${it.message}", Toast.LENGTH_SHORT).show()
+        cameraHelper.startCamera { e ->
+            Toast.makeText(requireContext(),
+                "Không thể mở camera: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         captureButton.setOnClickListener {
             (activity as? MainActivity)?.setContinueEnabled(false)
-
             cameraHelper.takePhoto(
-                onCaptured = { imageProxy ->
-                    handleCapture(imageProxy)
-                },
-                onFail = {
-                    Toast.makeText(requireContext(), "Lỗi chụp ảnh: ${it.message}", Toast.LENGTH_SHORT).show()
-                    (activity as? MainActivity)?.setContinueEnabled(true)
-                }
+                onCaptured = { imageProxy -> handleCapture(imageProxy) },
+                onFail     = { e -> Toast.makeText(
+                    requireContext(),
+                    "Lỗi chụp ảnh: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                    (activity as? MainActivity)?.setContinueEnabled(isMRZReady())}
             )
         }
     }
+
+
     override fun onResume() {
         super.onResume()
         // 💡 Re-trigger LED when returning to fragment
@@ -91,36 +95,46 @@ class CaptureBackPhotoFragment : Fragment() {
 
     @ExperimentalGetImage
     private fun handleCapture(imageProxy: ImageProxy) {
-        val bmp = imageProxy.image?.let { img ->
-            ImageUtils.imageToByteArray(img)?.let { byteArray ->
-                BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        // save back‐side bitmap
+        imageProxy.image?.let { img ->
+            ImageUtils.imageToByteArray(img)?.let { bytes ->
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    .also { bmp -> docViewModel.backImage = bmp }
             }
         }
 
-        bmp?.let { docViewModel.backImage = it }
+        requireActivity().runOnUiThread {
+            successTick.apply {
+                alpha = 0f
+                visibility = View.VISIBLE
+                animate()
+                    .alpha(1f)
+                    .setDuration(300)
+                    .withEndAction {
+                        postDelayed({
+                            animate()
+                                .alpha(0f)
+                                .setDuration(300)
+                                .withEndAction {
+                                    visibility = View.GONE
+                                    // —— enable Continue now that capture is done ——
+                                    (activity as? MainActivity)?.setContinueEnabled(true)
+                                    // then proceed with your existing OCR logic
+                                    processOcrWithEidSDK(imageProxy)
+                                }
+                                .start()
+                        }, 2000)
+                    }
+                    .start()
+            }
 
-        showSuccessTick()
-        Toast.makeText(requireContext(), "Ảnh mặt sau đã chụp xong!", Toast.LENGTH_SHORT).show()
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            processOcrWithEidSDK(imageProxy)
-        }, 500)
-    }
-
-    private fun showSuccessTick() {
-        successTick.apply {
-            alpha = 0f
-            visibility = View.VISIBLE
-            animate().alpha(1f).setDuration(300).withEndAction {
-                postDelayed({
-                    animate().alpha(0f).setDuration(300).withEndAction {
-                        visibility = View.GONE
-                        (activity as? MainActivity)?.setContinueEnabled(true)
-                    }.start()
-                }, 2000)
-            }.start()
+            Toast.makeText(requireContext(),
+                "Ảnh mặt sau đã chụp xong!",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
 
     @ExperimentalGetImage
     private fun processOcrWithEidSDK(imageProxy: ImageProxy) {
@@ -163,6 +177,9 @@ class CaptureBackPhotoFragment : Fragment() {
                 Toast.makeText(requireContext(), "Lỗi OCR: ${e.message}", Toast.LENGTH_SHORT).show()
                 imageProxy.close()
             }
+    }
+    fun getMRZ(): MRZInfo? {
+        return docViewModel.mrzInfo
     }
     fun isMRZReady(): Boolean {
         return docViewModel.mrzInfo != null

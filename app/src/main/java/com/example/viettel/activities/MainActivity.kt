@@ -31,6 +31,7 @@ import com.example.viettel.fragments.step1_2.PlaceDocumentFragment
 import com.example.viettel.fragments.step6.PortraitComparisonFragment
 import com.example.viettel.fragments.step6.PortraitLivenessFragment
 import com.example.viettel.fragments.step6.VideoCallFragment
+import com.example.viettel.fragments.step7.QrCodePaymentFragment
 import com.google.android.material.snackbar.Snackbar
 import org.jmrtd.lds.icao.MRZInfo
 
@@ -131,15 +132,25 @@ class MainActivity : AppCompatActivity() {
                 is CaptureBackPhotoFragment -> {
                     val frag = currentFragment
                     if (frag.isMRZReady()) {
-                        replaceFragment(NfcFragment())
-                    } else {
-                        Toast.makeText(
-                            this,
-                            "Vui lòng chụp ảnh mặt sau hợp lệ trước khi tiếp tục",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (frag.isMRZReady()) {
+                            val mrz = frag.getMRZ()
+                            if (mrz != null) {
+                                val nfcFragment =
+                                    NfcFragment.newInstance(mrz)  // ✅ use newInstance()
+                                replaceFragment(nfcFragment)
+                            } else {
+                                Toast.makeText(this, "MRZ chưa sẵn sàng", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "Vui lòng chụp ảnh mặt sau hợp lệ trước khi tiếp tục",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
+                    }
+
                 is NfcFragment ->
                     replaceFragment(EidDetailsFragment())
 
@@ -157,6 +168,10 @@ class MainActivity : AppCompatActivity() {
 
                 is VideoCallFragment ->
                     replaceFragment(PaymentFragment())
+                is PaymentFragment ->
+                    replaceFragment(ServiceEvaluationFragment())
+                is QrCodePaymentFragment ->
+                    replaceFragment(ServiceEvaluationFragment())
 
                 is ServiceEvaluationFragment ->
                     replaceFragment(EndFragment())
@@ -242,7 +257,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnBack)?.visibility =
             if (visible) View.VISIBLE else View.GONE
     }
-
+    fun setBackEnabled(enabled: Boolean) {
+        findViewById<Button>(R.id.btnBack)?.isEnabled = enabled
+    }
 
 }
 

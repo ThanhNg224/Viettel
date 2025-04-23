@@ -9,12 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.viettel.R
+import com.example.viettel.activities.MainActivity
 import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.viewmodel.DocumentViewModel
 import com.example.viettel.viewmodel.PortraitAction
@@ -51,6 +53,8 @@ class PortraitComparisonFragment : Fragment() {
     private lateinit var txtEthnicityValue: TextView
     private lateinit var txtDateOfIssueValue: TextView
     private lateinit var txtDateExpiryValue: TextView
+    private lateinit var progressMatchLoading: ProgressBar
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,17 +64,31 @@ class PortraitComparisonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ProgressUtils.animateProgressToStep(view, 6)
+        progressMatchLoading = view.findViewById(R.id.progressMatchLoading)
+
 
         // Left side initialization
         txtMatchResult = view.findViewById(R.id.txtMatchResult)
         imgSmilePortrait = view.findViewById(R.id.imgSmilePortrait)
         imgChipPortrait = view.findViewById(R.id.imgChipPortrait)
+        // Set loading text
+        txtMatchResult.text = "Đang thực hiện so sánh khuôn mặt..."
+        txtMatchResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.black)) // or gray
+
+        progressMatchLoading.visibility = View.VISIBLE
 
         val smileBitmap = docViewModel.portraitActions[PortraitAction.SMILE]
         val chipBitmap = docViewModel.chipPortrait
 
         smileBitmap?.let { imgSmilePortrait.setImageBitmap(it) }
         chipBitmap?.let { imgChipPortrait.setImageBitmap(it) }
+
+        (activity as? MainActivity)?.apply {
+            setBackVisible(true)
+            setContinueVisible(true)
+            setContinueEnabled(false)
+            setBackEnabled(false)//  Disable Continue during API call
+        }
 
         if (smileBitmap != null && chipBitmap != null) {
             callFaceMatchApi(smileBitmap, chipBitmap)
@@ -165,18 +183,23 @@ class PortraitComparisonFragment : Fragment() {
             } finally {
                 conn?.disconnect()
                 withContext(Dispatchers.Main) {
+                    progressMatchLoading.visibility = View.GONE
+                    (activity as? MainActivity)?.apply {
+                        setBackVisible(true)
+                        setContinueEnabled(true)
+                        setBackEnabled(true)
+                    }
+
                     if (matchScore != -1.0) {
                         updateMatchUI(matchScore)
                     } else {
                         txtMatchResult.text = errorMessage
                         txtMatchResult.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.red_dark
-                            )
+                            ContextCompat.getColor(requireContext(), R.color.red_dark)
                         )
                     }
                 }
+
             }
         }
     }

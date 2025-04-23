@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.utils.ProgressUtils
 
 class ServiceEvaluationFragment : Fragment() {
 
@@ -20,7 +21,7 @@ class ServiceEvaluationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        ProgressUtils.animateProgressToStep(view, 8)
         emojiButtons = listOf(
             view.findViewById(R.id.emoji1),
             view.findViewById(R.id.emoji2),
