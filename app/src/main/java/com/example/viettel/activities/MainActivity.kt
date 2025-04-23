@@ -17,9 +17,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
-import com.example.viettel.fragments.EndFragment
-import com.example.viettel.fragments.FeedbackFragment
-import com.example.viettel.fragments.ServiceEvaluationFragment
+import com.example.viettel.fragments.step8.EndFragment
+import com.example.viettel.fragments.step8.FeedbackFragment
+import com.example.viettel.fragments.step8.ServiceEvaluationFragment
 import com.example.viettel.fragments.step3_4.CaptureBackPhotoFragment
 import com.example.viettel.fragments.step3_4.CaptureFrontPhotoFragment
 import com.example.viettel.fragments.step1_2.DocumentSelectionFragment
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                             val mrz = frag.getMRZ()
                             if (mrz != null) {
                                 val nfcFragment =
-                                    NfcFragment.newInstance(mrz)  // ✅ use newInstance()
+                                    NfcFragment.newInstance(mrz)  //
                                 replaceFragment(nfcFragment)
                             } else {
                                 Toast.makeText(this, "MRZ chưa sẵn sàng", Toast.LENGTH_SHORT).show()

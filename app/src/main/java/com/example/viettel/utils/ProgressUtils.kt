@@ -9,7 +9,7 @@ object ProgressUtils {
         view: View,
         toStep: Int,
         totalSteps: Int = 8,
-        duration: Long = 1000L
+        duration: Long = 1300L
     ) {
         val progressLine = view.findViewById<View>(R.id.progressLine)
         val container = view.findViewById<View>(R.id.progressBarContainer)
@@ -19,13 +19,13 @@ object ProgressUtils {
             val fromWidth = (stepDistance * (toStep - 1)).toInt()
             val toWidth = (stepDistance * toStep).toInt()
 
-            // 🧼 Set initial width to toStep - 1 BEFORE animation starts (no full flash)
+            // 🧼 Set initial width to toStep - 1
             progressLine.layoutParams = progressLine.layoutParams.apply {
                 width = fromWidth
             }
             progressLine.requestLayout()
 
-            // ✅ Now animate smoothly from (toStep - 1) to toStep
+            // animate from (toStep - 1) to toStep
             ValueAnimator.ofInt(fromWidth, toWidth).apply {
                 this.duration = duration
                 addUpdateListener { anim ->

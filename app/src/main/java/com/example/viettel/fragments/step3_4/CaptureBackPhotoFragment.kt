@@ -185,6 +185,4 @@ class CaptureBackPhotoFragment : Fragment(R.layout.fragment_capture_back_photo) 
         ControlLightUtil.closeLight()
         cameraHelper.releaseCamera()
     }
-
-
 }

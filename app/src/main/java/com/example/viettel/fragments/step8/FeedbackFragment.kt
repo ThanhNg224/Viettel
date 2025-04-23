@@ -78,5 +78,15 @@ class FeedbackFragment : Fragment() {
         val enabled = isFeedbackValid()
         (activity as? MainActivity)?.setContinueEnabled(enabled)
     }
+    fun onContinuePressed() {
+        val feedback = collectFeedback()
+        val fragment = EndFragment().apply {
+            arguments = Bundle().apply {
+                putString("feedback", feedback)
+            }
+        }
+        (activity as? MainActivity)?.replaceFragment(fragment)
+    }
+
 
 }
