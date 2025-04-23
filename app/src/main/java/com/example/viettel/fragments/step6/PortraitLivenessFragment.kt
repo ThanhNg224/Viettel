@@ -1,5 +1,6 @@
 package com.example.viettel.fragments.step6
 
+import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -11,16 +12,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.viettel.R
 import com.example.viettel.utils.CameraHelper
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.viewmodel.DocumentViewModel
+import com.example.viettel.viewmodel.PortraitAction
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import vn.leeon.eidsdk.utils.ImageUtils
 
 class PortraitLivenessFragment : Fragment() {
 
@@ -46,6 +52,7 @@ class PortraitLivenessFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_portrait_liveness, container, false)
     }
 
+    @ExperimentalGetImage
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -61,7 +68,7 @@ class PortraitLivenessFragment : Fragment() {
         )
 
         instructionText.text = instructions[currentIndex]
-        ProgressUtils.animateProgressToStep(view, 5)
+        ProgressUtils.animateProgressToStep(view, 6)
 
         cameraHelper = CameraHelper(
             requireContext(),
@@ -88,13 +95,19 @@ class PortraitLivenessFragment : Fragment() {
         }
     }
 
+    @androidx.camera.core.ExperimentalGetImage
     private fun analyzeFace(imageProxy: ImageProxy) {
-        val byteBuffer = imageProxy.planes[0].buffer
-        val byteArray = ByteArray(byteBuffer.remaining())
-        byteBuffer.get(byteArray)
-        imageProxy.close()
+        val mediaImage = imageProxy.image
+        if (mediaImage == null) {
+            imageProxy.close()
+            Toast.makeText(requireContext(), "Lỗi: Không thể lấy ảnh từ camera!", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        val image = InputImage.fromByteArray(byteArray, imageProxy.width, imageProxy.height, 0, InputImage.IMAGE_FORMAT_NV21)
+        val image = InputImage.fromMediaImage(
+            mediaImage,
+            imageProxy.imageInfo.rotationDegrees
+        )
 
         val options = FaceDetectorOptions.Builder()
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
@@ -106,6 +119,8 @@ class PortraitLivenessFragment : Fragment() {
 
         detector.process(image)
             .addOnSuccessListener { faces ->
+                imageProxy.close()
+
                 if (faces.isEmpty()) {
                     Toast.makeText(requireContext(), "Không thấy khuôn mặt nào!", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
@@ -114,11 +129,14 @@ class PortraitLivenessFragment : Fragment() {
                 checkFaceAction(faces[0])
             }
             .addOnFailureListener {
+                imageProxy.close()
                 Toast.makeText(requireContext(), "Lỗi nhận diện khuôn mặt: ${it.message}", Toast.LENGTH_SHORT).show()
                 Log.e("PortraitLiveness", "Face detection failed", it)
             }
     }
 
+
+    @ExperimentalGetImage
     private fun checkFaceAction(face: Face) {
         val instruction = instructions[currentIndex]
         val smilingProb = face.smilingProbability ?: -1f
@@ -135,6 +153,29 @@ class PortraitLivenessFragment : Fragment() {
         }
 
         if (pass) {
+            if (instruction.contains("cười")) {
+                cameraHelper.takePhoto(
+                    onCaptured = { proxy ->
+                        val mediaImage = proxy.image
+                        if (mediaImage != null) {
+                            val bmp = ImageUtils.imageToByteArray(mediaImage)?.let { bytes ->
+                                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                            }
+
+                            if (bmp != null) {
+                                val docViewModel: DocumentViewModel by activityViewModels()
+                                docViewModel.portraitActions[PortraitAction.SMILE] = bmp
+                                Log.d("PortraitLiveness", "✅ SMILE photo saved")
+                            }
+                        }
+                        proxy.close()
+                    },
+                    onFail = {
+                        Log.e("PortraitLiveness", "❌ Failed to capture SMILE bitmap: ${it.message}")
+                    }
+                )
+            }
+
             emojiTicks[currentIndex].visibility = View.VISIBLE
             showResultOverlay(true)
             playSound(R.raw.siuuu)
@@ -145,11 +186,8 @@ class PortraitLivenessFragment : Fragment() {
                 instructionText.text = "Siuuuuuu! Bạn đã hoàn thành 🎉"
                 Toast.makeText(requireContext(), "Tất cả hành động đã hoàn thành!", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            showResultOverlay(false)
-            playSound(R.raw.fail_sound)
-            Toast.makeText(requireContext(), "Bạn chưa thực hiện đúng. Hãy thử lại!", Toast.LENGTH_SHORT).show()
         }
+
     }
 
     private fun showResultOverlay(success: Boolean) {
@@ -182,4 +220,9 @@ class PortraitLivenessFragment : Fragment() {
         }
         mediaPlayer.start()
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        cameraHelper.releaseCamera()
+    }
+
 }

@@ -18,6 +18,7 @@ class CameraHelper(
 ) {
     lateinit var imageCapture: ImageCapture
 
+
     fun startCamera(onError: (Exception) -> Unit = {}) {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         previewView.scaleType = PreviewView.ScaleType.FIT_CENTER
@@ -73,4 +74,18 @@ class CameraHelper(
             }
         )
     }
+
+    fun releaseCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+        cameraProviderFuture.addListener({
+            try {
+                val cameraProvider = cameraProviderFuture.get()
+                cameraProvider.unbindAll()
+            } catch (e: Exception) {
+                Log.e("CameraHelper", "Failed to release camera: ${e.message}", e)
+            }
+        }, ContextCompat.getMainExecutor(context))
+    }
+
+
 }

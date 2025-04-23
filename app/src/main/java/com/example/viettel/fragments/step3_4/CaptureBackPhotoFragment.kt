@@ -172,6 +172,8 @@ class CaptureBackPhotoFragment : Fragment() {
 
         //Turn off LED
         ControlLightUtil.closeLight()
+        cameraHelper.releaseCamera()
     }
+
 
 }
