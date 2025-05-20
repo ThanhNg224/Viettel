@@ -188,6 +188,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
+
                 is EndFragment ->
                     Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
 
@@ -260,6 +261,7 @@ class MainActivity : AppCompatActivity() {
     fun setBackEnabled(enabled: Boolean) {
         findViewById<Button>(R.id.btnBack)?.isEnabled = enabled
     }
+
 
 }
 
