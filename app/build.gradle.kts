@@ -90,7 +90,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation ("androidx.fragment:fragment-ktx:1.8.6")
+    implementation ("androidx.fragment:fragment-ktx:1.8.7")
 
 
     // CameraX
@@ -102,8 +102,8 @@ dependencies {
     // Vision + MLKit
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.google.mlkit:text-recognition:16.0.1")
-    implementation("com.google.mlkit:object-detection:17.0.0")
-    implementation("com.google.mlkit:object-detection-common:17.0.0")
+    implementation("com.google.mlkit:object-detection:17.0.2")
+    implementation("com.google.mlkit:object-detection-common:18.0.0")
     implementation("com.google.mlkit:vision-common:17.3.0")
     implementation ("com.google.mlkit:face-detection:16.1.7")
     implementation ("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
@@ -115,7 +115,7 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")
     }
     implementation("net.sf.scuba:scuba-sc-android:0.0.20")
-    implementation("com.madgag.spongycastle:prov:1.58.0.0")
+    implementation(libs.prov)
 
     implementation("org.ejbca.cvc:cert-cvc:1.4.13") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
@@ -123,10 +123,16 @@ dependencies {
     }
 
     // RxJava
-    implementation("io.reactivex.rxjava2:rxjava:2.2.21")
-    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
 
     //PDF reader
     implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
+
+    //
+    implementation ("org.java-websocket:Java-WebSocket:1.5.2")
+    implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+
+
 
 }
