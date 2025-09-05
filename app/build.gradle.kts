@@ -1,37 +1,41 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
 
-
 android {
     namespace = "com.example.viettel"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.viettel"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         ndk {
             abiFilters += "armeabi-v7a"
         }
-        packaging {
-            resources {
-                excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-                excludes += "META-INF/DEPENDENCIES"
-                excludes += "META-INF/LICENSE"
-                excludes += "META-INF/LICENSE.txt"
-                excludes += "META-INF/NOTICE"
-                excludes += "META-INF/NOTICE.txt"
-            }
+    }
+
+    // Nên đặt packaging ở cấp android {}, KHÔNG nằm trong defaultConfig
+    packaging {
+        resources {
+            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
         }
     }
 
-    // This MUST be OUTSIDE of defaultConfig!
+    // Thư viện .so
     sourceSets {
         getByName("main") {
             jniLibs.srcDirs("libs", "src/main/jniLibs")
@@ -48,27 +52,37 @@ android {
         }
     }
 
+    // Java toolchain cho phần Java/AGP
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
         viewBinding = true
     }
 
+    // Thường không cần set thủ công; có thể bỏ nếu muốn
     buildToolsVersion = "36.0.0"
 }
 
+// Kotlin: dùng toolchain + compilerOptions (thay cho kotlinOptions { jvmTarget = "..." })
+kotlin {
+    // Dùng JDK 21 để compile Kotlin
+    jvmToolchain(21)
+
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+        // Nếu có flags thêm thì mở comment:
+        // freeCompilerArgs.addAll("-Xjsr305=strict")
+    }
+}
 
 configurations.all {
     resolutionStrategy {
         force("org.bouncycastle:bcprov-jdk18on:1.76")
         force("org.bouncycastle:bcutil-jdk18on:1.76")
+
         eachDependency {
             if (requested.group == "org.bouncycastle" && requested.name.contains("jdk15on")) {
                 useTarget("org.bouncycastle:bcprov-jdk18on:1.76")
@@ -77,6 +91,7 @@ configurations.all {
         }
     }
 }
+
 
 
 dependencies {

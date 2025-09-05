@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         registerKioskToBackend()
-        connectWebSocket()
+//        connectWebSocket()
         resolveDeviceId()
 
         Log.d("KIOSK_ID", "Real serial: ${getHardwareSerial()}")
