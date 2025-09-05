@@ -1,117 +1,103 @@
-📝 Project Overview: Viettel CCCD/Passport Verification App
-🔹 Purpose:
-Designed for kiosk/tablet environments (like the Joyusing Z10S Pro).
+# Viettel CCCD/Passport Verification App
 
-Verifies citizen ID cards (CCCD) or passports at telecom service counters (Viettel flow).
+## 📌 Overview
+Viettel CCCD/Passport Verification App is an Android application designed for kiosk and tablet environments (e.g., **Joyusing Z10S Pro**).  
+It enables secure verification of **Vietnamese citizen ID cards (CCCD)** and **passports** at telecom service counters, meeting Vietnam's government mandates for chip-based ID authentication.
 
-Meets Vietnam's government mandates for chip-based ID authentication.
+---
 
-🚀 Main Features & Flow:
-Document Type Selection
+## ✨ Features
 
-Choose between CCCD or passport.
+### 🔹 Document Type Selection
+- Choose between **CCCD** or **Passport**  
+- Determines the flow for capture and validation
 
-Drives the capture flow.
+### 🔹 Document Capture
+- Capture front & back photos of CCCD or passport photo page  
+- Built with **CameraX** and **Joyusing SDK** for LED control:
+  - Front LED → Face capture
+  - Bottom LED → Document capture
 
-Document Capture
+### 🔹 OCR (MRZ Extraction)
+- Powered by **Google ML Kit OCR**  
+- Extracts MRZ from passports and CCCD backs
 
-Front & back photos of CCCD / passport photo page.
+### 🔹 NFC Chip Reading
+- Reads chip data securely  
+- Integrates **EidSDK (Viettel)** + **JMRTD**
 
-Uses CameraX with fill light control (via Joyusing SDK):
+### 🔹 Chip Data Display
+- Shows:
+  - Name, DOB, document number, gender, nationality  
+- Displays images:
+  - Front, back, and chip portrait
 
-Front LED: For face capture.
+### 🔹 Portrait Liveness Detection
+- **Google ML Kit Face Detection** validates:
+  - Smile, blink, head turn (left/right)  
+- Prevents spoofing
 
-Bottom LED: For document capture.
+### 🔹 Portrait Comparison
+- Matches **live portrait** with **chip portrait**  
+- Uses [ATIN Face Engine API](https://face-engine-api.atin.vn/api/v1/match)  
+- Displays similarity percentage
 
-OCR (MRZ Extraction)
+### 🔹 Contract PDF Signing
+- Loads PDF contracts for review  
+- Digital signature via:
+  - Checkbox + drawn signature  
+- Ensures signature validity
 
-Uses Google ML Kit for OCR.
+### 🔹 Video Call Verification
+- Real-time verification with agents  
+- Built on **Stringee/VTS SDK**
 
-Reads MRZ (Machine Readable Zone) for passports/CCCD backs.
+### 🔹 Payment
+- Supports **Cash** and **QR Code payments**  
+- Syncs with **Viettel BCCS system**
 
-NFC Chip Reading
+### 🔹 Customer Feedback
+- Collects satisfaction ratings  
+- Allows feedback for low ratings
 
-Reads chip data from CCCD/passport via NFC.
+---
 
-Uses EidSDK (Viettel) + JMRTD for secure chip communication.
+## 🏗 Technical Stack
 
-Chip Data Display
+- **Frontend:** Android (Kotlin, Fragments)  
+- **Image Capture:** CameraX + Joyusing SDK (`ControlLightUtil`)  
+- **OCR & Liveness:** Google ML Kit  
+- **NFC Reading:** JMRTD + Scuba + EidSDK (Viettel)  
+- **APIs:**  
+  - ATIN Face Engine (Face Match)  
+  - EidSDK (Chip Validation)  
+  - Viettel BCCS (Order/Validation)  
+- **PDF Signing:** Android PDF Viewer  
+- **Reactive Programming:** RxJava
 
-Shows chip data:
+---
 
-Name, DOB, document number, gender, nationality, etc.
+## 📦 Dependencies
 
-Displays captured images:
+- [CameraX](https://developer.android.com/training/camerax)  
+- [Google ML Kit](https://developers.google.com/ml-kit)  
+- Joyusing SDK (for LED light control)  
+- [JMRTD](https://jmrtd.org/) + Scuba (for NFC)  
+- EidSDK (Viettel)  
+- [RxJava](https://github.com/ReactiveX/RxJava)  
+- [Android PDF Viewer](https://github.com/barteksc/AndroidPdfViewer)
 
-Front, back, and chip portrait.
+---
 
-Portrait Liveness Check
+## 🚀 Getting Started
 
-Uses ML Kit face detection.
+### Prerequisites
+- Android Studio (latest version)  
+- Android device with:
+  - **NFC support**
+  - **Front/Bottom LED (Joyusing Z10S Pro recommended)**
 
-Validates user actions:
-
-Smile, blink, turn head left/right.
-
-Ensures real person is interacting.
-
-Portrait Comparison
-
-Compares live portrait (smile image) vs chip portrait.
-
-Calls Face Match API (https://face-engine-api.atin.vn/api/v1/match).
-
-Displays matching percentage.
-
-PDF Signing
-
-Shows contract PDF to the customer.
-
-Customer digitally signs on the screen.
-
-Includes signature validation (checkbox + drawn signature).
-
-Video Call Verification
-
-Connects with call center agents for manual verification via Stringee/VTS.
-
-Payment
-
-Supports cash or QR code payments.
-
-Updates Viettel's BCCS system accordingly.
-
-Customer Feedback Survey
-
-Collects satisfaction ratings.
-
-Offers additional feedback options for lower ratings.
-
-🏗 Technical Stack:
-Frontend:
-Android (Kotlin) with fragments for each step.
-
-CameraX for image capture.
-
-ML Kit for:
-
-OCR (MRZ extraction).
-
-Face detection (liveness check).
-
-Joyusing SDK (ControlLightUtil) for LED light control.
-
-Backend APIs:
-Face match via ATIN Face Engine.
-
-NFC chip validation via EidSDK.
-
-BCCS Viettel API (for order management, validation).
-
-Dependencies:
-JMRTD + Scuba for NFC (chip reading).
-
-RxJava for reactive flows.
-
-Android PDF Viewer for contract signing.
-
+### Installation
+```bash
+git clone https://github.com/your-org/viettel-cccd-passport-verification.git
+cd viettel-cccd-passport-verification
