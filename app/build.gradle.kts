@@ -23,7 +23,7 @@ android {
         }
     }
 
-    // Nên đặt packaging ở cấp android {}, KHÔNG nằm trong defaultConfig
+
     packaging {
         resources {
             excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
@@ -35,7 +35,7 @@ android {
         }
     }
 
-    // Thư viện .so
+
     sourceSets {
         getByName("main") {
             jniLibs.srcDirs("libs", "src/main/jniLibs")
@@ -62,13 +62,13 @@ android {
         viewBinding = true
     }
 
-    // Thường không cần set thủ công; có thể bỏ nếu muốn
+
     buildToolsVersion = "36.0.0"
 }
 
-// Kotlin: dùng toolchain + compilerOptions (thay cho kotlinOptions { jvmTarget = "..." })
+
 kotlin {
-    // Dùng JDK 21 để compile Kotlin
+
     jvmToolchain(21)
 
     compilerOptions {
@@ -105,7 +105,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation ("androidx.fragment:fragment-ktx:1.8.7")
+    implementation ("androidx.fragment:fragment-ktx:1.8.9")
 
 
     // CameraX
@@ -129,7 +129,7 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
         exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")
     }
-    implementation("net.sf.scuba:scuba-sc-android:0.0.20")
+    implementation("net.sf.scuba:scuba-sc-android:0.0.26")
     implementation(libs.prov)
 
     implementation("org.ejbca.cvc:cert-cvc:1.4.13") {
@@ -145,8 +145,10 @@ dependencies {
     implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
 
     //
-    implementation ("org.java-websocket:Java-WebSocket:1.5.2")
+    implementation ("org.java-websocket:Java-WebSocket:1.6.0")
     implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
 
 
 

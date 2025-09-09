@@ -17,8 +17,8 @@ class VideoCallFragment : Fragment(R.layout.fragment_video_call) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // bước 8
-        ProgressUtils.animateProgressToStep(view, 8)
+        // bước 6
+        ProgressUtils.animateProgressToStep(view, 6)
 
         val previewView = view.findViewById<PreviewView>(R.id.customerCam)
 

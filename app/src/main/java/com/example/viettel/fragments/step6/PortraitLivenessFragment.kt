@@ -67,7 +67,15 @@ class PortraitLivenessFragment : Fragment() {
             view.findViewById(R.id.imgTickBR)
         )
 
-        instructionText.text = instructions[currentIndex]
+        // ✅ Không bao giờ out-of-bounds
+        if (currentIndex >= instructions.size) {
+            instructionText.text = "Đã xong tất cả thao tác 🎉"
+            captureButton.isEnabled = false
+        } else {
+            val safeIdx = currentIndex.coerceIn(0, instructions.lastIndex)
+            instructionText.text = instructions.getOrNull(safeIdx) ?: instructions.last()
+        }
+
         ProgressUtils.animateProgressToStep(view, 6)
 
         cameraHelper = CameraHelper(
@@ -81,6 +89,7 @@ class PortraitLivenessFragment : Fragment() {
         }
 
         captureButton.setOnClickListener {
+            // ✅ Chặn khi đã hoàn thành
             if (currentIndex >= instructions.size) {
                 Log.d("PortraitLiveness", "All actions done. Ignoring capture.")
                 return@setOnClickListener
@@ -94,6 +103,7 @@ class PortraitLivenessFragment : Fragment() {
             )
         }
     }
+
 
     @ExperimentalGetImage
     private fun analyzeFace(imageProxy: ImageProxy) {
@@ -178,7 +188,7 @@ class PortraitLivenessFragment : Fragment() {
 
             emojiTicks[currentIndex].visibility = View.VISIBLE
             showResultOverlay(true)
-            playSound(R.raw.siuuu)
+            playSound(R.raw.success_sound)
             currentIndex++
             if (currentIndex < instructions.size) {
                 instructionText.text = instructions[currentIndex]
