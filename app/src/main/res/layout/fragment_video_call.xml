@@ -321,11 +321,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintDimensionRatio="16:9">
-                        <androidx.camera.view.PreviewView
-                            android:id="@+id/customerCam"
+
+                        <!--                        <androidx.camera.view.PreviewView-->
+                        <!--                            android:id="@+id/customerCam"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="match_parent"-->
+                        <!--                            android:scaleType="centerCrop" />-->
+
+                        <FrameLayout
+                            android:id="@+id/v_local"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop" />
+
                     </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -364,7 +372,9 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintDimensionRatio="16:9">
+
                         <FrameLayout
+                            android:id="@+id/v_remote"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 

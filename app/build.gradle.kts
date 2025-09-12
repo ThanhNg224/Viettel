@@ -14,7 +14,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -35,7 +35,7 @@ android {
         }
     }
 
-
+    // Thư viện .so
     sourceSets {
         getByName("main") {
             jniLibs.srcDirs("libs", "src/main/jniLibs")
@@ -96,16 +96,19 @@ configurations.all {
 
 dependencies {
     implementation(project(":eidsdk"))
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(files("libs/ControlLightLib.jar"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.media3.common.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation ("androidx.fragment:fragment-ktx:1.8.9")
+    implementation (libs.androidx.fragment.ktx)
 
 
     // CameraX
@@ -129,7 +132,7 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
         exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")
     }
-    implementation("net.sf.scuba:scuba-sc-android:0.0.26")
+    implementation("net.sf.scuba:scuba-sc-android:0.0.20")
     implementation(libs.prov)
 
     implementation("org.ejbca.cvc:cert-cvc:1.4.13") {
@@ -145,11 +148,13 @@ dependencies {
     implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
 
     //
-    implementation ("org.java-websocket:Java-WebSocket:1.6.0")
+    implementation ("org.java-websocket:Java-WebSocket:1.5.2")
+    implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
     implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
 
-    implementation("org.nanohttpd:nanohttpd:2.3.1")
-
-
+    //Stringee
+    implementation("com.stringee.sdk.android:stringee-android-sdk:1.9.1")
+    implementation("com.google.code.gson:gson:2.11.0")
 
 }

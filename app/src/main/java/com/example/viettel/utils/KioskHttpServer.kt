@@ -1,5 +1,11 @@
 import fi.iki.elonen.NanoHTTPD
 import org.json.JSONObject
+import kotlin.apply
+import kotlin.getOrDefault
+import kotlin.jvm.java
+import kotlin.jvm.javaClass
+import kotlin.runCatching
+import kotlin.text.ifBlank
 
 class KioskHttpServer(
     port: Int = 8088,
@@ -31,7 +37,7 @@ class KioskHttpServer(
             }
 
             session.method == Method.POST && session.uri == "/api/trigger" -> {
-                val map = HashMap<String, String>()
+                val map = kotlin.collections.HashMap<String, String>()
                 try { session.parseBody(map) } catch (_: Exception) {}
                 val body = map["postData"] ?: "{}"
                 val action = runCatching { JSONObject(body).optString("action") }

@@ -17,6 +17,9 @@ import androidx.core.view.WindowCompat
 import com.example.viettel.R
 import com.google.android.material.snackbar.Snackbar
 import android.content.Intent
+import kotlin.isInitialized
+import kotlin.jvm.java
+import kotlin.let
 
 class WaitingActivity : AppCompatActivity() {
 

@@ -1,11 +1,12 @@
 [versions]
-agp = "8.13.0"
+agp = "8.12.2"
 bcpkixJdk18on = "1.81"
 cameraCore = "1.4.2"
 certCvc = "1.4.13"
 coreKtxVersion = "1.17.0"
 firebaseCore = "21.1.1"
 firebaseMlCommon = "22.1.2"
+fragmentKtx = "1.8.9"
 jmrtd = "0.8.2"
 jnbis = "2.1.2"
 kotlin = "2.2.10"
@@ -21,6 +22,8 @@ prov = "1.58.0.0"
 retrofit = "3.0.0"
 rxandroid = "2.1.1"
 rxjava = "2.2.21"
+ui = "1.9.0"
+media3CommonKtx = "1.8.0"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
@@ -29,6 +32,7 @@ androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", versi
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-ktx-v1150 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 bcpkix-jdk18on = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bcpkixJdk18on" }
 bcprov-jdk18on = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bcpkixJdk18on" }
 cert-cvc = { module = "org.ejbca.cvc:cert-cvc", version.ref = "certCvc" }
@@ -49,6 +53,8 @@ prov = { module = "com.madgag.spongycastle:prov", version.ref = "prov" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
 rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

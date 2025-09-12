@@ -86,7 +86,7 @@ class NfcFragment : Fragment() {
                 override fun onEidReadStart() {
                     uiHandler.post {
                         progressBar?.visibility = View.VISIBLE
-                        txtStatus?.text = "🔄 Đang đọc chip..."
+                        txtStatus?.text = "🔄 Đang đọc chip, vui lòng không bỏ ra khỏi vùng NFC..."
 
                         (activity as? MainActivity)?.apply {
                             setBackVisible(true)

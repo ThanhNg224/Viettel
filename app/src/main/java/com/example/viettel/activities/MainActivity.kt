@@ -1,6 +1,6 @@
 package com.example.viettel.activities
 
-import KioskHttpServer
+
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
@@ -59,29 +59,7 @@ class MainActivity : AppCompatActivity() {
 //        resolveDeviceId()
         Log.d("KIOSK_ID", "Real serial: ${getHardwareSerial()}")
 
-        // ==== FULLSCREEN MODE ====
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            window.insetsController?.let { controller ->
-                controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-                controller.systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    )
-        }
-
-        // ❌ BỎ HẲN HTTP server ở MainActivity (chạy ở WaitingActivity rồi)
-        // (XÓA) httpServer = KioskHttpServer(8088) { action -> runOnUiThread { onTriggeredFromWeb(action) } }
-        // (XÓA) httpServer.start()
+        fullScreenMore()
 
         // Language menu (giữ nguyên)
         val languageSelector = findViewById<LinearLayout>(R.id.ChonNgonNgu)
@@ -116,14 +94,10 @@ class MainActivity : AppCompatActivity() {
             popup.show()
         }
 
-        // ❌ BỎ: replace WaitingFragment (vì waiting giờ là Activity riêng)
-        // if (savedInstanceState == null) { replaceFragment(WaitingFragment()) }
 
-        // ✅ Nếu được start từ WaitingActivity (web trigger), sẽ có ACTION
+
         val action = intent?.getStringExtra("ACTION")
         if (savedInstanceState == null) {
-            // Dù có ACTION hay không, ta vào DocumentSelection luôn cho tiện dev
-            // (nếu muốn phân nhánh theo action thì switch ở đây)
             replaceFragment(DocumentSelectionFragment())
         }
 
@@ -131,8 +105,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnBack).setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
-        // Continue Button (giữ nguyên logic flow của bạn)
+        // Continue Button
         findViewById<Button>(R.id.btnContinue).setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
             when (currentFragment) {
@@ -184,7 +157,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        fullScreenMore()
+    }
 
+    fun fullScreenMore() {
+        // ==== FULLSCREEN MODE ====
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            window.insetsController?.let { controller ->
+                controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+                controller.systemBarsBehavior =
+                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    )
+        }
+    }
 
     /**
      * Replace the fragment in the fragment container.
@@ -247,40 +245,6 @@ class MainActivity : AppCompatActivity() {
     }
     fun setBackEnabled(enabled: Boolean) {
         findViewById<Button>(R.id.btnBack)?.isEnabled = enabled
-    }
-    private fun registerKioskToBackend() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val url = URL("http://192.168.1.99:8080/api/v1/kios/connectDevice")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "POST"
-                connection.setRequestProperty("Content-Type", "application/json")
-                connection.setRequestProperty("token", "STATIC_TOKEN") // Token
-
-                val jsonBody = JSONObject().apply {
-                    put("deviceId", "KIOSK001")
-                    put("ip", getLocalIpAddress())
-                    put("location", "Hanoi")
-                    put("status", "ONLINE")
-                }
-
-                connection.doOutput = true
-                val outputWriter = OutputStreamWriter(connection.outputStream)
-                outputWriter.write(jsonBody.toString())
-                outputWriter.flush()
-
-                val responseCode = connection.responseCode
-                Log.d("KioskRegister", "Registered with response code: $responseCode")
-
-                connection.disconnect()
-            } catch (e: Exception) {
-                Log.e("KioskRegister", "Failed to connect kiosk: ${e.message}", e)
-            }
-        }
-    }
-    private fun getLocalIpAddress(): String {
-        //  mock IP or retrieve device IP
-        return "192.168.1.100"
     }
 
     private fun getHardwareSerial(): String {

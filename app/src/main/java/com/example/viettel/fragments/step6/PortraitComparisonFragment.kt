@@ -153,8 +153,8 @@ class PortraitComparisonFragment : Fragment() {
                 conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json; charset=utf-8")
                 conn.setRequestProperty("Accept", "application/json")
-                conn.connectTimeout = 15000
-                conn.readTimeout = 10000
+                conn.connectTimeout = 25000
+                conn.readTimeout = 15000
                 conn.doOutput = true
                 conn.doInput = true
 
