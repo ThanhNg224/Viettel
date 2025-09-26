@@ -11,7 +11,6 @@ import android.content.Context
 import com.crt.Crt900x
 import net.sf.scuba.smartcards.*
 import java.util.concurrent.locks.ReentrantLock
-import vn.leeon.eidsdk.BuildConfig
 
 
 class IDCardService(
