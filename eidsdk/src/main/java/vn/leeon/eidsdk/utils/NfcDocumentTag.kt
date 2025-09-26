@@ -38,7 +38,7 @@ class NfcDocumentTag {
             try {
                 passportService = PassportService(
 //                    IDCardService(context),
-                    IDCardService(manager),
+                    IDCardService(context, manager),
                     EidNfc.MAX_TRANSCEIVE_LENGTH_FOR_PACE,
                     EidNfc.MAX_TRANSCEIVE_LENGTH_FOR_SECURE_MESSAGING,
                     EidNfc.MAX_BLOCK_SIZE,

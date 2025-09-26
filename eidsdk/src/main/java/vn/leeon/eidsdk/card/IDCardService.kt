@@ -7,138 +7,123 @@ import net.sf.scuba.smartcards.CardService
 import net.sf.scuba.smartcards.CardServiceException
 import net.sf.scuba.smartcards.CommandAPDU
 import net.sf.scuba.smartcards.ResponseAPDU
-
-class IDCardService(private val mManager: RFCardManager) : CardService() {
-
-    //    private val mManager: RFCardManager by lazy {
-//        RFCardManager.getInstance()
-//    }
-    var bytes: ByteArray? = null
-    var started = false
-    fun send(bytes: ByteArray) {
-
-    }
-
-//    init {
-//        mManager.open(context)
-//
-//        mManager.reset()
-//    }
+import android.content.Context
+import com.crt.Crt900x
+import net.sf.scuba.smartcards.*
+import java.util.concurrent.locks.ReentrantLock
+import vn.leeon.eidsdk.BuildConfig
 
 
-    val cmd1 = byteArrayOf(0, -92, 2, 12, 2, 1, 28)
-    val cmd2 = byteArrayOf(0, -80, 0, 0, 8)
-    val cmd3 = byteArrayOf(0, -80, 0, 8, 46)
+class IDCardService(
+    private val context: Context,
+    private val mManager: RFCardManager,
+    private val readerVid: Int = 9176,
+    private val readerPid: Int = 36865
+) : CardService() {
 
-    private var chipPowerOn: Boolean = false
-    private var apduCount: Int = 0
+    private val txLock = ReentrantLock()
+    private var chipPowerOn = false
+    private var rfActive = false
+    private var apduCount = 0
+    private val crt = Crt900x(context)
 
     override fun open() {
+        try { crt.CrtReaderDisConnect() } catch (_: Throwable) {}
+        try {
+            crt.CrtSetBaseDir("/storage/emulated/0/crt_driver_Log")
+            crt.CrtSetLogLevel(2)
+        } catch (_: Throwable) {}
+        val ret = try { crt.CrtReaderConnect(readerPid, readerVid) } catch (_: Throwable) { -1 }
+        if (ret != 0) throw CardServiceException("CrtReaderConnect failed: $ret")
+        try { Thread.sleep(150) } catch (_: InterruptedException) {}
         chipPowerOn = true
-//        mManager.setReadListener {
-//            if (bytes != null) {
-//                mManager.apdu(bytes)
-//            } else null
-////            return@setReadListener
-//        }
-//        mManager.start { it: ByteArray? ->
-//            Log.d("TAG", "open: ${it.contentToString()}")
-//        }
-//        apduCount = 0
-//        mManager.stop()
-        Log.d("TAG111", "open: 1111")
-//        if (mManager.open(context)) {
-//            chipPowerOn = true
-//        } else {
-//            chipPowerOn = false
-//            throw CardServiceException("Failed to connect")
-//        }
-
+        rfActive = false
+        apduCount = 0
+        Log.d("IDCardService", "open(): reader connected (VID=$readerVid, PID=$readerPid)")
     }
 
-    fun send(string: String) {
-
+    override fun close() {
+        try { if (rfActive) crt.CrtReaderRFRelease() } catch (_: Throwable) {}
+        try { crt.CrtCloseReader() } catch (_: Throwable) {}
+        try { crt.CrtReaderDisConnect() } catch (_: Throwable) {}
+        chipPowerOn = false
+        rfActive = false
     }
 
-    override fun isOpen(): Boolean {
-        if (chipPowerOn) {
-            this.state = 1
-        } else {
-            this.state = 0
+    override fun isOpen(): Boolean = chipPowerOn
+
+    private fun ensureReady() {
+        if (!chipPowerOn) open()
+        if (!rfActive) {
+            val atr = ByteArray(128)
+            val len = try { crt.CrtReaderRFActive(atr) } catch (_: Throwable) { -1 }
+            if (len <= 0) throw CardServiceException("CrtReaderRFActive failed (len=$len)")
+            Log.d("IDCardService", "ATR: ${atr.copyOf(len).contentToString()}")
+            try { Thread.sleep(80) } catch (_: InterruptedException) {}
+            rfActive = true
         }
-        return chipPowerOn
     }
 
     override fun transmit(commandAPDU: CommandAPDU): ResponseAPDU {
-        return try {
+        txLock.lock()
+        try {
+            ensureReady() // đã connect + RF active
 
-//            val ulOutChipDataLength = IntArray(2)
-//            val lpOutbChipData = ByteArray(512)
-//            val lpInbChipData: ByteArray = commandAPDU.bytes
-//            val ulInChipDataLength = lpInbChipData.size
-            val command = bytesToHexString(commandAPDU.bytes)
-            var res = mManager.apdu(commandAPDU.bytes)
-            var bytes = res
-//            if (iRet == 0) {
-            var recv = ""
-//                val resLen = ulOutChipDataLength[0]
-//                val responseBytes = ByteArray(resLen)
-//                System.arraycopy(lpOutbChipData, 0, responseBytes, 0, resLen)
-//                for (i in 0 until ulOutChipDataLength[0]) {
-//                    val ch = lpOutbChipData[i].toInt()
-//                    val ch1 = ch shr 4 and 0x0000000f
-//                    val ch2 = ch and 0x0000000f
-//                    recv += Integer.toHexString(ch1) + Integer.toHexString(ch2)
-//                }
+            val cmd = commandAPDU.bytes
+            if (cmd.isEmpty()) throw CardServiceException("Empty APDU command")
 
-            Log.d(
-                "TAG",
-                "transmit: ${commandAPDU.bytes.contentToString()} ${bytes.contentToString()}"
-            )
-            if (res == null) {
-                Log.d(
-                    "TAG11",
-                    "transmit: ${mManager.isOpen} ${mManager.isContinue} ${commandAPDU.bytes.contentToString()} $res"
-                )
-                mManager.reset()
-                bytes = mManager.apdu(commandAPDU.bytes)
+            // 1) GỬI TRỰC TIẾP QUA CRT NATIVE
+            var resp: ByteArray? = try {
+                val outBuf = ByteArray(4096)
+                val outLen = IntArray(1)
+                // slot '0' là phổ biến; nếu vẫn không có resp, thử '1'
+                val ret = crt.CrtSendAPDU('0', cmd.size, cmd, outLen, outBuf)
+                Log.d("CRT", "send ret=$ret outLen=${outLen.getOrNull(0) ?: -1}")
+                if (ret == 0 && outLen.isNotEmpty() && outLen[0] > 0) {
+                    outBuf.copyOf(outLen[0])
+                } else null
+            } catch (_: Throwable) { null }
 
+            Log.d("TAG", "tx[crt]: open=$chipPowerOn rf=$rfActive cmd=${cmd.contentToString()} resp=${resp?.size ?: -1}")
+
+            // 2) Fallback (nếu cần) qua mManager.apdu
+            if (resp == null || resp.size < 2) {
+                try {
+                    // reset RF nhẹ rồi gửi lại
+                    try { crt.CrtReaderRFRelease() } catch (_: Throwable) {}
+                    rfActive = false
+                    ensureReady()
+                    Thread.sleep(100)
+                } catch (_: Throwable) {}
+
+                resp = try { mManager.apdu(cmd) } catch (_: Throwable) { null }
+                Log.d("TAG", "tx[fallback-mManager]: resp=${resp?.size ?: -1}")
             }
-//            val bytes = hexStringToBytes(res.replace(" ", ""))
-            if (bytes.size >= 2) {
 
-                val outResponseAPDU = ResponseAPDU(bytes)
-                notifyExchangedAPDU(
-                    APDUEvent(
-                        this,
-                        "ISODep",
-                        ++apduCount,
-                        commandAPDU,
-                        outResponseAPDU
-                    )
-                )
-                outResponseAPDU
-            } else {
-                throw CardServiceException("Failed response")
+            val bytes = resp ?: throw CardServiceException("transceive() returned null")
+            if (bytes.size < 2) throw CardServiceException("APDU response too short (${bytes.size})")
+
+            val sw1 = bytes[bytes.size - 2].toInt() and 0xFF
+            val sw2 = bytes[bytes.size - 1].toInt() and 0xFF
+            if (sw1 != 0x90 || sw2 != 0x00) {
+                Log.w("TAG", String.format(java.util.Locale.US,
+                    "Non-OK SW: %02X %02X for cmd=%s", sw1, sw2, cmd.contentToString()))
             }
-//            } else {
-//                throw CardServiceException("Failed response")
-//            }
-        } catch (var4: CardServiceException) {
-            throw var4
-        } catch (var5: java.lang.Exception) {
-            Log.e("TAG", var5.stackTraceToString())
-            throw CardServiceException("Could not tranceive APDU", var5)
+
+            val out = ResponseAPDU(bytes)
+            notifyExchangedAPDU(APDUEvent(this, "ISODep", ++apduCount, commandAPDU, out))
+            return out
+        } finally {
+            txLock.unlock()
         }
     }
+
+
 
     override fun getATR(): ByteArray? {
         return null
     }
 
-    override fun close() {
-//        mManager.close()
-    }
 
     override fun isConnectionLost(e: Exception?): Boolean {
         return if (this.isDirectConnectionLost(e)) {

@@ -49,7 +49,7 @@ public class Application extends android.app.Application {
 
         //Connect to web socket server
         WebSocketConnection webSocketConnection = new WebSocketConnection(this);
-        webSocketConnection.run();
+//        webSocketConnection.run();
 
         SharedPreferences pref = getSharedPreferences("PREF", MODE_PRIVATE);
         registerActivityLifecycleCallbacks(

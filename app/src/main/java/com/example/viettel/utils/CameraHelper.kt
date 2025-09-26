@@ -13,7 +13,7 @@ class CameraHelper(
     private val context: Context,
     private val lifecycleOwner: LifecycleOwner,
     private val previewView: PreviewView,
-    private val facing: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
+    private val facing: CameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA,
     private val targetResolution: Size = Size(1280, 720),
 ) {
     lateinit var imageCapture: ImageCapture
