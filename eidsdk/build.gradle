@@ -50,20 +50,20 @@ android {
 }
 
 dependencies {
-    // ✅ Local AARs / JARs
+    // Local AARs / JARs
     implementation(name: 'fotoapparat-2.7.0', ext: 'aar')
     implementation files('libs/crteid.aar')
     implementation files('libs/jj2000_imageutil.jar')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // ✅ Core Android + Firebase + ML
+    // Core Android + Firebase + ML
     implementation libs.androidx.core.ktx.v1150
     implementation libs.firebase.core
     implementation libs.firebase.ml.common
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.1'
 
-    // ✅ OCR + MRZ tools
+    // OCR + MRZ tools
     implementation libs.jmrtd
     implementation libs.prov
     implementation(libs.bcpkix.jdk18on)
@@ -71,16 +71,16 @@ dependencies {
 
     implementation libs.cert.cvc
 
-    // ✅ Networking
+    // Networking
     implementation libs.retrofit
     implementation libs.converter.gson
     implementation libs.converter.moshi
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
 
-    // ✅ Biometric fingerprint
+    // Biometric fingerprint
     implementation libs.jnbis
 
-    // ✅ Reactive
+    // Reactive
     implementation libs.rxandroid
     implementation libs.rxjava
 

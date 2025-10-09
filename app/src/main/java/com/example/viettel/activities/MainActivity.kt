@@ -1,7 +1,7 @@
 package com.example.viettel.activities
 
+
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import com.example.viettel.R
+
 import com.example.viettel.fragments.step8.EndFragment
 import com.example.viettel.fragments.step8.FeedbackFragment
 import com.example.viettel.fragments.step8.ServiceEvaluationFragment
@@ -43,8 +44,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jmrtd.lds.icao.MRZInfo
 import org.json.JSONObject
-import ua.naiksoftware.stomp.Stomp
-import ua.naiksoftware.stomp.StompClient
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -52,39 +51,17 @@ import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var stompClient: StompClient
-
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        registerKioskToBackend()
-        connectWebSocket()
-        resolveDeviceId()
-
+//        registerKioskToBackend()
+//        resolveDeviceId()
         Log.d("KIOSK_ID", "Real serial: ${getHardwareSerial()}")
 
-        // FULLSCREEN MODE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            window.insetsController?.let { controller ->
-                controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-                controller.systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    )
-        }
+        fullScreenMore()
 
-        // Language
+        // Language menu (giữ nguyên)
         val languageSelector = findViewById<LinearLayout>(R.id.ChonNgonNgu)
         languageSelector.setOnClickListener {
             val popup = PopupMenu(this, it)
@@ -117,143 +94,94 @@ class MainActivity : AppCompatActivity() {
             popup.show()
         }
 
-        // Document Selection
+
+
+        val action = intent?.getStringExtra("ACTION")
         if (savedInstanceState == null) {
             replaceFragment(DocumentSelectionFragment())
         }
 
-        // Back Button: Directly trigger the system Back action.
+        // Back Button
         findViewById<Button>(R.id.btnBack).setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
         // Continue Button
         findViewById<Button>(R.id.btnContinue).setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
             when (currentFragment) {
-                is DocumentSelectionFragment ->
-                    replaceFragment(PlaceDocumentFragment())
-
-                is PlaceDocumentFragment ->
-                    replaceFragment(CaptureFrontPhotoFragment())
-
+                is DocumentSelectionFragment -> replaceFragment(PlaceDocumentFragment())
+                is PlaceDocumentFragment -> replaceFragment(CaptureFrontPhotoFragment())
                 is CaptureFrontPhotoFragment -> {
                     val frag = currentFragment
                     if (frag.isFrontCaptured()) {
                         replaceFragment(CaptureBackPhotoFragment())
                     } else {
-                        Toast.makeText(
-                            this,
-                            "Vui lòng chụp ảnh mặt trước trước khi tiếp tục",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this, "Vui lòng chụp ảnh mặt trước trước khi tiếp tục", Toast.LENGTH_SHORT).show()
                     }
                 }
-
                 is CaptureBackPhotoFragment -> {
                     val frag = currentFragment
                     if (frag.isMRZReady()) {
-                        if (frag.isMRZReady()) {
-                            val mrz = frag.getMRZ()
-                            if (mrz != null) {
-                                val nfcFragment =
-                                    NfcFragment.newInstance(mrz)  //
-                                replaceFragment(nfcFragment)
-                            } else {
-                                Toast.makeText(this, "MRZ chưa sẵn sàng", Toast.LENGTH_SHORT).show()
-                            }
+                        val mrz = frag.getMRZ()
+                        if (mrz != null) {
+                            val nfcFragment = NfcFragment.newInstance(mrz)
+                            replaceFragment(nfcFragment)
                         } else {
-                            Toast.makeText(
-                                this,
-                                "Vui lòng chụp ảnh mặt sau hợp lệ trước khi tiếp tục",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this, "MRZ chưa sẵn sàng", Toast.LENGTH_SHORT).show()
                         }
+                    } else {
+                        Toast.makeText(this, "Vui lòng chụp ảnh mặt sau hợp lệ trước khi tiếp tục", Toast.LENGTH_SHORT).show()
                     }
-                    }
-
-                is NfcFragment ->
-                    replaceFragment(EidDetailsFragment())
-
-                is EidDetailsFragment ->
-                    replaceFragment(PortraitLivenessFragment())
-
-                is PortraitLivenessFragment ->
-                    replaceFragment(PortraitComparisonFragment())
-
-                is PortraitComparisonFragment ->
-                    replaceFragment(PdfSignFragment())
-
-                is PdfSignFragment ->
-                    replaceFragment(VideoCallFragment())
-
-                is VideoCallFragment ->
-                    replaceFragment(PaymentFragment())
-                is PaymentFragment ->
-                    replaceFragment(ServiceEvaluationFragment())
-                is QrCodePaymentFragment ->
-                    replaceFragment(ServiceEvaluationFragment())
-
-                is ServiceEvaluationFragment ->
-                    replaceFragment(EndFragment())
-
+                }
+                is NfcFragment -> replaceFragment(EidDetailsFragment())
+                is EidDetailsFragment -> replaceFragment(PortraitLivenessFragment())
+                is PortraitLivenessFragment -> replaceFragment(PortraitComparisonFragment())
+                is PortraitComparisonFragment -> replaceFragment(PdfSignFragment())
+                is PdfSignFragment -> replaceFragment(VideoCallFragment())
+                is VideoCallFragment -> replaceFragment(PaymentFragment())
+                is PaymentFragment -> replaceFragment(ServiceEvaluationFragment())
+                is QrCodePaymentFragment -> replaceFragment(ServiceEvaluationFragment())
+                is ServiceEvaluationFragment -> replaceFragment(EndFragment())
                 is FeedbackFragment -> {
                     if (currentFragment.isFeedbackValid()) {
                         currentFragment.onContinuePressed()
                     } else {
-                        Toast.makeText(
-                            this,
-                            "Vui lòng chọn ít nhất một lý do",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this, "Vui lòng chọn ít nhất một lý do", Toast.LENGTH_SHORT).show()
                     }
                 }
-
-
                 is EndFragment ->
                     Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
-
                 else ->
                     Toast.makeText(this, "Không xác định bước hiện tại", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
-    private fun connectWebSocket() {
-        stompClient = Stomp.over(
-            Stomp.ConnectionProvider.OKHTTP,
-            "ws://192.168.1.99:8080/ws/websocket"
-        )
+    override fun onResume() {
+        super.onResume()
+        fullScreenMore()
+    }
 
-        stompClient.connect()
-
-        stompClient.topic("/topic/terminalControl").subscribe { topicMessage ->
-            val payload = JSONObject(topicMessage.payload)
-            val action = payload.getString("action")
-//            val deviceId = payload.getString("deviceId")
-
-            Log.d("WebSocket", "Received action: $action")
-
-            when (action) {
-                "RESET" -> runOnUiThread { recreate() }
-                "OPEN_CAMERA" -> runOnUiThread {
-                    replaceFragment(CaptureFrontPhotoFragment())
-                }
-                "GO_TO_PAYMENT" -> runOnUiThread {
-                    replaceFragment(PaymentFragment())
-                }
-                // more
+    fun fullScreenMore() {
+        // ==== FULLSCREEN MODE ====
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            window.insetsController?.let { controller ->
+                controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+                controller.systemBarsBehavior =
+                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    )
         }
-
-        // Optionally send back acknowledgment
-        val response = JSONObject().apply {
-            put("deviceId", "KIOSK001")
-            put("status", "ONLINE")
-            put("message", "WebSocket Connected")
-        }
-        stompClient.send("/app/clientResponse", response.toString()).subscribe()
     }
 
     /**
@@ -318,40 +246,6 @@ class MainActivity : AppCompatActivity() {
     fun setBackEnabled(enabled: Boolean) {
         findViewById<Button>(R.id.btnBack)?.isEnabled = enabled
     }
-    private fun registerKioskToBackend() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val url = URL("http://192.168.1.99:8080/api/v1/kios/connectDevice")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "POST"
-                connection.setRequestProperty("Content-Type", "application/json")
-                connection.setRequestProperty("token", "STATIC_TOKEN") // Token
-
-                val jsonBody = JSONObject().apply {
-                    put("deviceId", "KIOSK001")
-                    put("ip", getLocalIpAddress())
-                    put("location", "Hanoi")
-                    put("status", "ONLINE")
-                }
-
-                connection.doOutput = true
-                val outputWriter = OutputStreamWriter(connection.outputStream)
-                outputWriter.write(jsonBody.toString())
-                outputWriter.flush()
-
-                val responseCode = connection.responseCode
-                Log.d("KioskRegister", "Registered with response code: $responseCode")
-
-                connection.disconnect()
-            } catch (e: Exception) {
-                Log.e("KioskRegister", "Failed to connect kiosk: ${e.message}", e)
-            }
-        }
-    }
-    private fun getLocalIpAddress(): String {
-        //  mock IP or retrieve device IP
-        return "192.168.1.100"
-    }
 
     private fun getHardwareSerial(): String {
         try {
@@ -364,7 +258,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun resolveDeviceId(): String {
-        val tm = getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+        val tm = getSystemService(TELEPHONY_SERVICE) as? TelephonyManager
 
         try {
             //
@@ -375,7 +269,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (!imei.isNullOrBlank()) return imei
-        } catch (e: SecurityException) {
+        } catch (_: SecurityException) {
             Log.w("DeviceID", "No permission for IMEI")
         }
 

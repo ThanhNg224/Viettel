@@ -1,26 +1,29 @@
 [versions]
-agp = "8.10.0"
-bcpkixJdk18on = "1.79"
+agp = "8.12.2"
+bcpkixJdk18on = "1.81"
 cameraCore = "1.4.2"
 certCvc = "1.4.13"
-coreKtxVersion = "1.16.0"
+coreKtxVersion = "1.17.0"
 firebaseCore = "21.1.1"
 firebaseMlCommon = "22.1.2"
-jmrtd = "0.7.39"
-jnbis = "2.0.2"
-kotlin = "2.0.21"
-coreKtx = "1.16.0"
+fragmentKtx = "1.8.9"
+jmrtd = "0.8.2"
+jnbis = "2.1.2"
+kotlin = "2.2.10"
+coreKtx = "1.17.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-appcompat = "1.7.0"
-material = "1.12.0"
-navigationFragmentKtx = "2.8.9"
-navigationUiKtx = "2.8.9"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
+appcompat = "1.7.1"
+material = "1.13.0"
+navigationFragmentKtx = "2.9.3"
+navigationUiKtx = "2.9.3"
 prov = "1.58.0.0"
-retrofit = "2.9.0"
+retrofit = "3.0.0"
 rxandroid = "2.1.1"
 rxjava = "2.2.21"
+ui = "1.9.0"
+media3CommonKtx = "1.8.0"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
@@ -29,6 +32,7 @@ androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", versi
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-ktx-v1150 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 bcpkix-jdk18on = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bcpkixJdk18on" }
 bcprov-jdk18on = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bcpkixJdk18on" }
 cert-cvc = { module = "org.ejbca.cvc:cert-cvc", version.ref = "certCvc" }
@@ -49,6 +53,8 @@ prov = { module = "com.madgag.spongycastle:prov", version.ref = "prov" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
 rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,37 +1,41 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
 
-
 android {
     namespace = "com.example.viettel"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.viettel"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         ndk {
             abiFilters += "armeabi-v7a"
         }
-        packaging {
-            resources {
-                excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-                excludes += "META-INF/DEPENDENCIES"
-                excludes += "META-INF/LICENSE"
-                excludes += "META-INF/LICENSE.txt"
-                excludes += "META-INF/NOTICE"
-                excludes += "META-INF/NOTICE.txt"
-            }
+    }
+
+
+    packaging {
+        resources {
+            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
         }
     }
 
-    // This MUST be OUTSIDE of defaultConfig!
+    // Thư viện .so
     sourceSets {
         getByName("main") {
             jniLibs.srcDirs("libs", "src/main/jniLibs")
@@ -48,27 +52,37 @@ android {
         }
     }
 
+    // Java toolchain cho phần Java/AGP
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
         viewBinding = true
     }
 
+
     buildToolsVersion = "36.0.0"
 }
 
+
+kotlin {
+
+    jvmToolchain(21)
+
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+        // Nếu có flags thêm thì mở comment:
+        // freeCompilerArgs.addAll("-Xjsr305=strict")
+    }
+}
 
 configurations.all {
     resolutionStrategy {
         force("org.bouncycastle:bcprov-jdk18on:1.76")
         force("org.bouncycastle:bcutil-jdk18on:1.76")
+
         eachDependency {
             if (requested.group == "org.bouncycastle" && requested.name.contains("jdk15on")) {
                 useTarget("org.bouncycastle:bcprov-jdk18on:1.76")
@@ -79,18 +93,22 @@ configurations.all {
 }
 
 
+
 dependencies {
     implementation(project(":eidsdk"))
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(files("libs/ControlLightLib.jar"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.media3.common.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation ("androidx.fragment:fragment-ktx:1.8.7")
+    implementation (libs.androidx.fragment.ktx)
 
 
     // CameraX
@@ -132,7 +150,11 @@ dependencies {
     //
     implementation ("org.java-websocket:Java-WebSocket:1.5.2")
     implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
+    implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
 
-
+    //Stringee
+    implementation("com.stringee.sdk.android:stringee-android-sdk:1.9.1")
+    implementation("com.google.code.gson:gson:2.11.0")
 
 }
