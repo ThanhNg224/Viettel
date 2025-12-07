@@ -3,12 +3,15 @@ package com.example.viettel.core.camera
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
+import androidx.annotation.OptIn
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import com.example.viettel.feature.identity.domain.entity.ImageFrame
 import java.io.ByteArrayOutputStream
 
 object ImageProxyMapper {
 
+    @OptIn(ExperimentalGetImage::class)
     fun toJpegBytes(imageProxy: ImageProxy, quality: Int = 92): ByteArray? {
         val image = imageProxy.image ?: return null
         val nv21 = yuv420ToNv21(imageProxy)
@@ -18,6 +21,7 @@ object ImageProxyMapper {
         return out.toByteArray()
     }
 
+    @ExperimentalGetImage
     fun toNv21Frame(imageProxy: ImageProxy): ImageFrame? {
         val image = imageProxy.image ?: return null
         val nv21 = yuv420ToNv21(imageProxy)

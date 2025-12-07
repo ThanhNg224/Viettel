@@ -10,13 +10,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.viettel.activities.MainActivity
 import com.example.viettel.databinding.FragmentPaymentBinding
 import com.example.viettel.feature.payment.domain.entity.PaymentMethod
 import com.example.viettel.feature.payment.domain.entity.PaymentStatus
 import com.example.viettel.feature.payment.presentation.PaymentViewModel
 import com.example.viettel.feature.feedback.presentation.ui.ServiceEvaluationFragment
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.utils.navigateTo
+import com.example.viettel.utils.updateNavigationControls
 import kotlinx.coroutines.launch
 
 class PaymentFragment : Fragment() {
@@ -39,15 +40,12 @@ class PaymentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         ProgressUtils.animateProgressToStep(view, 7)
-        (activity as? MainActivity)?.apply {
-            setContinueVisible(false)
-            setBackVisible(true)
-        }
+        updateNavigationControls(isBackVisible = true, isContinueVisible = false, isContinueEnabled = false)
 
         binding.qrOptionCard.setOnClickListener {
             paymentViewModel.selectMethod(PaymentMethod.QR)
             Toast.makeText(requireContext(), "Da chon thanh toan QR", Toast.LENGTH_SHORT).show()
-            (activity as? MainActivity)?.replaceFragment(QrCodePaymentFragment())
+            navigateTo(QrCodePaymentFragment())
         }
 
         binding.cashOptionCard.setOnClickListener {
@@ -63,7 +61,7 @@ class PaymentFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 paymentViewModel.uiState.collect { state ->
                     if (state.status is PaymentStatus.Success) {
-                        (activity as? MainActivity)?.replaceFragment(ServiceEvaluationFragment())
+                        navigateTo(ServiceEvaluationFragment())
                     }
                 }
             }

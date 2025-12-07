@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.viettel.activities.MainActivity
 import com.example.viettel.databinding.FragmentPlaceDocumentBinding
 import com.example.viettel.feature.identity.domain.entity.DocumentType
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.utils.updateNavigationControls
 
 class PlaceDocumentFragment : Fragment() {
 
@@ -32,11 +32,7 @@ class PlaceDocumentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? MainActivity)?.apply {
-            setBackVisible(true)
-            setContinueVisible(true)
-            setContinueEnabled(true)
-        }
+        updateNavigationControls(isBackVisible = true, isContinueVisible = true, isContinueEnabled = true)
 
         val docType = identityViewModel.uiState.value.documentType
 
@@ -50,11 +46,7 @@ class PlaceDocumentFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as? MainActivity)?.apply {
-            setBackVisible(true)
-            setContinueVisible(true)
-            setContinueEnabled(true)
-        }
+        updateNavigationControls(isBackVisible = true, isContinueVisible = true, isContinueEnabled = true)
     }
 
     override fun onDestroyView() {

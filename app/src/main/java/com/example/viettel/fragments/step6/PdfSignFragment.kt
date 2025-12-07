@@ -16,10 +16,10 @@ import android.widget.Toast
 import androidx.core.graphics.createBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.viettel.activities.MainActivity
 import com.example.viettel.databinding.FragmentPdfSignBinding
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.utils.updateNavigationControls
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -51,7 +51,7 @@ class PdfSignFragment : Fragment() {
         loadPdfFromAssets()
         setupListeners()
 
-        (activity as? MainActivity)?.setContinueVisible(false)
+        updateNavigationControls(isBackVisible = true, isContinueVisible = false, isContinueEnabled = false)
     }
 
     private fun loadPdfFromAssets() {
@@ -114,7 +114,7 @@ class PdfSignFragment : Fragment() {
             false
         }
 
-        (activity as? MainActivity)?.setContinueVisible(false)
+        updateNavigationControls(isBackVisible = true, isContinueVisible = false, isContinueEnabled = false)
     }
 
     private fun updatePageNumber() {
@@ -142,7 +142,11 @@ class PdfSignFragment : Fragment() {
             identityViewModel.saveSignature(signatureBytes)
         }
 
-        (activity as? MainActivity)?.setContinueVisible(isSigned && isChecked)
+        updateNavigationControls(
+            isBackVisible = true,
+            isContinueVisible = isSigned && isChecked,
+            isContinueEnabled = isSigned && isChecked
+        )
     }
 
     override fun onDestroyView() {
@@ -203,4 +207,3 @@ class SignatureView(context: Context, attrs: AttributeSet?) : View(context, attr
         return true
     }
 }
-

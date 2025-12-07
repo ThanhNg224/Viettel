@@ -10,12 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.viettel.activities.MainActivity
 import com.example.viettel.databinding.FragmentQrPaymentBinding
 import com.example.viettel.feature.payment.domain.entity.PaymentStatus
 import com.example.viettel.feature.payment.presentation.PaymentViewModel
 import com.example.viettel.feature.feedback.presentation.ui.ServiceEvaluationFragment
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.utils.navigateTo
+import com.example.viettel.utils.updateNavigationControls
 import kotlinx.coroutines.launch
 
 class QrCodePaymentFragment : Fragment() {
@@ -38,10 +39,7 @@ class QrCodePaymentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         ProgressUtils.animateProgressToStep(view, 7)
-        (activity as? MainActivity)?.apply {
-            setContinueVisible(false)
-            setBackVisible(true)
-        }
+        updateNavigationControls(isBackVisible = true, isContinueVisible = false, isContinueEnabled = false)
 
         binding.btnCancelPayment.setOnClickListener {
             paymentViewModel.cancelPayment()
@@ -60,7 +58,7 @@ class QrCodePaymentFragment : Fragment() {
                         PaymentStatus.Processing -> binding.circularProgress.visibility = View.VISIBLE
                         PaymentStatus.Success -> {
                             binding.circularProgress.visibility = View.GONE
-                            (activity as? MainActivity)?.replaceFragment(ServiceEvaluationFragment())
+                            navigateTo(ServiceEvaluationFragment())
                         }
                         is PaymentStatus.Error -> {
                             binding.circularProgress.visibility = View.GONE

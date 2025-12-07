@@ -13,12 +13,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.viettel.activities.MainActivity
 import com.example.viettel.core.camera.ImageProxyMapper
 import com.example.viettel.databinding.FragmentCaptureFrontPhotoBinding
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.CameraHelper
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.utils.navigateTo
+import com.example.viettel.utils.updateNavigationControls
 import com.joyusing.controllight.ControlLightUtil
 import kotlinx.coroutines.launch
 
@@ -51,16 +52,20 @@ class CaptureFrontPhotoFragment : Fragment() {
 
         binding.tvInstruction.text = "Vui long chup anh mat truoc cua giay to"
         ProgressUtils.animateProgressToStep(view, 3)
-        (activity as? MainActivity)?.apply {
-            setBackVisible(true)
-            setContinueVisible(true)
-            setContinueEnabled(identityViewModel.uiState.value.frontImage != null)
-        }
+        updateNavigationControls(
+            isBackVisible = true,
+            isContinueVisible = true,
+            isContinueEnabled = identityViewModel.uiState.value.frontImage != null
+        )
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 identityViewModel.uiState.collect { state ->
-                    (activity as? MainActivity)?.setContinueEnabled(state.frontImage != null)
+                    updateNavigationControls(
+                        isBackVisible = true,
+                        isContinueVisible = true,
+                        isContinueEnabled = state.frontImage != null
+                    )
                 }
             }
         }
@@ -71,7 +76,11 @@ class CaptureFrontPhotoFragment : Fragment() {
         }
 
         binding.btnCapture.setOnClickListener {
-            (activity as? MainActivity)?.setContinueEnabled(false)
+            updateNavigationControls(
+                isBackVisible = true,
+                isContinueVisible = true,
+                isContinueEnabled = false
+            )
             cameraHelper.takePhoto(
                 onCaptured = { imageProxy ->
                     val imageBytes = ImageProxyMapper.toJpegBytes(imageProxy)
@@ -80,7 +89,11 @@ class CaptureFrontPhotoFragment : Fragment() {
 
                     if (imageBytes == null) {
                         Toast.makeText(requireContext(), "Khong the xu ly anh", Toast.LENGTH_SHORT).show()
-                        (activity as? MainActivity)?.setContinueEnabled(identityViewModel.uiState.value.frontImage != null)
+                        updateNavigationControls(
+                            isBackVisible = true,
+                            isContinueVisible = true,
+                            isContinueEnabled = identityViewModel.uiState.value.frontImage != null
+                        )
                         return@takePhoto
                     }
 
@@ -89,7 +102,11 @@ class CaptureFrontPhotoFragment : Fragment() {
                 },
                 onFail = {
                     Toast.makeText(requireContext(), "Loi chup anh: ${it.message}", Toast.LENGTH_SHORT).show()
-                    (activity as? MainActivity)?.setContinueEnabled(identityViewModel.uiState.value.frontImage != null)
+                    updateNavigationControls(
+                        isBackVisible = true,
+                        isContinueVisible = true,
+                        isContinueEnabled = identityViewModel.uiState.value.frontImage != null
+                    )
                 }
             )
         }
@@ -114,7 +131,7 @@ class CaptureFrontPhotoFragment : Fragment() {
                 postDelayed({
                     animate().alpha(0f).setDuration(300).withEndAction {
                         visibility = View.GONE
-                        (activity as? MainActivity)?.replaceFragment(CaptureBackPhotoFragment())
+                        navigateTo(CaptureBackPhotoFragment())
                     }.start()
                 }, 2000)
             }.start()

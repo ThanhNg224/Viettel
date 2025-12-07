@@ -9,18 +9,17 @@ import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.PopupMenu
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
+import com.example.viettel.databinding.ActivityMainBinding
+import com.example.viettel.feature.feedback.presentation.ui.EndFragment
+import com.example.viettel.feature.feedback.presentation.ui.FeedbackFragment
+import com.example.viettel.feature.feedback.presentation.ui.ServiceEvaluationFragment
 import com.example.viettel.fragments.step1_2.DocumentSelectionFragment
 import com.example.viettel.fragments.step1_2.PlaceDocumentFragment
 import com.example.viettel.fragments.step3_4.CaptureBackPhotoFragment
@@ -33,23 +32,19 @@ import com.example.viettel.fragments.step6.PortraitLivenessFragment
 import com.example.viettel.fragments.step6.VideoCallFragment
 import com.example.viettel.fragments.step7.PaymentFragment
 import com.example.viettel.fragments.step7.QrCodePaymentFragment
-import com.example.viettel.feature.feedback.presentation.ui.EndFragment
-import com.example.viettel.feature.feedback.presentation.ui.FeedbackFragment
-import com.example.viettel.feature.feedback.presentation.ui.ServiceEvaluationFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * MainActivity - Activity chính quản lý navigation giữa các bước trong flow eKYC.
- * Sử dụng Fragment transaction để điều hướng giữa các màn hình.
- */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         Log.d("KIOSK_ID", "Real serial: ${getHardwareSerial()}")
 
         fullScreenMore()
@@ -59,10 +54,8 @@ class MainActivity : AppCompatActivity() {
             replaceFragment(DocumentSelectionFragment())
         }
 
-        findViewById<Button>(R.id.btnBack).setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-        findViewById<Button>(R.id.btnContinue).setOnClickListener { onContinuePressed() }
+        binding.btnBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.btnContinue.setOnClickListener { onContinuePressed() }
     }
 
     override fun onResume() {
@@ -71,36 +64,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupLanguageMenu() {
-        val languageSelector = findViewById<LinearLayout>(R.id.ChonNgonNgu)
-        languageSelector.setOnClickListener {
-            val popup = PopupMenu(this, it)
-            popup.menuInflater.inflate(R.menu.language_menu, popup.menu)
-            popup.setOnMenuItemClickListener { item ->
-                val languageText = languageSelector.findViewById<TextView>(R.id.languageText)
-                val flagImage = languageSelector.findViewById<ImageView>(R.id.languageFlag)
-                when (item.itemId) {
-                    R.id.lang_vi -> {
-                        languageText.text = "Tieng Viet"
-                        flagImage.setImageResource(R.drawable.ic_vietnam_flag)
-                        showLanguageSnackbar("Da chon: Tieng Viet")
-                        true
+        binding.ChonNgonNgu.setOnClickListener { anchor ->
+            PopupMenu(this, anchor).apply {
+                menuInflater.inflate(R.menu.language_menu, menu)
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.lang_vi -> {
+                            @Suppress("SetTextI18n")
+                            binding.languageText.text = "Tieng Viet"
+                            binding.languageFlag.setImageResource(R.drawable.ic_vietnam_flag)
+                            showLanguageSnackbar("Da chon: Tieng Viet")
+                            true
+                        }
+
+                        R.id.lang_en -> {
+                            @Suppress("SetTextI18n")
+                            binding.languageText.text = "English"
+                            binding.languageFlag.setImageResource(R.drawable.uk_flag)
+                            showLanguageSnackbar("Selected: English")
+                            true
+                        }
+
+                        R.id.lang_fr -> {
+                            @Suppress("SetTextI18n")
+                            binding.languageText.text = "Francais"
+                            binding.languageFlag.setImageResource(R.drawable.france_flag)
+                            showLanguageSnackbar("Langue selectionnee : Francais")
+                            true
+                        }
+
+                        else -> false
                     }
-                    R.id.lang_en -> {
-                        languageText.text = "English"
-                        flagImage.setImageResource(R.drawable.uk_flag)
-                        showLanguageSnackbar("Selected: English")
-                        true
-                    }
-                    R.id.lang_fr -> {
-                        languageText.text = "Francais"
-                        flagImage.setImageResource(R.drawable.france_flag)
-                        showLanguageSnackbar("Langue selectionnee : Francais")
-                        true
-                    }
-                    else -> false
                 }
-            }
-            popup.show()
+            }.show()
         }
     }
 
@@ -127,8 +123,10 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "Vui long chon it nhat mot ly do", Toast.LENGTH_SHORT).show()
                 }
             }
+
             is EndFragment ->
                 Toast.makeText(this, "Da den buoc cuoi", Toast.LENGTH_SHORT).show()
+
             else ->
                 Toast.makeText(this, "Khong xac dinh buoc hien tai", Toast.LENGTH_SHORT).show()
         }
@@ -139,19 +137,12 @@ class MainActivity : AppCompatActivity() {
             WindowCompat.setDecorFitsSystemWindows(window, false)
             window.insetsController?.let { controller ->
                 controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-                controller.systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
         } else {
             @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    )
+            window.decorView.systemUiVisibility =
+                (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
 
@@ -163,8 +154,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLanguageSnackbar(message: String) {
-        val rootLayout = findViewById<ConstraintLayout>(R.id.main_layout)
-        Snackbar.make(rootLayout, message, Snackbar.LENGTH_SHORT)
+        Snackbar.make(binding.mainLayout, message, Snackbar.LENGTH_SHORT)
             .setBackgroundTint(ContextCompat.getColor(this, R.color.black))
             .setTextColor(ContextCompat.getColor(this, android.R.color.white))
             .setAction("OK") { }
@@ -172,40 +162,46 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun animateToStep(step: Int) {
-        val progressLine = findViewById<View>(R.id.progressLine)
-        val container = findViewById<View>(R.id.progressBarContainer)
-        container?.post {
-            val totalSteps = 8
-            val stepWidth = (container.width.toFloat() / totalSteps) * step
-            val lp = progressLine.layoutParams
-            lp.width = stepWidth.toInt()
-            progressLine.layoutParams = lp
+        try {
+            val progressLine = binding.root.findViewById<View>(R.id.progressLine)
+            val container = binding.root.findViewById<View>(R.id.progressBarContainer)
+
+            if (progressLine != null && container != null) {
+                container.post {
+                    val totalSteps = 8
+                    val stepWidth = (container.width.toFloat() / totalSteps) * step
+                    val lp = progressLine.layoutParams
+                    lp.width = stepWidth.toInt()
+                    progressLine.layoutParams = lp
+                }
+            } else {
+                Log.d("MainActivity", "Progress bar views not found in layout")
+            }
+        } catch (e: Exception) {
+            Log.d("MainActivity", "Progress bar animation error: ${e.message}")
         }
     }
 
     fun setContinueVisible(visible: Boolean) {
-        findViewById<Button>(R.id.btnContinue)?.visibility =
-            if (visible) View.VISIBLE else View.GONE
+        binding.btnContinue.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     fun setContinueEnabled(enabled: Boolean) {
-        findViewById<Button>(R.id.btnContinue)?.isEnabled = enabled
+        binding.btnContinue.isEnabled = enabled
     }
 
     fun setBackVisible(visible: Boolean) {
-        findViewById<Button>(R.id.btnBack)?.visibility =
-            if (visible) View.VISIBLE else View.GONE
+        binding.btnBack.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     fun setBackEnabled(enabled: Boolean) {
-        findViewById<Button>(R.id.btnBack)?.isEnabled = enabled
+        binding.btnBack.isEnabled = enabled
     }
 
     private fun getHardwareSerial(): String {
         return try {
             val process = Runtime.getRuntime().exec("getprop ro.serialno")
-            val bufferedReader = process.inputStream.bufferedReader()
-            bufferedReader.readLine().trim()
+            process.inputStream.bufferedReader().readLine().trim()
         } catch (e: Exception) {
             Log.e("DeviceID", "Failed to get hardware serial", e)
             "UNKNOWN"
@@ -217,27 +213,29 @@ class MainActivity : AppCompatActivity() {
         val tm = getSystemService(TELEPHONY_SERVICE) as? TelephonyManager
 
         try {
+            @Suppress("DEPRECATION")
             val imei = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 tm?.imei ?: ""
             } else {
                 ""
             }
-
-            if (!imei.isNullOrBlank()) return imei
+            if (imei.isNotBlank()) return imei
         } catch (_: SecurityException) {
             Log.w("DeviceID", "No permission for IMEI")
         }
 
         try {
+            @Suppress("DEPRECATION")
             val serial = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 Build.getSerial()
             } else {
-                Build.SERIAL
+                ""
             }
-            if (!serial.isNullOrBlank() && serial != "unknown") return serial
+            if (serial.isNotBlank() && serial != "unknown") return serial
         } catch (_: Exception) {
         }
 
+        @Suppress("HardwareIds")
         return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
     }
 }

@@ -10,10 +10,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.viettel.activities.MainActivity
 import com.example.viettel.databinding.FragmentNfcBinding
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
+import com.example.viettel.utils.mainActivity
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.utils.navigateTo
+import com.example.viettel.utils.updateNavigationControls
 import kotlinx.coroutines.launch
 
 class NfcFragment : Fragment() {
@@ -40,11 +42,7 @@ class NfcFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ProgressUtils.animateProgressToStep(view, 5)
-        (activity as? MainActivity)?.apply {
-            setBackVisible(true)
-            setContinueVisible(true)
-            setContinueEnabled(false)
-        }
+        updateNavigationControls(isBackVisible = true, isContinueVisible = true, isContinueEnabled = false)
 
         if (identityViewModel.uiState.value.mrzData == null) {
             Toast.makeText(requireContext(), "Khong co du lieu MRZ", Toast.LENGTH_SHORT).show()
@@ -79,8 +77,9 @@ class NfcFragment : Fragment() {
                         navigated = true
                         @Suppress("SetTextI18n")
                         binding.txtStatus.text = "Doc du lieu chip thanh cong"
-                        (activity as? MainActivity)?.setContinueEnabled(true)
-                        (activity as? MainActivity)?.replaceFragment(EidDetailsFragment())
+                        updateNavigationControls(isBackVisible = true, isContinueVisible = true, isContinueEnabled = true)
+                        mainActivity()?.animateToStep(6)
+                        navigateTo(EidDetailsFragment())
                     }
                 }
             }

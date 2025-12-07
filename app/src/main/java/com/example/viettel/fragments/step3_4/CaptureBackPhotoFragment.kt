@@ -12,13 +12,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.viettel.activities.MainActivity
 import com.example.viettel.core.camera.ImageProxyMapper
 import com.example.viettel.databinding.FragmentCaptureBackPhotoBinding
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.fragments.step5.NfcFragment
 import com.example.viettel.utils.CameraHelper
 import com.example.viettel.utils.ProgressUtils
+import com.example.viettel.utils.mainActivity
+import com.example.viettel.utils.navigateTo
+import com.example.viettel.utils.updateNavigationControls
 import com.joyusing.controllight.ControlLightUtil
 import kotlinx.coroutines.launch
 
@@ -51,16 +53,20 @@ class CaptureBackPhotoFragment : Fragment() {
 
         ProgressUtils.animateProgressToStep(view, 4)
 
-        (activity as? MainActivity)?.apply {
-            setBackVisible(true)
-            setContinueVisible(true)
-            setContinueEnabled(identityViewModel.uiState.value.mrzData != null)
-        }
+        updateNavigationControls(
+            isBackVisible = true,
+            isContinueVisible = true,
+            isContinueEnabled = identityViewModel.uiState.value.mrzData != null
+        )
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 identityViewModel.uiState.collect { state ->
-                    (activity as? MainActivity)?.setContinueEnabled(state.mrzData != null && !state.isLoading)
+                    updateNavigationControls(
+                        isBackVisible = true,
+                        isContinueVisible = true,
+                        isContinueEnabled = state.mrzData != null && !state.isLoading
+                    )
                     state.errorMessage?.let { error ->
                         if (error != lastError) {
                             lastError = error
@@ -70,10 +76,8 @@ class CaptureBackPhotoFragment : Fragment() {
 
                     if (!navigatedToNfc && state.mrzData != null) {
                         navigatedToNfc = true
-                        (activity as? MainActivity)?.apply {
-                            animateToStep(5)
-                            replaceFragment(NfcFragment())
-                        }
+                        mainActivity()?.animateToStep(5)
+                        navigateTo(NfcFragment())
                     }
                 }
             }
@@ -89,7 +93,11 @@ class CaptureBackPhotoFragment : Fragment() {
         }
 
         binding.btnCapture.setOnClickListener {
-            (activity as? MainActivity)?.setContinueEnabled(false)
+            updateNavigationControls(
+                isBackVisible = true,
+                isContinueVisible = true,
+                isContinueEnabled = false
+            )
             cameraHelper.takePhoto(
                 onCaptured = { imageProxy ->
                     val imageBytes = ImageProxyMapper.toJpegBytes(imageProxy)
@@ -98,7 +106,11 @@ class CaptureBackPhotoFragment : Fragment() {
 
                     if (imageBytes == null) {
                         Toast.makeText(requireContext(), "Khong the xu ly anh", Toast.LENGTH_SHORT).show()
-                        (activity as? MainActivity)?.setContinueEnabled(identityViewModel.uiState.value.mrzData != null)
+                        updateNavigationControls(
+                            isBackVisible = true,
+                            isContinueVisible = true,
+                            isContinueEnabled = identityViewModel.uiState.value.mrzData != null
+                        )
                         return@takePhoto
                     }
 
@@ -112,7 +124,11 @@ class CaptureBackPhotoFragment : Fragment() {
                         "Loi chup anh: ${it.message}",
                         Toast.LENGTH_SHORT
                     ).show()
-                    (activity as? MainActivity)?.setContinueEnabled(identityViewModel.uiState.value.mrzData != null)
+                    updateNavigationControls(
+                        isBackVisible = true,
+                        isContinueVisible = true,
+                        isContinueEnabled = identityViewModel.uiState.value.mrzData != null
+                    )
                 }
             )
         }
@@ -138,7 +154,11 @@ class CaptureBackPhotoFragment : Fragment() {
                             .setDuration(300)
                             .withEndAction {
                                 visibility = View.GONE
-                                (activity as? MainActivity)?.setContinueEnabled(true)
+                                updateNavigationControls(
+                                    isBackVisible = true,
+                                    isContinueVisible = true,
+                                    isContinueEnabled = true
+                                )
                             }
                             .start()
                     }, 2000)
@@ -160,4 +180,3 @@ class CaptureBackPhotoFragment : Fragment() {
         _binding = null
     }
 }
-
