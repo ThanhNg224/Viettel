@@ -1,9 +1,10 @@
 package com.example.viettel.activities
 
-
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
 import android.view.WindowInsets
@@ -19,49 +20,57 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
-import android.provider.Settings
-import android.telephony.TelephonyManager
 import com.example.viettel.R
-
-import com.example.viettel.fragments.step8.EndFragment
-import com.example.viettel.fragments.step8.FeedbackFragment
-import com.example.viettel.fragments.step8.ServiceEvaluationFragment
+import com.example.viettel.fragments.step1_2.DocumentSelectionFragment
+import com.example.viettel.fragments.step1_2.PlaceDocumentFragment
 import com.example.viettel.fragments.step3_4.CaptureBackPhotoFragment
 import com.example.viettel.fragments.step3_4.CaptureFrontPhotoFragment
-import com.example.viettel.fragments.step1_2.DocumentSelectionFragment
 import com.example.viettel.fragments.step5.EidDetailsFragment
 import com.example.viettel.fragments.step5.NfcFragment
-import com.example.viettel.fragments.step7.PaymentFragment
 import com.example.viettel.fragments.step6.PdfSignFragment
-import com.example.viettel.fragments.step1_2.PlaceDocumentFragment
 import com.example.viettel.fragments.step6.PortraitComparisonFragment
 import com.example.viettel.fragments.step6.PortraitLivenessFragment
 import com.example.viettel.fragments.step6.VideoCallFragment
+import com.example.viettel.fragments.step7.PaymentFragment
 import com.example.viettel.fragments.step7.QrCodePaymentFragment
+import com.example.viettel.feature.feedback.presentation.ui.EndFragment
+import com.example.viettel.feature.feedback.presentation.ui.FeedbackFragment
+import com.example.viettel.feature.feedback.presentation.ui.ServiceEvaluationFragment
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.jmrtd.lds.icao.MRZInfo
-import org.json.JSONObject
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
+import dagger.hilt.android.AndroidEntryPoint
 
-
+/**
+ * MainActivity - Activity chính quản lý navigation giữa các bước trong flow eKYC.
+ * Sử dụng Fragment transaction để điều hướng giữa các màn hình.
+ */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        registerKioskToBackend()
-//        resolveDeviceId()
         Log.d("KIOSK_ID", "Real serial: ${getHardwareSerial()}")
 
         fullScreenMore()
+        setupLanguageMenu()
 
-        // Language menu (giữ nguyên)
+        if (savedInstanceState == null) {
+            replaceFragment(DocumentSelectionFragment())
+        }
+
+        findViewById<Button>(R.id.btnBack).setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        findViewById<Button>(R.id.btnContinue).setOnClickListener { onContinuePressed() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fullScreenMore()
+    }
+
+    private fun setupLanguageMenu() {
         val languageSelector = findViewById<LinearLayout>(R.id.ChonNgonNgu)
         languageSelector.setOnClickListener {
             val popup = PopupMenu(this, it)
@@ -71,9 +80,9 @@ class MainActivity : AppCompatActivity() {
                 val flagImage = languageSelector.findViewById<ImageView>(R.id.languageFlag)
                 when (item.itemId) {
                     R.id.lang_vi -> {
-                        languageText.text = "Tiếng Việt"
+                        languageText.text = "Tieng Viet"
                         flagImage.setImageResource(R.drawable.ic_vietnam_flag)
-                        showLanguageSnackbar("Đã chọn: Tiếng Việt")
+                        showLanguageSnackbar("Da chon: Tieng Viet")
                         true
                     }
                     R.id.lang_en -> {
@@ -83,9 +92,9 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.lang_fr -> {
-                        languageText.text = "Français"
+                        languageText.text = "Francais"
                         flagImage.setImageResource(R.drawable.france_flag)
-                        showLanguageSnackbar("Langue sélectionnée : Français")
+                        showLanguageSnackbar("Langue selectionnee : Francais")
                         true
                     }
                     else -> false
@@ -93,77 +102,39 @@ class MainActivity : AppCompatActivity() {
             }
             popup.show()
         }
-
-
-
-        val action = intent?.getStringExtra("ACTION")
-        if (savedInstanceState == null) {
-            replaceFragment(DocumentSelectionFragment())
-        }
-
-        // Back Button
-        findViewById<Button>(R.id.btnBack).setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-        // Continue Button
-        findViewById<Button>(R.id.btnContinue).setOnClickListener {
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-            when (currentFragment) {
-                is DocumentSelectionFragment -> replaceFragment(PlaceDocumentFragment())
-                is PlaceDocumentFragment -> replaceFragment(CaptureFrontPhotoFragment())
-                is CaptureFrontPhotoFragment -> {
-                    val frag = currentFragment
-                    if (frag.isFrontCaptured()) {
-                        replaceFragment(CaptureBackPhotoFragment())
-                    } else {
-                        Toast.makeText(this, "Vui lòng chụp ảnh mặt trước trước khi tiếp tục", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is CaptureBackPhotoFragment -> {
-                    val frag = currentFragment
-                    if (frag.isMRZReady()) {
-                        val mrz = frag.getMRZ()
-                        if (mrz != null) {
-                            val nfcFragment = NfcFragment.newInstance(mrz)
-                            replaceFragment(nfcFragment)
-                        } else {
-                            Toast.makeText(this, "MRZ chưa sẵn sàng", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(this, "Vui lòng chụp ảnh mặt sau hợp lệ trước khi tiếp tục", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is NfcFragment -> replaceFragment(EidDetailsFragment())
-                is EidDetailsFragment -> replaceFragment(PortraitLivenessFragment())
-                is PortraitLivenessFragment -> replaceFragment(PortraitComparisonFragment())
-                is PortraitComparisonFragment -> replaceFragment(PdfSignFragment())
-                is PdfSignFragment -> replaceFragment(VideoCallFragment())
-                is VideoCallFragment -> replaceFragment(PaymentFragment())
-                is PaymentFragment -> replaceFragment(ServiceEvaluationFragment())
-                is QrCodePaymentFragment -> replaceFragment(ServiceEvaluationFragment())
-                is ServiceEvaluationFragment -> replaceFragment(EndFragment())
-                is FeedbackFragment -> {
-                    if (currentFragment.isFeedbackValid()) {
-                        currentFragment.onContinuePressed()
-                    } else {
-                        Toast.makeText(this, "Vui lòng chọn ít nhất một lý do", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is EndFragment ->
-                    Toast.makeText(this, "Đã đến bước cuối", Toast.LENGTH_SHORT).show()
-                else ->
-                    Toast.makeText(this, "Không xác định bước hiện tại", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        fullScreenMore()
+    private fun onContinuePressed() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        when (currentFragment) {
+            is DocumentSelectionFragment -> replaceFragment(PlaceDocumentFragment())
+            is PlaceDocumentFragment -> replaceFragment(CaptureFrontPhotoFragment())
+            is CaptureFrontPhotoFragment -> replaceFragment(CaptureBackPhotoFragment())
+            is CaptureBackPhotoFragment -> replaceFragment(NfcFragment())
+            is NfcFragment -> replaceFragment(EidDetailsFragment())
+            is EidDetailsFragment -> replaceFragment(PortraitLivenessFragment())
+            is PortraitLivenessFragment -> replaceFragment(PortraitComparisonFragment())
+            is PortraitComparisonFragment -> replaceFragment(PdfSignFragment())
+            is PdfSignFragment -> replaceFragment(VideoCallFragment())
+            is VideoCallFragment -> replaceFragment(PaymentFragment())
+            is PaymentFragment -> replaceFragment(ServiceEvaluationFragment())
+            is QrCodePaymentFragment -> replaceFragment(ServiceEvaluationFragment())
+            is ServiceEvaluationFragment -> replaceFragment(EndFragment())
+            is FeedbackFragment -> {
+                if (currentFragment.isFeedbackValid()) {
+                    currentFragment.onContinuePressed()
+                } else {
+                    Toast.makeText(this, "Vui long chon it nhat mot ly do", Toast.LENGTH_SHORT).show()
+                }
+            }
+            is EndFragment ->
+                Toast.makeText(this, "Da den buoc cuoi", Toast.LENGTH_SHORT).show()
+            else ->
+                Toast.makeText(this, "Khong xac dinh buoc hien tai", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun fullScreenMore() {
-        // ==== FULLSCREEN MODE ====
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowCompat.setDecorFitsSystemWindows(window, false)
             window.insetsController?.let { controller ->
@@ -184,9 +155,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Replace the fragment in the fragment container.
-     */
     fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
@@ -194,9 +162,6 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    /**
-     * Displays a custom Snackbar when a language is chosen.
-     */
     private fun showLanguageSnackbar(message: String) {
         val rootLayout = findViewById<ConstraintLayout>(R.id.main_layout)
         Snackbar.make(rootLayout, message, Snackbar.LENGTH_SHORT)
@@ -206,11 +171,6 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    /**
-     * Call this function to animate custom progress bar to a given step.
-     *
-     *
-     */
     fun animateToStep(step: Int) {
         val progressLine = findViewById<View>(R.id.progressLine)
         val container = findViewById<View>(R.id.progressBarContainer)
@@ -223,45 +183,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * When OCR is successful launch the NFC step.
-     */
-    fun launchNFCStep(mrzInfo: MRZInfo) {
-        // Do not log the entire mrzInfo.toString(); log just some fields if needed
-        Log.d("MainActivity", "MRZ read: Document Number = ${mrzInfo.documentNumber}")
-        replaceFragment(NfcFragment.newInstance(mrzInfo))
-        animateToStep(5)
-    }
     fun setContinueVisible(visible: Boolean) {
         findViewById<Button>(R.id.btnContinue)?.visibility =
             if (visible) View.VISIBLE else View.GONE
     }
+
     fun setContinueEnabled(enabled: Boolean) {
         findViewById<Button>(R.id.btnContinue)?.isEnabled = enabled
     }
+
     fun setBackVisible(visible: Boolean) {
         findViewById<Button>(R.id.btnBack)?.visibility =
             if (visible) View.VISIBLE else View.GONE
     }
+
     fun setBackEnabled(enabled: Boolean) {
         findViewById<Button>(R.id.btnBack)?.isEnabled = enabled
     }
 
     private fun getHardwareSerial(): String {
-        try {
+        return try {
             val process = Runtime.getRuntime().exec("getprop ro.serialno")
             val bufferedReader = process.inputStream.bufferedReader()
-            return bufferedReader.readLine().trim()
+            bufferedReader.readLine().trim()
         } catch (e: Exception) {
             Log.e("DeviceID", "Failed to get hardware serial", e)
-            return "UNKNOWN"
+            "UNKNOWN"
         }
     }
+
+    @Suppress("unused")
     private fun resolveDeviceId(): String {
         val tm = getSystemService(TELEPHONY_SERVICE) as? TelephonyManager
 
         try {
-            //
             val imei = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 tm?.imei ?: ""
             } else {
@@ -273,7 +228,6 @@ class MainActivity : AppCompatActivity() {
             Log.w("DeviceID", "No permission for IMEI")
         }
 
-        //
         try {
             val serial = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 Build.getSerial()
@@ -281,13 +235,9 @@ class MainActivity : AppCompatActivity() {
                 Build.SERIAL
             }
             if (!serial.isNullOrBlank() && serial != "unknown") return serial
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
 
-        // Fallback
         return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
     }
-
-
 }
-
-

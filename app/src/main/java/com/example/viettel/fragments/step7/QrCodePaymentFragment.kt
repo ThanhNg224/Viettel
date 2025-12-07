@@ -4,21 +4,80 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.viettel.R
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.viettel.activities.MainActivity
+import com.example.viettel.databinding.FragmentQrPaymentBinding
+import com.example.viettel.feature.payment.domain.entity.PaymentStatus
+import com.example.viettel.feature.payment.presentation.PaymentViewModel
+import com.example.viettel.feature.feedback.presentation.ui.ServiceEvaluationFragment
 import com.example.viettel.utils.ProgressUtils
+import kotlinx.coroutines.launch
 
 class QrCodePaymentFragment : Fragment() {
 
+    private var _binding: FragmentQrPaymentBinding? = null
+    private val binding get() = _binding!!
+
+    private val paymentViewModel: PaymentViewModel by activityViewModels { PaymentViewModel.Factory() }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_qrcode_payment, container, false)
+        _binding = FragmentQrPaymentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ProgressUtils.animateProgressToStep(view, 8)
+
+        ProgressUtils.animateProgressToStep(view, 7)
+        (activity as? MainActivity)?.apply {
+            setContinueVisible(false)
+            setBackVisible(true)
+        }
+
+        binding.btnCancelPayment.setOnClickListener {
+            paymentViewModel.cancelPayment()
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
+        observeState()
+        paymentViewModel.startPaymentIfNeeded()
+    }
+
+    private fun observeState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                paymentViewModel.uiState.collect { state ->
+                    when (state.status) {
+                        PaymentStatus.Processing -> binding.circularProgress.visibility = View.VISIBLE
+                        PaymentStatus.Success -> {
+                            binding.circularProgress.visibility = View.GONE
+                            (activity as? MainActivity)?.replaceFragment(ServiceEvaluationFragment())
+                        }
+                        is PaymentStatus.Error -> {
+                            binding.circularProgress.visibility = View.GONE
+                            Toast.makeText(requireContext(), "Thanh toan loi", Toast.LENGTH_SHORT).show()
+                        }
+                        PaymentStatus.Cancelled -> {
+                            binding.circularProgress.visibility = View.GONE
+                        }
+                        PaymentStatus.Idle -> binding.circularProgress.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

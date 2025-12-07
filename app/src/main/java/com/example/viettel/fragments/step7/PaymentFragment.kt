@@ -1,76 +1,77 @@
 package com.example.viettel.fragments.step7
 
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.example.viettel.R
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.databinding.FragmentPaymentBinding
+import com.example.viettel.feature.payment.domain.entity.PaymentMethod
+import com.example.viettel.feature.payment.domain.entity.PaymentStatus
+import com.example.viettel.feature.payment.presentation.PaymentViewModel
+import com.example.viettel.feature.feedback.presentation.ui.ServiceEvaluationFragment
 import com.example.viettel.utils.ProgressUtils
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-//class PaymentFragment : Fragment(R.layout.fragment_payment) {
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        // bước 7
-//        ProgressUtils.animateProgressToStep(view, 7)
-//
-//        //  CardView
-//        val qrOption = view.findViewById<CardView>(R.id.qrOptionCard)
-//        val cashOption = view.findViewById<CardView>(R.id.cashOptionCard)
-//        val qrText = view.findViewById<TextView>(R.id.textQrOption)
-//
-//        Log.d("DEBUG_UI", "QR TEXT = ${qrText.text}, visible = ${qrText.visibility}, height = ${qrText.height}")
-//
-//
-//        // Click demo
-//        qrOption.setOnClickListener {
-//            Toast.makeText(requireContext(), "Đã chọn thanh toán bằng QR", Toast.LENGTH_SHORT).show()
-//            (activity as? MainActivity)?.replaceFragment(QrCodePayment())
-//        }
-//
-//        cashOption.setOnClickListener {
-//            Toast.makeText(requireContext(), "Đã chọn thanh toán bằng Tiền mặt", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-//}
+class PaymentFragment : Fragment() {
 
-class PaymentFragment : Fragment(R.layout.fragment_payment) {
+    private var _binding: FragmentPaymentBinding? = null
+    private val binding get() = _binding!!
+
+    private val paymentViewModel: PaymentViewModel by activityViewModels { PaymentViewModel.Factory() }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPaymentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Bước 7
         ProgressUtils.animateProgressToStep(view, 7)
-
-        // CardView
-        val qrOption = view.findViewById<CardView>(R.id.qrOptionCard)
-        val cashOption = view.findViewById<CardView>(R.id.cashOptionCard)
-        val qrText = view.findViewById<TextView>(R.id.textQrOption)
-
-        Log.d(
-            "DEBUG_UI",
-            "QR TEXT = ${qrText.text}, visible = ${qrText.visibility}, height = ${qrText.height}"
-        )
-
-        // Click demo
-        qrOption.setOnClickListener {
-            Toast.makeText(requireContext(), "Đã chọn thanh toán bằng QR", Toast.LENGTH_SHORT)
-                .show()
-            (activity as? MainActivity)?.replaceFragment(QrCodePayment())
+        (activity as? MainActivity)?.apply {
+            setContinueVisible(false)
+            setBackVisible(true)
         }
 
-        cashOption.setOnClickListener {
-            Toast.makeText(requireContext(), "Đã chọn thanh toán bằng Tiền mặt", Toast.LENGTH_SHORT)
-                .show()
+        binding.qrOptionCard.setOnClickListener {
+            paymentViewModel.selectMethod(PaymentMethod.QR)
+            Toast.makeText(requireContext(), "Da chon thanh toan QR", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.replaceFragment(QrCodePaymentFragment())
         }
+
+        binding.cashOptionCard.setOnClickListener {
+            paymentViewModel.selectMethod(PaymentMethod.CASH)
+            Toast.makeText(requireContext(), "Da chon thanh toan Tien mat", Toast.LENGTH_SHORT).show()
+        }
+
+        observePayment()
+    }
+
+    private fun observePayment() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                paymentViewModel.uiState.collect { state ->
+                    if (state.status is PaymentStatus.Success) {
+                        (activity as? MainActivity)?.replaceFragment(ServiceEvaluationFragment())
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

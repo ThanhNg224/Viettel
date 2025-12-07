@@ -8,74 +8,56 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.graphics.createBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
-import com.example.viettel.fragments.step6.SignatureView
+import com.example.viettel.databinding.FragmentPdfSignBinding
+import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.ProgressUtils
-import com.example.viettel.viewmodel.DocumentViewModel
-import com.github.barteksc.pdfviewer.PDFView
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 
 class PdfSignFragment : Fragment() {
 
-    private lateinit var pdfView: PDFView
-    private lateinit var signatureView: SignatureView
-    private lateinit var tvPageNumber: TextView
-    private lateinit var btnPrevPage: ImageButton
-    private lateinit var btnNextPage: ImageButton
-    private lateinit var btnZoomPdf: ImageButton
-    private lateinit var checkboxAgree: CheckBox
-    private lateinit var btnClearSignature: View
-    private val docViewModel: DocumentViewModel by activityViewModels()
+    private var _binding: FragmentPdfSignBinding? = null
+    private val binding get() = _binding!!
 
+    private val identityViewModel: IdentityViewModel by activityViewModels {
+        IdentityViewModel.Factory(requireActivity().application)
+    }
 
     private var totalPages = 0
     private var currentPage = 0
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_pdf_sign, container, false)
+    ): View {
+        _binding = FragmentPdfSignBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         ProgressUtils.animateProgressToStep(view, 6)
-        initViews(view)
         loadPdfFromAssets()
         setupListeners()
 
         (activity as? MainActivity)?.setContinueVisible(false)
-
-    }
-
-    private fun initViews(view: View) {
-        pdfView = view.findViewById(R.id.pdfView)
-        signatureView = view.findViewById(R.id.signature_view)
-        tvPageNumber = view.findViewById(R.id.tv_page_number)
-        btnPrevPage = view.findViewById(R.id.btn_back_page)
-        btnNextPage = view.findViewById(R.id.btn_next_page)
-        btnZoomPdf = view.findViewById(R.id.btn_zoom_pdf)
-        checkboxAgree = view.findViewById(R.id.checkbox_agree_policy)
-        btnClearSignature = view.findViewById(R.id.btn_clear_signature)
     }
 
     private fun loadPdfFromAssets() {
         try {
             val inputStream = requireContext().assets.open("Testing.pdf")
-            pdfView.fromStream(inputStream)
+            binding.pdfView.fromStream(inputStream)
                 .defaultPage(currentPage)
                 .enableSwipe(true)
                 .swipeHorizontal(false)
@@ -88,82 +70,85 @@ class PdfSignFragment : Fragment() {
                     updatePageNumber()
                 }
                 .load()
-        } catch (e: IOException) {
-            Toast.makeText(requireContext(), "Không thể mở PDF", Toast.LENGTH_SHORT).show()
-            Log.e("TAG", "IOException: ${e.message}", e)
+        } catch (_: IOException) {
+            Toast.makeText(requireContext(), "Khong the mo PDF", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setupListeners() {
-        btnZoomPdf.setOnClickListener {
+        binding.btnZoomPdf.setOnClickListener {
             val zoomDialog = ZoomPdfDialogFragment(currentPage)
             zoomDialog.show(childFragmentManager, "ZoomPdfDialog")
         }
 
-        btnPrevPage.setOnClickListener {
+        binding.btnBackPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
-                pdfView.jumpTo(currentPage, true)
+                binding.pdfView.jumpTo(currentPage, true)
                 updatePageNumber()
             }
         }
 
-        btnNextPage.setOnClickListener {
+        binding.btnNextPage.setOnClickListener {
             if (currentPage < totalPages - 1) {
                 currentPage++
-                pdfView.jumpTo(currentPage, true)
+                binding.pdfView.jumpTo(currentPage, true)
                 updatePageNumber()
             }
         }
 
-        btnClearSignature.setOnClickListener {
-            signatureView.clear()
-            checkSignatureAndPolicy() // reset lại điều kiện nếu đã ký rồi
-        }
-
-        // Lắng nghe tick checkbox
-        checkboxAgree.setOnCheckedChangeListener { _, _ ->
+        binding.btnClearSignature.setOnClickListener {
+            binding.signatureView.clear()
             checkSignatureAndPolicy()
         }
 
-        signatureView.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                v.performClick() // ✅ Accessibility support
-                checkSignatureAndPolicy()
-            }
-            false // allow drawing
+        binding.checkboxAgreePolicy.setOnCheckedChangeListener { _, _ ->
+            checkSignatureAndPolicy()
         }
 
-        // Ẩn nút tiếp tục khi mới vào
+        binding.signatureView.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                v.performClick()
+                checkSignatureAndPolicy()
+            }
+            false
+        }
+
         (activity as? MainActivity)?.setContinueVisible(false)
     }
 
-
     private fun updatePageNumber() {
-        tvPageNumber.text = "${currentPage + 1} / $totalPages"
+        @Suppress("SetTextI18n")
+        binding.tvPageNumber.text = "${currentPage + 1} / $totalPages"
     }
 
     fun isSigned(): Boolean {
-        return this::signatureView.isInitialized && !signatureView.isEmpty()
+        return _binding != null && !binding.signatureView.isEmpty()
     }
 
     fun isPolicyChecked(): Boolean {
-        return this::checkboxAgree.isInitialized && checkboxAgree.isChecked
+        return _binding != null && binding.checkboxAgreePolicy.isChecked
     }
 
-    fun getSignatureBitmap() = signatureView.getSignatureBitmap()
     private fun checkSignatureAndPolicy() {
         val isSigned = isSigned()
         val isChecked = isPolicyChecked()
 
         if (isSigned && isChecked) {
-            docViewModel.signatureBitmap = getSignatureBitmap()
+            val signatureBytes = ByteArrayOutputStream().use { out ->
+                binding.signatureView.getSignatureBitmap().compress(Bitmap.CompressFormat.PNG, 100, out)
+                out.toByteArray()
+            }
+            identityViewModel.saveSignature(signatureBytes)
         }
 
         (activity as? MainActivity)?.setContinueVisible(isSigned && isChecked)
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
 
 class SignatureView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -184,9 +169,7 @@ class SignatureView(context: Context, attrs: AttributeSet?) : View(context, attr
         invalidate()
     }
 
-    fun isEmpty(): Boolean {
-        return !isTouched
-    }
+    fun isEmpty(): Boolean = !isTouched
 
     fun getSignatureBitmap(): Bitmap {
         val bitmap = createBitmap(width, height)
@@ -214,9 +197,10 @@ class SignatureView(context: Context, attrs: AttributeSet?) : View(context, attr
         super.onDraw(canvas)
         canvas.drawPath(path, paint)
     }
+
     override fun performClick(): Boolean {
         super.performClick()
         return true
     }
-
 }
+

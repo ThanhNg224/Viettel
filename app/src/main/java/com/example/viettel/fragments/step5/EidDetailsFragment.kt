@@ -1,8 +1,6 @@
 package com.example.viettel.fragments.step5
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,20 +8,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.R
-import com.example.viettel.viewmodel.DocumentViewModel
-import vn.leeon.eidsdk.data.Eid
-import vn.leeon.eidsdk.jmrtd.FeatureStatus
-import vn.leeon.eidsdk.jmrtd.VerificationStatus
-import java.security.MessageDigest
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.viettel.feature.identity.presentation.mapper.BitmapMapper
+import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
+import kotlinx.coroutines.launch
 
 class EidDetailsFragment : Fragment() {
 
-    private val docViewModel: DocumentViewModel by activityViewModels()
-    //get Eid from the view model rather than a local property.
-    private val eid: Eid? get() = docViewModel.eid
+    private val identityViewModel: IdentityViewModel by activityViewModels {
+        IdentityViewModel.Factory(requireActivity().application)
+    }
 
     private lateinit var imgFront: ImageView
     private lateinit var imgBack: ImageView
@@ -43,13 +40,10 @@ class EidDetailsFragment : Fragment() {
     private lateinit var txtDateOfIssue: TextView
     private lateinit var txtDateExpiry: TextView
     private lateinit var txtPersonalIdentification: TextView
-
     private lateinit var txtSignatureInfo: TextView
     private lateinit var txtVerificationStatus: TextView
 
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_eid_details, container, false)
 
         imgFront = view.findViewById(R.id.imgFront)
@@ -80,94 +74,41 @@ class EidDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Slight delay to ensure ViewModel is ready
-        view.postDelayed({
-            displayCapturedImages()
-            Log.d("EidDetails", "front=${docViewModel.frontImage}, back=${docViewModel.backImage}, chip=${docViewModel.chipPortrait}")
-        }, 100)
+        renderState()
 
-        displayEidInfo()
-    }
-
-    private fun displayCapturedImages() {
-        docViewModel.frontImage?.let { imgFront.setImageBitmap(it) }
-        docViewModel.backImage?.let { imgBack.setImageBitmap(it) }
-        if (docViewModel.chipPortrait != null) {
-            imgChipFace.setImageBitmap(docViewModel.chipPortrait)
-            Log.d("EidDetails", "chipPortrait applied to imgChipFace")
-        } else {
-            Log.w("EidDetails", "chipPortrait is NULL, retrying in 200ms...")
-            view?.postDelayed({ displayCapturedImages() }, 200)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                identityViewModel.uiState.collect {
+                    renderState()
+                }
+            }
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun displayEidInfo() {
-        val pod = eid?.personOptionalDetails
-        if (pod != null) {
-            txtName.text = pod.fullName ?: "-"
-            txtDocNumber.text = pod.eidNumber ?: "-"
-            txtPersonalIdentification.text = pod.personalIdentification ?: "-"
-            txtDob.text = pod.dateOfBirth ?: "-"
-            txtGender.text = pod.gender ?: "-"
-            txtNationality.text = pod.nationality ?: "-"
-            txtFatherName.text = pod.fatherName ?: "-"
-            txtMotherName.text = pod.motherName ?: "-"
-            txtPlaceOfOrigin.text = pod.placeOfOrigin ?: "-"
-            txtPlaceOfResidence.text = pod.placeOfResidence ?: "-"
-            txtReligion.text = pod.religion ?: "-"
-            txtEthnicity.text = pod.ethnicity ?: "-"
-            txtDateOfIssue.text = pod.dateOfIssue ?: "-"
-            txtDateExpiry.text = pod.dateOfExpiry ?: "-"
+    private fun renderState() {
+        val state = identityViewModel.uiState.value
 
-            // Save the user info in the ViewModel for later use
-            docViewModel.userInfo = pod
-        } else {
-            Log.w("EidDetails", "No person optional details found in eid!")
-        }
+        imgFront.setImageBitmap(BitmapMapper.fromBytes(state.frontImage, state.frontImageRotation))
+        imgBack.setImageBitmap(BitmapMapper.fromBytes(state.backImage, state.backImageRotation))
+        imgChipFace.setImageBitmap(BitmapMapper.fromBytes(state.eidData?.chipPortrait))
 
-        val cert = eid?.sodFile?.docSigningCertificate
-        if (cert != null) {
-            val sha1 = try {
-                MessageDigest.getInstance("SHA-1").digest(cert.encoded).joinToString("") { "%02X".format(it) }
-            } catch (_: Exception) {
-                "Không thể tạo SHA-1"
-            }
-            txtSignatureInfo.text = buildString {
-                appendLine("Serial: ${cert.serialNumber}")
-                appendLine("Public Key: ${cert.publicKey.algorithm}")
-                appendLine("Signature Algorithm: ${cert.sigAlgName}")
-                appendLine("Thumbprint (SHA-1): $sha1")
-                appendLine("Issuer DN: ${cert.issuerDN.name}")
-                appendLine("Subject DN: ${cert.subjectDN.name}")
-                appendLine("Valid From: ${dateFormat.format(cert.notBefore)}")
-                appendLine("Valid To: ${dateFormat.format(cert.notAfter)}")
-            }
-        } else {
-            txtSignatureInfo.text = "(Không có thông tin chứng chỉ)"
-        }
+        val info = state.eidData?.personalInfo
+        txtName.text = info?.fullName ?: "-"
+        txtDocNumber.text = info?.documentNumber ?: "-"
+        txtPersonalIdentification.text = info?.personalIdentification ?: "-"
+        txtDob.text = info?.dateOfBirth ?: "-"
+        txtGender.text = info?.gender ?: "-"
+        txtNationality.text = info?.nationality ?: "-"
+        txtFatherName.text = info?.fatherName ?: "-"
+        txtMotherName.text = info?.motherName ?: "-"
+        txtPlaceOfOrigin.text = info?.placeOfOrigin ?: "-"
+        txtPlaceOfResidence.text = info?.placeOfResidence ?: "-"
+        txtReligion.text = info?.religion ?: "-"
+        txtEthnicity.text = info?.ethnicity ?: "-"
+        txtDateOfIssue.text = info?.dateOfIssue ?: "-"
+        txtDateExpiry.text = info?.dateOfExpiry ?: "-"
 
-        txtVerificationStatus.text = buildVerificationStatusText(
-            eid?.verificationStatus,
-            eid?.featureStatus
-        )
-    }
-
-    private fun buildVerificationStatusText(vs: VerificationStatus?, fs: FeatureStatus?): String {
-        if (vs == null || fs == null) return "Không có kết quả xác thực"
-        fun verdictToStr(v: VerificationStatus.Verdict?): String {
-            return when (v) {
-                VerificationStatus.Verdict.SUCCEEDED -> "✔️ Thành công"
-                VerificationStatus.Verdict.FAILED -> "❌ Thất bại"
-                else -> "❔ Không rõ"
-            }
-        }
-        return buildString {
-            appendLine("🛡️ Kết quả xác thực chip:")
-            appendLine("• Document check (HT): ${verdictToStr(vs.ht)}")
-            appendLine("• Chip Auth (CA): ${verdictToStr(vs.ca)}")
-            appendLine("• Country Signing (CS): ${verdictToStr(vs.cs)}")
-            appendLine("• Active Auth (AA): ${verdictToStr(vs.aa)}")
-        }
+        txtSignatureInfo.text = state.eidData?.certificateSummary ?: "(Khong co thong tin chu ky)"
+        txtVerificationStatus.text = state.eidData?.verificationSummary ?: "Khong co ket qua xac thuc"
     }
 }

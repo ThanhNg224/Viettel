@@ -4,16 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.camera.core.CameraSelector
-import androidx.camera.view.PreviewView
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
+import com.example.viettel.fragments.step7.PaymentFragment
 import com.example.viettel.stringee.Common
 import com.example.viettel.stringee.SensorManagerUtils
 import com.example.viettel.stringee.Utils
-import com.example.viettel.utils.CameraHelper
 import com.example.viettel.utils.ProgressUtils
 import com.stringee.call.StringeeCall2
 import com.stringee.common.StringeeAudioManager
@@ -22,8 +21,6 @@ import com.stringee.common.StringeeAudioManager.AudioManagerEvents
 import com.stringee.listener.StatusListener
 import com.stringee.video.StringeeVideoTrack
 import org.json.JSONObject
-import android.view.WindowManager
-import com.example.viettel.fragments.step7.PaymentFragment
 
 class VideoCallFragment : Fragment(R.layout.fragment_video_call) {
 
@@ -41,8 +38,8 @@ class VideoCallFragment : Fragment(R.layout.fragment_video_call) {
         // bước 6
         ProgressUtils.animateProgressToStep(view, 6)
 
-        vRemote = view.findViewById<FrameLayout>(R.id.v_remote)
-        vLocal = view.findViewById<FrameLayout>(R.id.v_local)
+        vRemote = view.findViewById(R.id.v_remote)
+        vLocal = view.findViewById(R.id.v_local)
 
         sensorManagerUtils = SensorManagerUtils.getInstance(requireContext())
         sensorManagerUtils!!.acquireProximitySensor(requireActivity().localClassName)
@@ -56,23 +53,17 @@ class VideoCallFragment : Fragment(R.layout.fragment_video_call) {
 
         Common.isInCall = true
 
-        makeCall();
+        makeCall()
     }
 
     private fun makeCall() {
         //create audio manager to control audio device
         audioManager = StringeeAudioManager.create(requireContext())
-        audioManager!!.start(object : AudioManagerEvents {
-            override fun onAudioDeviceChanged(
-                audioDevice: AudioDevice?,
-                set: MutableSet<AudioDevice?>?
-            ) {
-            }
-        })
+        audioManager!!.start { audioDevice, set -> }
         audioManager!!.setSpeakerphoneOn(true)
 
         //make a call
-        stringeeCall = StringeeCall2(Common.client, Common.client.getUserId(), "+testcall")
+        stringeeCall = StringeeCall2(Common.client, Common.client?.userId, "+testcall")
         stringeeCall!!.setVideoCall(true)
 
         stringeeCall!!.setCallListener(object : StringeeCall2.StringeeCallListener {
@@ -214,7 +205,7 @@ class VideoCallFragment : Fragment(R.layout.fragment_video_call) {
             audioManager = null
         }
         sensorManagerUtils!!.releaseSensor()
-        Utils.postDelay(Runnable {
+        Utils.postDelay({
             Common.isInCall = false
         }, 1000)
     }

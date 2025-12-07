@@ -10,9 +10,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
+import androidx.fragment.app.activityViewModels
+import com.example.viettel.feature.identity.domain.entity.DocumentType
+import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.ProgressUtils
 
 class DocumentSelectionFragment : Fragment() {
+
+    private val identityViewModel: IdentityViewModel by activityViewModels {
+        IdentityViewModel.Factory(requireActivity().application)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,14 +40,10 @@ class DocumentSelectionFragment : Fragment() {
         val optionCCCD = view.findViewById<ConstraintLayout>(R.id.option1)
         val optionPassport = view.findViewById<ConstraintLayout>(R.id.option2)
 
-
         val imageOption1 = optionCCCD.findViewById<ImageView>(R.id.imageOption1)
         val imageOption2 = optionPassport.findViewById<ImageView>(R.id.imageOption2)
 
         ProgressUtils.animateProgressToStep(view, 1)
-
-
-
 
         optionCCCD.setOnClickListener {
             imageOption1.setBackgroundResource(R.drawable.red_circle)
@@ -47,19 +51,14 @@ class DocumentSelectionFragment : Fragment() {
 
             Toast.makeText(requireContext(), "CCCD selected", Toast.LENGTH_SHORT).show()
 
-            val fragment = PlaceDocumentFragment().apply {
-                arguments = Bundle().apply {
-                    putString("docType", "cccd")
-                }
-            }
+            identityViewModel.selectDocumentType(DocumentType.CCCD)
             (activity as? MainActivity)?.apply {
                 setBackVisible(true)
                 setContinueVisible(true)
                 setContinueEnabled(true)  // once picked, continue is clickable
             }
 
-
-            (activity as? MainActivity)?.replaceFragment(fragment)
+            (activity as? MainActivity)?.replaceFragment(PlaceDocumentFragment())
         }
 
         optionPassport.setOnClickListener {
@@ -68,13 +67,9 @@ class DocumentSelectionFragment : Fragment() {
 
             Toast.makeText(requireContext(), "Passport selected", Toast.LENGTH_SHORT).show()
 
-            val fragment = PlaceDocumentFragment().apply {
-                arguments = Bundle().apply {
-                    putString("docType", "passport")
-                }
-            }
+            identityViewModel.selectDocumentType(DocumentType.PASSPORT)
 
-            (activity as? MainActivity)?.replaceFragment(fragment)
+            (activity as? MainActivity)?.replaceFragment(PlaceDocumentFragment())
         }
 
     }

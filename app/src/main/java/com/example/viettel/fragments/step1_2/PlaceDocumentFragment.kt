@@ -1,41 +1,64 @@
 package com.example.viettel.fragments.step1_2
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.viettel.R
+import androidx.fragment.app.activityViewModels
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.databinding.FragmentPlaceDocumentBinding
+import com.example.viettel.feature.identity.domain.entity.DocumentType
+import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.ProgressUtils
 
-class PlaceDocumentFragment : Fragment(R.layout.fragment_place_document) {
+class PlaceDocumentFragment : Fragment() {
+
+    private var _binding: FragmentPlaceDocumentBinding? = null
+    private val binding get() = _binding!!
+
+    private val identityViewModel: IdentityViewModel by activityViewModels {
+        IdentityViewModel.Factory(requireActivity().application)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPlaceDocumentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? MainActivity)?.apply {
-            findViewById<View>(R.id.btnContinue)?.visibility = View.VISIBLE
-            findViewById<View>(R.id.btnBack)?.visibility = View.VISIBLE
-        }
-
-        val docType = arguments?.getString("docType") ?: "cccd"  // default fallback
-        val imgIllustration = view.findViewById<ImageView>(R.id.imgIllustration)
-
-        // 🔄 Swap image based on docType
-        when (docType) {
-            "cccd" -> imgIllustration.setImageResource(R.drawable.ic_cccd_placement)
-            "passport" -> imgIllustration.setImageResource(R.drawable.ic_passport_placement)
-        }
-
-        ProgressUtils.animateProgressToStep(view, 2)
-
-    }
-    override fun onResume() {
-        super.onResume()
-
         (activity as? MainActivity)?.apply {
             setBackVisible(true)
             setContinueVisible(true)
             setContinueEnabled(true)
         }
+
+        val docType = identityViewModel.uiState.value.documentType
+
+        when (docType) {
+            DocumentType.CCCD -> binding.imgIllustration.setImageResource(com.example.viettel.R.drawable.ic_cccd_placement)
+            DocumentType.PASSPORT -> binding.imgIllustration.setImageResource(com.example.viettel.R.drawable.ic_passport_placement)
+        }
+
+        ProgressUtils.animateProgressToStep(view, 2)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.apply {
+            setBackVisible(true)
+            setContinueVisible(true)
+            setContinueEnabled(true)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
