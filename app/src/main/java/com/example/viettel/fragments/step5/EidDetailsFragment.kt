@@ -10,16 +10,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.databinding.FragmentEidDetailsBinding
-import com.example.viettel.di.IdentityViewModelFactory
 import com.example.viettel.feature.identity.presentation.mapper.BitmapMapper
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class EidDetailsFragment : Fragment() {
 
-    private val identityViewModel: IdentityViewModel by activityViewModels {
-        IdentityViewModelFactory(requireActivity().application)
-    }
+    private val identityViewModel: IdentityViewModel by activityViewModels()
 
     private var _binding: FragmentEidDetailsBinding? = null
     private val binding get() = _binding!!

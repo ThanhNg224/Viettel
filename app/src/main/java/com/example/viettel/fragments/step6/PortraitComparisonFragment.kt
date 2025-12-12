@@ -13,19 +13,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.R
 import com.example.viettel.databinding.FragmentPortraitComparisonBinding
-import com.example.viettel.di.IdentityViewModelFactory
 import com.example.viettel.feature.identity.domain.entity.PortraitAction
 import com.example.viettel.feature.identity.presentation.mapper.BitmapMapper
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.utils.updateNavigationControls
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PortraitComparisonFragment : Fragment() {
 
-    private val identityViewModel: IdentityViewModel by activityViewModels {
-        IdentityViewModelFactory(requireActivity().application)
-    }
+    private val identityViewModel: IdentityViewModel by activityViewModels()
 
     private var _binding: FragmentPortraitComparisonBinding? = null
     private val binding get() = _binding!!

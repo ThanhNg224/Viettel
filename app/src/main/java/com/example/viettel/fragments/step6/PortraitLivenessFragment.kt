@@ -17,12 +17,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.R
 import com.example.viettel.core.camera.ImageProxyMapper
 import com.example.viettel.databinding.FragmentPortraitLivenessBinding
-import com.example.viettel.di.IdentityViewModelFactory
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.CameraHelper
 import com.example.viettel.utils.ProgressUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PortraitLivenessFragment : Fragment() {
 
     private var _binding: FragmentPortraitLivenessBinding? = null
@@ -31,9 +32,7 @@ class PortraitLivenessFragment : Fragment() {
     private lateinit var emojiTicks: List<android.widget.ImageView>
     private lateinit var cameraHelper: CameraHelper
 
-    private val identityViewModel: IdentityViewModel by activityViewModels {
-        IdentityViewModelFactory(requireActivity().application)
-    }
+    private val identityViewModel: IdentityViewModel by activityViewModels()
 
     private var lastLivenessEventId = -1
 

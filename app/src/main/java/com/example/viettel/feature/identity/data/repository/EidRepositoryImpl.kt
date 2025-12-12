@@ -6,11 +6,12 @@ import com.example.viettel.feature.identity.domain.entity.EidData
 import com.example.viettel.feature.identity.domain.entity.MrzData
 import com.example.viettel.feature.identity.domain.repository.EidRepository
 import com.example.viettel.feature.identity.integration.eid.EidReaderDataSource
+import javax.inject.Inject
 
-class EidRepositoryImpl(
+class EidRepositoryImpl @Inject constructor(
     private val eidReaderDataSource: EidReaderDataSource,
-    private val mrzMapper: MrzMapper = MrzMapper(),
-    private val eidMapper: EidMapper = EidMapper(),
+    private val mrzMapper: MrzMapper,
+    private val eidMapper: EidMapper,
 ) : EidRepository {
 
     override suspend fun readEid(mrzData: MrzData): Result<EidData> {

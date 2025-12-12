@@ -1,6 +1,7 @@
 package com.example.viettel.feature.identity.integration.eid
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.suspendCancellableCoroutine
 import net.sf.scuba.smartcards.CardServiceException
@@ -11,10 +12,11 @@ import org.jmrtd.lds.icao.MRZInfo
 import vn.leeon.eidsdk.data.Eid
 import vn.leeon.eidsdk.facade.EidCallback
 import vn.leeon.eidsdk.facade.EidFacade
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class EidReaderDataSource(
-    private val context: Context,
+class EidReaderDataSource @Inject constructor(
+    @ApplicationContext private val context: Context,
 ) {
 
     suspend fun readEid(mrzInfo: MRZInfo): Result<Eid> = suspendCancellableCoroutine { continuation ->

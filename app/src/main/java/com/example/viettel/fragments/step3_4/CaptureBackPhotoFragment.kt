@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.core.camera.ImageProxyMapper
 import com.example.viettel.databinding.FragmentCaptureBackPhotoBinding
-import com.example.viettel.di.IdentityViewModelFactory
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.fragments.step5.NfcFragment
 import com.example.viettel.utils.CameraHelper
@@ -22,9 +21,11 @@ import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.utils.mainActivity
 import com.example.viettel.utils.navigateTo
 import com.example.viettel.utils.updateNavigationControls
+import dagger.hilt.android.AndroidEntryPoint
 import com.joyusing.controllight.ControlLightUtil
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class CaptureBackPhotoFragment : Fragment() {
 
     private var _binding: FragmentCaptureBackPhotoBinding? = null
@@ -32,9 +33,7 @@ class CaptureBackPhotoFragment : Fragment() {
 
     private lateinit var cameraHelper: CameraHelper
 
-    private val identityViewModel: IdentityViewModel by activityViewModels {
-        IdentityViewModelFactory(requireActivity().application)
-    }
+    private val identityViewModel: IdentityViewModel by activityViewModels()
 
     private var navigatedToNfc = false
     private var lastError: String? = null

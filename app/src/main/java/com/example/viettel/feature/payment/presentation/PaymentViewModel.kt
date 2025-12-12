@@ -6,12 +6,15 @@ import com.example.viettel.feature.payment.domain.entity.PaymentMethod
 import com.example.viettel.feature.payment.domain.entity.PaymentStatus
 import com.example.viettel.feature.payment.domain.usecase.CancelPaymentUseCase
 import com.example.viettel.feature.payment.domain.usecase.StartPaymentUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PaymentViewModel(
+@HiltViewModel
+class PaymentViewModel @Inject constructor(
     private val startPaymentUseCase: StartPaymentUseCase,
     private val cancelPaymentUseCase: CancelPaymentUseCase,
 ) : ViewModel() {

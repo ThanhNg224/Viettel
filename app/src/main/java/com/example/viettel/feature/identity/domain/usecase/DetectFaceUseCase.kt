@@ -3,8 +3,9 @@ package com.example.viettel.feature.identity.domain.usecase
 import com.example.viettel.feature.identity.domain.entity.FaceAttributes
 import com.example.viettel.feature.identity.domain.entity.ImageFrame
 import com.example.viettel.feature.identity.domain.repository.FaceDetectionRepository
+import javax.inject.Inject
 
-class DetectFaceUseCase(
+class DetectFaceUseCase @Inject constructor(
     private val repository: FaceDetectionRepository,
 ) {
     suspend operator fun invoke(frame: ImageFrame): Result<FaceAttributes> {

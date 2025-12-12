@@ -8,9 +8,10 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.jmrtd.lds.icao.MRZInfo
 import vn.leeon.eidsdk.utils.OcrUtils
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class OcrMrzDataSource {
+class OcrMrzDataSource @Inject constructor() {
 
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 

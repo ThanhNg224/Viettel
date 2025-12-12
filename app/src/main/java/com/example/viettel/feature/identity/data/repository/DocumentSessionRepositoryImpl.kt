@@ -7,8 +7,9 @@ import com.example.viettel.feature.identity.domain.entity.MrzData
 import com.example.viettel.feature.identity.domain.repository.DocumentSessionRepository
 import com.example.viettel.feature.identity.domain.entity.PortraitAction
 import java.util.concurrent.atomic.AtomicReference
+import javax.inject.Inject
 
-class DocumentSessionRepositoryImpl : DocumentSessionRepository {
+class DocumentSessionRepositoryImpl @Inject constructor() : DocumentSessionRepository {
 
     private val cache = AtomicReference(DocumentSession())
 

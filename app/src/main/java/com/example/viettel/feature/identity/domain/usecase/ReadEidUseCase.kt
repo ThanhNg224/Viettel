@@ -3,8 +3,9 @@ package com.example.viettel.feature.identity.domain.usecase
 import com.example.viettel.feature.identity.domain.entity.EidData
 import com.example.viettel.feature.identity.domain.repository.DocumentSessionRepository
 import com.example.viettel.feature.identity.domain.repository.EidRepository
+import javax.inject.Inject
 
-class ReadEidUseCase(
+class ReadEidUseCase @Inject constructor(
     private val eidRepository: EidRepository,
     private val documentSessionRepository: DocumentSessionRepository,
 ) {

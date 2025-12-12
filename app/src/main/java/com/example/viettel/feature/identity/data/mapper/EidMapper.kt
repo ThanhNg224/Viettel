@@ -10,8 +10,9 @@ import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Locale
+import javax.inject.Inject
 
-class EidMapper {
+class EidMapper @Inject constructor() {
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 

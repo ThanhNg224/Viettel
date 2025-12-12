@@ -6,8 +6,9 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-class FaceMatchRemoteDataSource {
+class FaceMatchRemoteDataSource @Inject constructor() {
 
     suspend fun compare(smilePortrait: ByteArray, chipPortrait: ByteArray): Result<Double> =
         withContext(Dispatchers.IO) {

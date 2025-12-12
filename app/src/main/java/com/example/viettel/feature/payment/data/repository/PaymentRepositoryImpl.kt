@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PaymentRepositoryImpl : PaymentRepository {
+class PaymentRepositoryImpl @Inject constructor() : PaymentRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private val statusFlow = MutableSharedFlow<PaymentStatus>(replay = 1)

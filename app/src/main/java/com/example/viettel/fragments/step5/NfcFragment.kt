@@ -11,22 +11,21 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.databinding.FragmentNfcBinding
-import com.example.viettel.di.IdentityViewModelFactory
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.mainActivity
 import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.utils.navigateTo
 import com.example.viettel.utils.updateNavigationControls
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class NfcFragment : Fragment() {
 
     private var _binding: FragmentNfcBinding? = null
     private val binding get() = _binding!!
 
-    private val identityViewModel: IdentityViewModel by activityViewModels {
-        IdentityViewModelFactory(requireActivity().application)
-    }
+    private val identityViewModel: IdentityViewModel by activityViewModels()
     private var startedReading = false
     private var navigated = false
     private var lastError: String? = null

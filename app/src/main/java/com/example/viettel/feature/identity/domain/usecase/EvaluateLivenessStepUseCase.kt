@@ -2,8 +2,9 @@ package com.example.viettel.feature.identity.domain.usecase
 
 import com.example.viettel.feature.identity.domain.entity.FaceAttributes
 import com.example.viettel.feature.identity.domain.entity.PortraitAction
+import javax.inject.Inject
 
-class EvaluateLivenessStepUseCase {
+class EvaluateLivenessStepUseCase @Inject constructor() {
 
     fun instructions(): List<String> = listOf(
         "Hay cuoi voi may anh",

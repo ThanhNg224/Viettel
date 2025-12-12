@@ -19,11 +19,14 @@ import com.example.viettel.feature.identity.domain.usecase.SaveDocumentTypeUseCa
 import com.example.viettel.feature.identity.domain.usecase.SaveFrontImageUseCase
 import com.example.viettel.feature.identity.domain.usecase.SavePortraitUseCase
 import com.example.viettel.feature.identity.domain.usecase.SaveSignatureUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class IdentityViewModel(
+@HiltViewModel
+class IdentityViewModel @Inject constructor(
     private val saveDocumentTypeUseCase: SaveDocumentTypeUseCase,
     private val saveFrontImageUseCase: SaveFrontImageUseCase,
     private val saveBackImageUseCase: SaveBackImageUseCase,

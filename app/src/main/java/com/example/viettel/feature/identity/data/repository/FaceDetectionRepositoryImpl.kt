@@ -4,8 +4,9 @@ import com.example.viettel.feature.identity.domain.entity.FaceAttributes
 import com.example.viettel.feature.identity.domain.entity.ImageFrame
 import com.example.viettel.feature.identity.domain.repository.FaceDetectionRepository
 import com.example.viettel.feature.identity.integration.face.FaceDetectionDataSource
+import javax.inject.Inject
 
-class FaceDetectionRepositoryImpl(
+class FaceDetectionRepositoryImpl @Inject constructor(
     private val dataSource: FaceDetectionDataSource,
 ) : FaceDetectionRepository {
     override suspend fun detectFace(frame: ImageFrame): Result<FaceAttributes> {
