@@ -1,9 +1,7 @@
 package com.example.viettel.feature.payment.presentation
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.viettel.feature.payment.data.repository.PaymentRepositoryImpl
 import com.example.viettel.feature.payment.domain.entity.PaymentMethod
 import com.example.viettel.feature.payment.domain.entity.PaymentStatus
 import com.example.viettel.feature.payment.domain.usecase.CancelPaymentUseCase
@@ -48,14 +46,4 @@ class PaymentViewModel(
         val selectedMethod: PaymentMethod? = null,
         val status: PaymentStatus = PaymentStatus.Idle,
     )
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val repository = PaymentRepositoryImpl()
-            val startUseCase = StartPaymentUseCase(repository)
-            val cancelUseCase = CancelPaymentUseCase(repository)
-            return PaymentViewModel(startUseCase, cancelUseCase) as T
-        }
-    }
 }

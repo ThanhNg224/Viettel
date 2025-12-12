@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.core.camera.ImageProxyMapper
 import com.example.viettel.databinding.FragmentCaptureFrontPhotoBinding
+import com.example.viettel.di.IdentityViewModelFactory
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.CameraHelper
 import com.example.viettel.utils.ProgressUtils
@@ -31,7 +32,7 @@ class CaptureFrontPhotoFragment : Fragment() {
     private lateinit var cameraHelper: CameraHelper
 
     private val identityViewModel: IdentityViewModel by activityViewModels {
-        IdentityViewModel.Factory(requireActivity().application)
+        IdentityViewModelFactory(requireActivity().application)
     }
 
     override fun onCreateView(

@@ -61,7 +61,7 @@ dependencies {
     implementation libs.androidx.core.ktx.v1150
     implementation libs.firebase.core
     implementation libs.firebase.ml.common
-    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.1'
+    implementation libs.play.services.mlkit.text.recognition
 
     // OCR + MRZ tools
     implementation libs.jmrtd
@@ -75,7 +75,7 @@ dependencies {
     implementation libs.retrofit
     implementation libs.converter.gson
     implementation libs.converter.moshi
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+    implementation libs.logging.interceptor
 
     // Biometric fingerprint
     implementation libs.jnbis

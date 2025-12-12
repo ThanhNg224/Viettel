@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.databinding.FragmentQrPaymentBinding
+import com.example.viettel.di.PaymentViewModelFactory
 import com.example.viettel.feature.payment.domain.entity.PaymentStatus
 import com.example.viettel.feature.payment.presentation.PaymentViewModel
 import com.example.viettel.feature.feedback.presentation.ui.ServiceEvaluationFragment
@@ -24,7 +25,7 @@ class QrCodePaymentFragment : Fragment() {
     private var _binding: FragmentQrPaymentBinding? = null
     private val binding get() = _binding!!
 
-    private val paymentViewModel: PaymentViewModel by activityViewModels { PaymentViewModel.Factory() }
+    private val paymentViewModel: PaymentViewModel by activityViewModels { PaymentViewModelFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,

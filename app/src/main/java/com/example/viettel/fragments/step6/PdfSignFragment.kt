@@ -17,6 +17,7 @@ import androidx.core.graphics.createBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.viettel.databinding.FragmentPdfSignBinding
+import com.example.viettel.di.IdentityViewModelFactory
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.ProgressUtils
 import com.example.viettel.utils.updateNavigationControls
@@ -29,7 +30,7 @@ class PdfSignFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val identityViewModel: IdentityViewModel by activityViewModels {
-        IdentityViewModel.Factory(requireActivity().application)
+        IdentityViewModelFactory(requireActivity().application)
     }
 
     private var totalPages = 0

@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.viettel.databinding.FragmentNfcBinding
+import com.example.viettel.di.IdentityViewModelFactory
 import com.example.viettel.feature.identity.presentation.viewmodel.IdentityViewModel
 import com.example.viettel.utils.mainActivity
 import com.example.viettel.utils.ProgressUtils
@@ -24,7 +25,7 @@ class NfcFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val identityViewModel: IdentityViewModel by activityViewModels {
-        IdentityViewModel.Factory(requireActivity().application)
+        IdentityViewModelFactory(requireActivity().application)
     }
     private var startedReading = false
     private var navigated = false
