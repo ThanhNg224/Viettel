@@ -223,7 +223,59 @@ class IdentityViewModel @Inject constructor(
         val lastLivenessSuccess: Boolean? = null,
         val lastLivenessMessage: String? = null,
         val livenessEventId: Int = 0,
-    )
+    ) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as DocumentUiState
+
+            if (frontImageRotation != other.frontImageRotation) return false
+            if (backImageRotation != other.backImageRotation) return false
+            if (isLoading != other.isLoading) return false
+            if (faceMatchScore != other.faceMatchScore) return false
+            if (livenessStepIndex != other.livenessStepIndex) return false
+            if (livenessTotalSteps != other.livenessTotalSteps) return false
+            if (livenessCompleted != other.livenessCompleted) return false
+            if (lastLivenessSuccess != other.lastLivenessSuccess) return false
+            if (livenessEventId != other.livenessEventId) return false
+            if (documentType != other.documentType) return false
+            if (!frontImage.contentEquals(other.frontImage)) return false
+            if (!backImage.contentEquals(other.backImage)) return false
+            if (mrzData != other.mrzData) return false
+            if (eidData != other.eidData) return false
+            if (portraitActions != other.portraitActions) return false
+            if (!signature.contentEquals(other.signature)) return false
+            if (errorMessage != other.errorMessage) return false
+            if (livenessInstruction != other.livenessInstruction) return false
+            if (lastLivenessMessage != other.lastLivenessMessage) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = frontImageRotation
+            result = 31 * result + backImageRotation
+            result = 31 * result + isLoading.hashCode()
+            result = 31 * result + (faceMatchScore?.hashCode() ?: 0)
+            result = 31 * result + livenessStepIndex
+            result = 31 * result + livenessTotalSteps
+            result = 31 * result + livenessCompleted.hashCode()
+            result = 31 * result + (lastLivenessSuccess?.hashCode() ?: 0)
+            result = 31 * result + livenessEventId
+            result = 31 * result + documentType.hashCode()
+            result = 31 * result + (frontImage?.contentHashCode() ?: 0)
+            result = 31 * result + (backImage?.contentHashCode() ?: 0)
+            result = 31 * result + (mrzData?.hashCode() ?: 0)
+            result = 31 * result + (eidData?.hashCode() ?: 0)
+            result = 31 * result + portraitActions.hashCode()
+            result = 31 * result + (signature?.contentHashCode() ?: 0)
+            result = 31 * result + (errorMessage?.hashCode() ?: 0)
+            result = 31 * result + livenessInstruction.hashCode()
+            result = 31 * result + (lastLivenessMessage?.hashCode() ?: 0)
+            return result
+        }
+    }
 
     data class LivenessUpdate(
         val stepIndex: Int,
