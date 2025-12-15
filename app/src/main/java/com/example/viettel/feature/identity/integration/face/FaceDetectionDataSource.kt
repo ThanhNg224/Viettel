@@ -1,7 +1,7 @@
 package com.example.viettel.feature.identity.integration.face
 
+import com.example.viettel.core.camera.ImageFrame
 import com.example.viettel.feature.identity.domain.entity.FaceAttributes
-import com.example.viettel.feature.identity.domain.entity.ImageFrame
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions

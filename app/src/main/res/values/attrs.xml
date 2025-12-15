@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="isTablet">false</bool>
+
+    <declare-styleable name="dsColor">
+        <attr name="colorBlack" format="color" />
+        <attr name="colorTextBlack" format="color" />
+        <attr name="colorTextBlack_1" format="color" />
+        <attr name="colorTextBlack_2" format="color" />
+        <attr name="colorTextBlack_3" format="color" />
+        <attr name="colorTextBlack_4" format="color" />
+        <attr name="colorBackgroundWhite_3" format="color" />
+        <attr name="colorBackgroundWhite_4" format="color" />
+        <attr name="colorBackgroundWhite_5" format="color" />
+        <attr name="colorWhite" format="color" />
+        <attr name="textColorPrimary" format="color" />
+        <attr name="colorBackgroundWhite" format="color" />
+        <attr name="colorStrokeBackgroundWhite" format="color" />
+        <attr name="colorBackgroundGray_6" format="color" />
+        <attr name="colorBackgroundGray_9" format="color" />
+        <attr name="colorBackgroundGray_12" format="color" />
+        <attr name="colorBackgroundWhite_2" format="color" />
+        <attr name="colorTextGray_4" format="color" />
+        <attr name="colorTextWhite_2" format="color" />
+        <attr name="colorBackgroundRed_7" format="color" />
+        <attr name="colorBackgroundGreen" format="color" />
+        <attr name="colorBackgroundGreen_2" format="color" />
+        <attr name="colorTextWhite_3" format="color" />
+        <attr name="colorGray6_Black_6" format="color" />
+
+        <attr name="colorBackground" format="color" />
+        <attr name="colorBackgroundChild" format="color" />
+
+        <attr name="colorText" format="color" />
+        <attr name="colorText_2" format="color" />
+        <attr name="colorGray" format="color" />
+
+
+        <!-- Utilities -->
+        <attr name="accent_inverse" format="reference|color" />
+        <attr name="tag_premium" format="reference|color" />
+
+        <!-- Static -->
+        <attr name="static_white" format="reference|color" />
+        <attr name="static_black" format="reference|color" />
+
+        <!-- Surface -->
+        <attr name="sf_primary" format="reference|color" />
+        <attr name="sf_secondary" format="reference|color" />
+        <attr name="sf_tertiary" format="reference|color" />
+        <attr name="sf_quaternary" format="reference|color" />
+        <attr name="sf_disabled" format="reference|color" />
+        <attr name="sf_inverse" format="reference|color" />
+
+        <!-- Content -->
+        <attr name="ct_primary" format="reference|color" />
+        <attr name="ct_secondary" format="reference|color" />
+        <attr name="ct_tertiary" format="reference|color" />
+        <attr name="ct_quaternary" format="reference|color" />
+        <attr name="ct_disabled" format="reference|color" />
+
+        <!-- Icon -->
+        <attr name="ic_primary" format="reference|color" />
+        <attr name="ic_secondary" format="reference|color" />
+        <attr name="ic_tertiary" format="reference|color" />
+        <attr name="ic_quaternary" format="reference|color" />
+        <attr name="ic_disabled" format="reference|color" />
+
+        <!-- Border -->
+        <attr name="bd_primary" format="reference|color" />
+        <attr name="bd_secondary" format="reference|color" />
+        <attr name="bd_disabled" format="reference|color" />
+
+        <!-- Brand -->
+        <attr name="brand_darker" format="reference|color" />
+        <attr name="brand_dark" format="reference|color" />
+        <attr name="brand_base" format="reference|color" />
+        <attr name="brand_subtle" format="reference|color" />
+        <attr name="brand_light" format="reference|color" />
+        <attr name="brand_lighter" format="reference|color" />
+
+        <!-- Accent -->
+        <attr name="accent_darker" format="reference|color" />
+        <attr name="accent_dark" format="reference|color" />
+        <attr name="accent_base" format="reference|color" />
+        <attr name="accent_subtle" format="reference|color" />
+        <attr name="accent_light" format="reference|color" />
+        <attr name="accent_lighter" format="reference|color" />
+
+        <!-- Success -->
+        <attr name="success_darker" format="reference|color" />
+        <attr name="success_dark" format="reference|color" />
+        <attr name="success_base" format="reference|color" />
+        <attr name="success_subtle" format="reference|color" />
+        <attr name="success_light" format="reference|color" />
+        <attr name="success_lighter" format="reference|color" />
+
+        <!-- Error -->
+        <attr name="error_darker" format="reference|color" />
+        <attr name="error_dark" format="reference|color" />
+        <attr name="error_base" format="reference|color" />
+        <attr name="error_subtle" format="reference|color" />
+        <attr name="error_light" format="reference|color" />
+        <attr name="error_lighter" format="reference|color" />
+
+        <!-- Warning -->
+        <attr name="warning_darker" format="reference|color" />
+        <attr name="warning_dark" format="reference|color" />
+        <attr name="warning_base" format="reference|color" />
+        <attr name="warning_subtle" format="reference|color" />
+        <attr name="warning_light" format="reference|color" />
+        <attr name="warning_lighter" format="reference|color" />
+
+        <!-- Information -->
+        <attr name="info_darker" format="reference|color" />
+        <attr name="info_dark" format="reference|color" />
+        <attr name="info_base" format="reference|color" />
+        <attr name="info_subtle" format="reference|color" />
+        <attr name="info_light" format="reference|color" />
+        <attr name="info_lighter" format="reference|color" />
+
+        <!-- Other -->
+        <attr name="color_primary" format="reference|color" />
+        <attr name="color_accent" format="reference|color" />
+        <attr name="color_secondary" format="reference|color" />
+        <attr name="color_background" format="reference|color" />
+        <attr name="color_surface" format="reference|color" />
+        <attr name="color_text_primary" format="reference|color" />
+        <attr name="color_text_secondary" format="reference|color" />
+        <attr name="color_text_hint" format="reference|color" />
+        <attr name="color_text_on_primary" format="reference|color" />
+        <attr name="color_error" format="reference|color" />
+        <attr name="color_white" format="reference|color" />
+        <attr name="color_voucher_box" format="reference|color" />
+    </declare-styleable>
+
+
+    <declare-styleable name="FuriganaView">
+        <attr name="android:text" />
+        <attr name="android:maxLines" />
+        <attr name="android:textAlignment" />
+        <attr name="android:lineSpacingExtra" />
+        <attr name="android:layout_marginEnd" />
+        <attr name="android:layout_marginLeft" />
+        <attr name="android:layout_marginRight" />
+        <attr name="android:layout_marginStart" />
+        <attr name="furiganaSize" format="dimension" />
+    </declare-styleable>
+
+    <attr name="MessageInput" format="reference" />
+
+    <declare-styleable name="MessageInput">
+        <attr name="inputButtonBackground" format="reference" />
+        <attr name="inputButtonDefaultBgColor" format="color|reference" />
+        <attr name="inputButtonDefaultBgPressedColor" format="color|reference" />
+        <attr name="inputButtonDefaultBgDisabledColor" format="color|reference" />
+
+        <attr name="inputButtonIcon" format="reference" />
+        <attr name="inputButtonDefaultIconColor" format="color|reference" />
+        <attr name="inputButtonDefaultIconPressedColor" format="color|reference" />
+        <attr name="inputButtonDefaultIconDisabledColor" format="color|reference" />
+
+        <attr name="inputButtonMargin" format="dimension|reference" />
+        <attr name="inputButtonWidth" format="dimension|reference" />
+        <attr name="inputButtonHeight" format="dimension|reference" />
+
+        <attr name="showAttachmentButton" format="boolean" />
+        <attr name="attachmentButtonBackground" format="reference" />
+        <attr name="attachmentButtonDefaultBgColor" format="color|reference" />
+        <attr name="attachmentButtonDefaultBgPressedColor" format="color|reference" />
+        <attr name="attachmentButtonDefaultBgDisabledColor" format="color|reference" />
+
+        <attr name="attachmentButtonIcon" format="reference" />
+        <attr name="attachmentButtonDefaultIconColor" format="color|reference" />
+        <attr name="attachmentButtonDefaultIconPressedColor" format="color|reference" />
+        <attr name="attachmentButtonDefaultIconDisabledColor" format="color|reference" />
+
+        <attr name="attachmentButtonMargin" format="dimension|reference" />
+        <attr name="attachmentButtonWidth" format="dimension|reference" />
+        <attr name="attachmentButtonHeight" format="dimension|reference" />
+
+        <attr name="inputMaxLines" format="integer" />
+        <attr name="inputHint" format="string" />
+
+        <attr name="inputText" format="string" />
+        <attr name="inputTextSize" format="dimension|reference" />
+        <attr name="inputTextColor" format="color|reference" />
+        <attr name="inputHintColor" format="color|reference" />
+
+        <attr name="inputBackground" format="reference" />
+        <attr name="inputCursorDrawable" format="reference" />
+
+        <attr name="delayTypingStatus" format="integer" />
+    </declare-styleable>
+
+    <attr name="MessagesList" format="reference" />
+
+    <declare-styleable name="MessagesList">
+
+        <attr name="textAutoLink">
+            <flag name="all" value="15" />
+            <flag name="email" value="2" />
+            <flag name="map" value="8" />
+            <flag name="none" value="0" />
+            <flag name="phone" value="4" />
+            <flag name="web" value="1" />
+        </attr>
+
+        <attr name="incomingTextLinkColor" format="color|reference" />
+        <attr name="outcomingTextLinkColor" format="color|reference" />
+
+        <attr name="incomingAvatarWidth" format="dimension|reference" />
+        <attr name="incomingAvatarHeight" format="dimension|reference" />
+
+        <attr name="incomingBubbleDrawable" format="reference" />
+        <attr name="incomingDefaultBubbleColor" format="color|reference" />
+        <attr name="incomingDefaultBubblePressedColor" format="color|reference" />
+        <attr name="incomingDefaultBubbleSelectedColor" format="color|reference" />
+
+        <attr name="incomingImageOverlayDrawable" format="reference" />
+        <attr name="incomingDefaultImageOverlayPressedColor" format="color|reference" />
+        <attr name="incomingDefaultImageOverlaySelectedColor" format="color|reference" />
+
+        <attr name="incomingBubblePaddingLeft" format="dimension|reference" />
+        <attr name="incomingBubblePaddingRight" format="dimension|reference" />
+        <attr name="incomingBubblePaddingTop" format="dimension|reference" />
+        <attr name="incomingBubblePaddingBottom" format="dimension|reference" />
+
+        <attr name="incomingTextColor" format="color|reference" />
+        <attr name="incomingTextSize" format="dimension|reference" />
+        <attr name="incomingTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="incomingTimeTextColor" format="color|reference" />
+        <attr name="incomingTimeTextSize" format="dimension|reference" />
+        <attr name="incomingTimeTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="incomingImageTimeTextColor" format="color|reference" />
+        <attr name="incomingImageTimeTextSize" format="dimension|reference" />
+        <attr name="incomingImageTimeTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="outcomingBubbleDrawable" format="reference" />
+        <attr name="outcomingDefaultBubbleColor" format="color|reference" />
+        <attr name="outcomingDefaultBubblePressedColor" format="color|reference" />
+        <attr name="outcomingDefaultBubbleSelectedColor" format="color|reference" />
+
+        <attr name="outcomingImageOverlayDrawable" format="reference" />
+        <attr name="outcomingDefaultImageOverlayPressedColor" format="color|reference" />
+        <attr name="outcomingDefaultImageOverlaySelectedColor" format="color|reference" />
+
+        <attr name="outcomingBubblePaddingLeft" format="dimension|reference" />
+        <attr name="outcomingBubblePaddingRight" format="dimension|reference" />
+        <attr name="outcomingBubblePaddingTop" format="dimension|reference" />
+        <attr name="outcomingBubblePaddingBottom" format="dimension|reference" />
+
+        <attr name="outcomingTextColor" format="color|reference" />
+        <attr name="outcomingTextSize" format="dimension|reference" />
+        <attr name="outcomingTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="outcomingTimeTextColor" format="color|reference" />
+        <attr name="outcomingTimeTextSize" format="dimension|reference" />
+        <attr name="outcomingTimeTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="outcomingImageTimeTextColor" format="color|reference" />
+        <attr name="outcomingImageTimeTextSize" format="dimension|reference" />
+        <attr name="outcomingImageTimeTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="dateHeaderPadding" format="dimension|reference" />
+        <attr name="dateHeaderFormat" format="string|reference" />
+        <attr name="dateHeaderTextColor" format="color|reference" />
+        <attr name="dateHeaderTextSize" format="dimension|reference" />
+        <attr name="dateHeaderTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="ReadMoreTextView">
+        <attr name="trimExpandedText" format="string" />
+        <attr name="trimCollapsedText" format="string" />
+        <attr name="trimLength" format="integer" />
+        <attr name="showTrimExpandedText" format="boolean" />
+        <attr name="colorClickableText" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="pickerview">
+        <attr name="wheelview_gravity">
+            <enum name="center" value="17" />
+            <enum name="left" value="3" />
+            <enum name="right" value="5" />
+        </attr>
+        <attr name="wheelview_textSize" format="dimension" />
+        <attr name="wheelview_textColorOut" format="color" />
+        <attr name="wheelview_textColorCenter" format="color" />
+        <attr name="wheelview_dividerColor" format="color" />
+        <attr name="wheelview_dividerWidth" format="dimension" />
+        <attr name="wheelview_lineSpacingMultiplier" format="float" />
+    </declare-styleable>
+
+
+    <attr name="button_color" format="color" />
+    <attr name="button_radius" format="dimension" />
+    <attr name="button_radiusTopLeft" format="dimension" />
+    <attr name="button_radiusTopRight" format="dimension" />
+    <attr name="button_radiusBottomLeft" format="dimension" />
+    <attr name="button_radiusBottomRight" format="dimension" />
+    <attr name="button_borderColor" format="color" />
+    <attr name="button_borderWidth" format="dimension" />
+    <attr name="button_clipToOutline" format="boolean" />
+    <attr name="button_shape" format="enum">
+        <enum name="rectangle" value="0" />
+        <enum name="circle" value="1" />
+    </attr>
+    <attr name="button_background_skip" format="boolean" />
+    <!-- 🔹 Hỗ trợ gradient -->
+    <attr name="button_backgroundColors" format="reference|color|string" />
+    <attr name="button_borderColors" format="reference|color|string" /> <!-- reference tới @array -->
+    <attr name="button_orientation" format="enum">
+        <enum name="left_right" value="0" />
+        <enum name="top_bottom" value="1" />
+        <enum name="tl_br" value="2" />
+        <enum name="tr_bl" value="3" />
+        <enum name="bl_tr" value="4" />
+        <enum name="br_tl" value="5" />
+    </attr>
+
+    <declare-styleable name="FrameButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_clipToOutline" />
+        <attr name="button_shape" />
+        <attr name="button_background_skip" />
+
+        <!-- 🔹 include gradient attr -->
+        <attr name="button_backgroundColors" />
+        <attr name="button_borderColors" />
+        <attr name="button_orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="LinearButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_clipToOutline" />
+        <attr name="button_shape" />
+        <attr name="button_background_skip" />
+
+        <!-- 🔹 include gradient attr -->
+        <attr name="button_backgroundColors" />
+        <attr name="button_borderColors" />
+        <attr name="button_orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="RelativeButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_clipToOutline" />
+        <attr name="button_shape" />
+        <attr name="button_background_skip" />
+
+        <!-- 🔹 include gradient attr -->
+        <attr name="button_backgroundColors" />
+        <attr name="button_borderColors" />
+        <attr name="button_orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="ConstraintButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_clipToOutline" />
+        <attr name="button_shape" />
+        <attr name="button_background_skip" />
+
+        <!-- 🔹 include gradient attr -->
+        <attr name="button_backgroundColors" />
+        <attr name="button_borderColors" />
+        <attr name="button_orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_clipToOutline" />
+        <attr name="button_shape" />
+        <attr name="button_background_skip" />
+
+        <!-- 🔹 include gradient attr -->
+        <attr name="button_backgroundColors" />
+        <attr name="button_borderColors" />
+        <attr name="button_orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="CardButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_shape" />
+        <attr name="button_background_skip" />
+
+        <!-- 🔹 include gradient attr -->
+        <attr name="button_backgroundColors" />
+        <attr name="button_borderColors" />
+        <attr name="button_orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="TextButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_clipToOutline" />
+        <attr name="button_shape" />
+        <attr name="button_underline" format="boolean" />
+        <attr name="button_background_skip" />
+        <attr name="button_format" format="string" />
+        <attr name="button_autoSizeText" format="boolean" />
+
+        <!-- 🔹 include gradient attr -->
+        <attr name="button_backgroundColors" />
+        <attr name="button_borderColors" />
+        <attr name="button_orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="ImageButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_clipToOutline" />
+        <attr name="button_shape" />
+
+        <!-- 🔹 include gradient attr -->
+        <attr name="button_backgroundColors" />
+        <attr name="button_borderColors" />
+        <attr name="button_orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="OnboardingLevelView">
+        <attr name="android:src" />
+        <attr name="icon_right" format="boolean" />
+        <attr name="level_title" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="ProgressLevelItemView">
+        <attr name="android:text" />
+    </declare-styleable>
+
+    <declare-styleable name="PremiumPackageItemView">
+        <attr name="PremiumPackage_isBest" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="PremiumPackageV2ItemView">
+        <attr name="PremiumPackageV2_isBest" format="boolean" />
+        <attr name="PremiumPackageV2_isLifetime" format="boolean" />
+    </declare-styleable>
+
+    <attr name="switch_size" format="enum">
+        <enum name="medium" value="0" />
+        <enum name="small" value="1" />
+    </attr>
+    <declare-styleable name="CustomSwitch">
+        <attr name="checked" format="boolean" />
+        <attr name="trackSelectedColor" format="color" />
+        <attr name="trackUnselectedColor" format="color" />
+        <attr name="thumbSelectedColor" format="color" />
+        <attr name="thumbUnselectedColor" format="color" />
+        <attr name="switch_size" />
+    </declare-styleable>
+
+    <attr name="progressTextSize" format="dimension" />
+    <attr name="progressTextColor" format="color" />
+    <attr name="progressTextOffset" format="dimension" />
+    <attr name="progressNormalColor" format="color" />
+    <attr name="progressReachColor" format="color" />
+    <attr name="progressNormalSize" format="dimension" />
+    <attr name="progressReachSize" format="dimension" />
+    <attr name="progressReachWidth" format="dimension" />
+    <attr name="progressNormalWidth" format="dimension" />
+    <attr name="progressTextVisible" format="boolean" />
+    <attr name="progressTextSkewX" format="dimension" />
+    <attr name="progressTextPrefix" format="string" />
+    <attr name="progressTextSuffix" format="string" />
+    <attr name="innerBackgroundColor" format="color" />
+
+    <declare-styleable name="HorizontalProgressView">
+        <attr name="progressNormalColor" />
+        <attr name="progressReachColor" />
+        <attr name="progressTextColor" />
+        <attr name="progressTextSize" />
+        <attr name="progressTextOffset" />
+        <attr name="progressNormalSize" />
+        <attr name="progressReachSize" />
+        <attr name="progressTextPosition" format="enum">
+            <enum name="TOP" value="1" />
+            <enum name="BOTTOM" value="-1" />
+            <enum name="CENTER" value="0" />
+        </attr>
+        <attr name="progressTextVisible" />
+        <attr name="progressTextSkewX" />
+        <attr name="progressTextPrefix" />
+        <attr name="progressTextSuffix" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleProgressView">
+        <attr name="progressNormalColor" />
+        <attr name="progressReachColor" />
+        <attr name="progressTextColor" />
+        <attr name="progressTextSize" />
+        <attr name="progressTextOffset" />
+        <attr name="progressNormalSize" />
+        <attr name="progressReachSize" />
+        <attr name="radius" format="dimension" />
+        <attr name="progressTextVisible" />
+        <attr name="progressStartArc" format="integer" />
+        <attr name="progressTextSkewX" />
+        <attr name="progressTextPrefix" />
+        <attr name="progressTextSuffix" />
+        <attr name="innerBackgroundColor" />
+        <attr name="progressStyle" format="enum">
+            <enum name="Normal" value="0" />
+            <enum name="FillInner" value="1" />
+            <enum name="FillInnerArc" value="2" />
+        </attr>
+        <attr name="innerProgressColor" format="color" />
+        <attr name="innerPadding" format="dimension" />
+        <attr name="outerColor" format="color" />
+        <attr name="outerSize" format="dimension" />
+        <attr name="reachCapRound" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="TopicDialogItemView">
+        <attr name="course_icon" format="reference" />
+        <attr name="icon_background" format="reference" />
+        <attr name="course_title" format="string" />
+        <attr name="lesson_count" format="string" />
+        <attr name="course_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="OnboardingFavouriteView">
+        <attr name="android:src" />
+        <attr name="favourite_title" format="string" />
+        <attr name="favourite_description" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="PercentWidthConstraintLayout">
+        <attr name="width_percent" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="DualVideoPlayerView">
+        <attr name="autoPlay" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="StrokeTextView">
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="strokeColor" format="color" />
+        <attr name="fillColor" format="color" />
+        <attr name="strokeJoinStyle">
+            <enum name="miter" value="0" />
+            <enum name="bevel" value="1" />
+            <enum name="round" value="2" />
+        </attr>
+        <attr name="strokeMiter" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="GradientStrokeTextView">
+        <attr name="startColor" format="color" />
+        <attr name="endColor" format="color" />
+        <attr name="strokeWidthGradient" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="PremiumSubscriptionView">
+        <attr name="premium_title" format="string" />
+        <attr name="start_date" format="string" />
+        <attr name="end_date" format="string" />
+        <attr name="subscription_type" format="enum">
+            <enum name="monthly_12" value="0" />
+            <enum name="monthly_6" value="1" />
+            <enum name="lifetime" value="2" />
+        </attr>
+        <attr name="crown_icon" format="reference" />
+        <attr name="premium_background_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="IconButton">
+        <attr name="button_color" />
+        <attr name="button_radius" />
+        <attr name="button_radiusTopLeft" />
+        <attr name="button_radiusTopRight" />
+        <attr name="button_radiusBottomLeft" />
+        <attr name="button_radiusBottomRight" />
+        <attr name="button_borderColor" />
+        <attr name="button_borderWidth" />
+        <attr name="button_clipToOutline" />
+        <attr name="button_shape" />
+        <attr name="android:text" />
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="icon_src" format="reference" />
+        <attr name="icon_size" format="dimension" />
+        <attr name="icon_tint" format="color" />
+        <attr name="icon_marginEnd" format="dimension" />
+        <attr name="show_icon" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="HomeLearningPathView">
+        <attr name="path_orientation" format="enum">
+            <enum name="TL_TR_BR" value="0" /> <!-- trái→phải (trên) → xuống phải -->
+            <enum name="TR_TL_BL" value="1" /> <!-- phải→trái (trên) → xuống trái -->
+        </attr>
+        <attr name="pathColor" format="color" />
+        <attr name="pathWidth" format="dimension" />
+        <attr name="dashed" format="boolean" />
+        <attr name="dashOn" format="dimension" />
+        <attr name="dashOff" format="dimension" />
+        <attr name="edgeInset" format="dimension" />
+        <attr name="topBulgeFactor" format="float" />   <!-- 0..1: độ “phồng” đoạn ngang -->
+        <attr name="progress" format="float" />         <!-- 0..1: vẽ theo tiến độ -->
+    </declare-styleable>
+
+    <declare-styleable name="HighlightTextView">
+        <attr name="highlightKeywords" format="string" />
+        <attr name="highlightColor" format="color" />
+        <attr name="highlightFontFamily" format="reference" />
+        <attr name="highlightTextSize" format="dimension" />
+        <attr name="highlightUnderline" format="boolean" />
+        <attr name="highlightTextAppearance" format="reference" />
+        <attr name="highlightClickable" format="boolean" />
+    </declare-styleable>
+
+    <attr name="course_sub_level" format="enum">
+        <enum name="alphabet" value="0" />
+        <enum name="beginner" value="1" />
+        <enum name="basic" value="2" />
+        <enum name="intermediate" value="3" />
+        <enum name="advanced" value="4" />
+    </attr>
+
+    <declare-styleable name="HomeLearningCourseSubLevelView">
+        <attr name="course_sub_level" />
+    </declare-styleable>
+
+    <declare-styleable name="OnboardingFavouriteSubLevelView">
+        <attr name="course_sub_level" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomProgressBar">
+        <attr name="progressColor" format="color" />
+        <attr name="backgroundColor" format="color" />
+        <attr name="progressValue" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="ShadowLayout">
+        <attr name="shadowColor" format="color" />
+        <attr name="shadowAlpha" format="float" />
+        <attr name="shadowRadius" format="dimension" />
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="dx" format="dimension" /> <!-- dịch ngang -->
+        <attr name="dy" format="dimension" /> <!-- dịch dọc -->
+    </declare-styleable>
+
+    <declare-styleable name="SignInTextField">
+        <attr name="android:src" />
+        <attr name="android:hint" />
+        <attr name="android:textColor" />
+        <attr name="android:textColorHint" />
+        <attr name="text_field_require" format="boolean" />
+        <attr name="android:inputType" />
+        <attr name="android:focusable" />
+    </declare-styleable>
+
+
+    <declare-styleable name="onboardingHeaderView">
+        <attr name="headerText" format="string|reference" />
+        <attr name="descriptionText" format="string|reference" />
+        <attr name="mascotImage" format="reference" />
+    </declare-styleable>
+
+
+    <declare-styleable name="onboardingReminderDayItemView">
+        <attr name="dayChoiceSelected" format="boolean" />
+        <attr name="dayChoiceName" format="enum">
+            <enum name="daily" value="0" />
+            <enum name="monday" value="1" />
+            <enum name="tuesday" value="2" />
+            <enum name="wednesday" value="3" />
+            <enum name="thursday" value="4" />
+            <enum name="friday" value="5" />
+            <enum name="saturday" value="6" />
+            <enum name="sunday" value="7" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="TheorySettingDisplayView">
+        <attr name="setting_type" format="enum">
+            <enum name="kanji" value="0" />
+            <enum name="kana" value="1" />
+            <enum name="romaji" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SemiCircularProgressView">
+        <attr name="circularStrokeWidth" format="dimension" />
+        <attr name="circularProgressColors" format="reference|color|string" />
+    </declare-styleable>
+
+    <declare-styleable name="TheoryCompleteProgressView">
+        <attr name="theory_progress_type" format="enum">
+            <enum name="word" value="0" />
+            <enum name="grammar" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="JapaneseSentenceView">
+        <!-- style -->
+        <attr name="textAppearanceWord" format="reference"/>
+        <attr name="textAppearanceRomaji" format="reference"/>
+
+        <!-- default text colors when no highlight -->
+        <attr name="colorWordDefault" format="color"/>
+        <attr name="colorKanaDefault" format="color"/>
+        <attr name="colorRomajiDefault" format="color"/>
+
+        <!-- Optional: tỉ lệ size kana so với word (mặc định 0.5) -->
+        <attr name="kanaSizeRatio" format="float"/>
+
+        <attr name="textAlignment" format="enum">
+            <enum name="start"  value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="end"    value="2"/>
+        </attr>
+        <attr name="textAllCaps" format="boolean"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="TheoryReviewView">
+        <attr name="theory_review_type" format="enum">
+            <enum name="word" value="0" />
+            <enum name="grammar" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SettingsItemView">
+        <!-- content -->
+        <attr name="siv_title" format="string"/>
+        <attr name="siv_description" format="string"/>
+        <attr name="siv_type" format="enum">
+            <enum name="title_only" value="0"/>
+            <enum name="title_description" value="1"/>
+            <enum name="title_arrow" value="2"/>
+            <enum name="title_description_underline" value="3"/>
+            <enum name="title_switch" value="4"/>
+        </attr>
+
+        <!-- colors -->
+        <attr name="siv_titleColor" format="color"/>
+        <attr name="siv_descriptionColor" format="color"/>
+        <attr name="siv_iconTint" format="color"/>
+
+        <!-- style -->
+        <attr name="siv_titleTextAppearance" format="reference"/>
+        <attr name="siv_descriptionTextAppearance" format="reference"/>
+
+        <!-- switch -->
+        <attr name="siv_switch_checked" format="boolean" />
+
+    </declare-styleable>
+
+</resources>

@@ -6,7 +6,6 @@ import android.graphics.YuvImage
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
-import com.example.viettel.feature.identity.domain.entity.ImageFrame
 import java.io.ByteArrayOutputStream
 
 object ImageProxyMapper {

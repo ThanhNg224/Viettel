@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.viettel.core.ui.buttons.FrameButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/switch_track"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <RelativeLayout
+        android:id="@+id/view_track"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_core_switch_track"
+        android:padding="2dp">
+
+        <View
+            android:id="@+id/thumb"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/selector_core_switch_thumb" />
+    </RelativeLayout>
+
+</com.example.viettel.core.ui.buttons.FrameButton>
+

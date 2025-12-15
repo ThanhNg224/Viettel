@@ -2,10 +2,10 @@ package com.example.viettel.feature.identity.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.viettel.core.camera.ImageFrame
 import com.example.viettel.feature.identity.domain.entity.CapturedImage
 import com.example.viettel.feature.identity.domain.entity.DocumentType
 import com.example.viettel.feature.identity.domain.entity.EidData
-import com.example.viettel.feature.identity.domain.entity.ImageFrame
 import com.example.viettel.feature.identity.domain.entity.MrzData
 import com.example.viettel.feature.identity.domain.entity.PortraitAction
 import com.example.viettel.feature.identity.domain.usecase.ComparePortraitUseCase

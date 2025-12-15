@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.viettel.R
 import com.example.viettel.activities.MainActivity
+import com.example.viettel.core.extensions.gone
+import com.example.viettel.core.extensions.visible
 import com.example.viettel.feature.feedback.domain.entity.FeedbackReason
 import com.example.viettel.feature.feedback.presentation.viewmodel.FeedbackViewModel
 import com.example.viettel.utils.ProgressUtils
@@ -23,9 +25,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FeedbackFragment : Fragment() {
 
-    private lateinit var checkboxReason5: CheckBox
-    private lateinit var editTextReason5: EditText
-    private lateinit var allCheckboxes: List<CheckBox>
+    private lateinit var checkboxOther: CheckBox
+    private lateinit var editTextOther: EditText
+    private lateinit var reasonCheckboxes: List<Pair<CheckBox, FeedbackReason>>
 
     private val feedbackViewModel: FeedbackViewModel by activityViewModels()
 
@@ -50,33 +52,24 @@ class FeedbackFragment : Fragment() {
     }
 
     private fun initializeViews(view: View) {
-        checkboxReason5 = view.findViewById(R.id.checkbox_reason_5)
-        editTextReason5 = view.findViewById(R.id.editText_checkBox5)
+        checkboxOther = view.findViewById(R.id.checkbox_reason_5)
+        editTextOther = view.findViewById(R.id.editText_checkBox5)
+        editTextOther.gone()
 
-        allCheckboxes = listOf(
-            view.findViewById(R.id.checkbox_reason_1),
-            view.findViewById(R.id.checkbox_reason_2),
-            view.findViewById(R.id.checkbox_reason_3),
-            view.findViewById(R.id.checkbox_reason_4),
-            checkboxReason5
+        reasonCheckboxes = listOf(
+            view.findViewById<CheckBox>(R.id.checkbox_reason_1) to FeedbackReason.FEATURE_ISSUE,
+            view.findViewById<CheckBox>(R.id.checkbox_reason_2) to FeedbackReason.INFORMATION_UNCLEAR,
+            view.findViewById<CheckBox>(R.id.checkbox_reason_3) to FeedbackReason.UI_LAYOUT,
+            view.findViewById<CheckBox>(R.id.checkbox_reason_4) to FeedbackReason.RESPONSE_TIME,
+            checkboxOther to FeedbackReason.OTHER,
         )
     }
 
     private fun setupListeners() {
-        checkboxReason5.setOnCheckedChangeListener { _, isChecked ->
-            editTextReason5.visibility = if (isChecked) View.VISIBLE else View.GONE
-            feedbackViewModel.toggleReason(FeedbackReason.OTHER, isChecked)
-            updateContinueState()
-        }
-
-        allCheckboxes.forEachIndexed { index, checkbox ->
+        reasonCheckboxes.forEach { (checkbox, reason) ->
             checkbox.setOnCheckedChangeListener { _, isChecked ->
-                val reason = when (index) {
-                    0 -> FeedbackReason.FEATURE_ISSUE
-                    1 -> FeedbackReason.INFORMATION_UNCLEAR
-                    2 -> FeedbackReason.UI_LAYOUT
-                    3 -> FeedbackReason.RESPONSE_TIME
-                    else -> FeedbackReason.OTHER
+                if (reason == FeedbackReason.OTHER) {
+                    if (isChecked) editTextOther.visible() else editTextOther.gone()
                 }
                 feedbackViewModel.toggleReason(reason, isChecked)
                 updateContinueState()
@@ -87,16 +80,24 @@ class FeedbackFragment : Fragment() {
     fun isFeedbackValid(): Boolean = feedbackViewModel.isFeedbackValid()
 
     private fun collectFeedback(): String = buildString {
-        if (view?.findViewById<CheckBox>(R.id.checkbox_reason_1)?.isChecked == true)
-            append("- Tinh nang kho su dung\n")
-        if (view?.findViewById<CheckBox>(R.id.checkbox_reason_2)?.isChecked == true)
-            append("- Thong tin ve san pham dich vu khong ro rang\n")
-        if (view?.findViewById<CheckBox>(R.id.checkbox_reason_3)?.isChecked == true)
-            append("- Giao dien, bo cuc sap xep chua hop ly\n")
-        if (view?.findViewById<CheckBox>(R.id.checkbox_reason_4)?.isChecked == true)
-            append("- Thoi gian phan hoi cua ung dung cham\n")
-        if (checkboxReason5.isChecked)
-            append("- Ly do khac: ${editTextReason5.text}\n")
+        val reasonLines = mapOf(
+            FeedbackReason.FEATURE_ISSUE to "- Tinh nang kho su dung",
+            FeedbackReason.INFORMATION_UNCLEAR to "- Thong tin ve san pham dich vu khong ro rang",
+            FeedbackReason.UI_LAYOUT to "- Giao dien, bo cuc sap xep chua hop ly",
+            FeedbackReason.RESPONSE_TIME to "- Thoi gian phan hoi cua ung dung cham",
+        )
+
+        reasonCheckboxes.forEach { (checkbox, reason) ->
+            if (!checkbox.isChecked) return@forEach
+
+            if (reason == FeedbackReason.OTHER) {
+                append("- Ly do khac: ${editTextOther.text}\n")
+                return@forEach
+            }
+
+            val line = reasonLines[reason] ?: return@forEach
+            append(line).append('\n')
+        }
     }
 
     private fun updateContinueState() {
@@ -105,7 +106,7 @@ class FeedbackFragment : Fragment() {
 
     fun onContinuePressed() {
         val feedback = collectFeedback()
-        feedbackViewModel.updateCustomReason(editTextReason5.text.toString())
+        feedbackViewModel.updateCustomReason(editTextOther.text.toString())
         feedbackViewModel.submitFeedback()
 
         val fragment = EndFragment().apply {
@@ -121,4 +122,3 @@ class FeedbackFragment : Fragment() {
         private const val ARG_FEEDBACK = "feedback"
     }
 }
-

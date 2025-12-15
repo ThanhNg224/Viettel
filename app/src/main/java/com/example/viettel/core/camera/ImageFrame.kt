@@ -1,4 +1,4 @@
-package com.example.viettel.feature.identity.domain.entity
+package com.example.viettel.core.camera
 
 data class ImageFrame(
     val data: ByteArray,
@@ -6,3 +6,4 @@ data class ImageFrame(
     val height: Int,
     val rotation: Int,
 )
+
