@@ -1,4 +1,4 @@
-# Viettel CCCD/Passport Verification App
+# Viettel CCCD/Passport Verification App - Demo version
 
 ## 📌 Overview
 Viettel CCCD/Passport Verification App is an Android application designed for kiosk and tablet environments (e.g., **Joyusing Z10S Pro**).  
